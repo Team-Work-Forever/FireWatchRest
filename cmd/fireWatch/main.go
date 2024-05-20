@@ -34,19 +34,21 @@ func main() {
 	version := app.GetVersion("v1")
 
 	// Setup Swagger
-	adapters.UseSwagger(app.Instance, env.FIRE_WATCH_PORT)
+	adapters.UseSwagger(app.Instance, env.FIRE_WATCH_API_PORT)
 
 	// Setup aux services
 
 	// repositories
 	authRepository := repositories.NewAuthRepository(db)
+	tokenRepository := repositories.NewTokenRepository(db)
 
 	// use cases
 	loginUseCase := usecases.NewLoginUseCase(authRepository)
 	signUpUseCase := usecases.NewSignUpUseCase(authRepository)
+	forgotPasswordUseCase := usecases.NewForgotPasswordUseCase(authRepository, tokenRepository)
 
 	// controllers
-	authController := controllers.NewAuthController(loginUseCase, signUpUseCase)
+	authController := controllers.NewAuthController(loginUseCase, signUpUseCase, forgotPasswordUseCase)
 	authController.Route(version)
 
 	// Serve application

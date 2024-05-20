@@ -21,7 +21,7 @@ func NewSignUpUseCase(authRepository *repositories.AuthRepository) *SignUpUseCas
 	}
 }
 
-func (uc *SignUpUseCase) Handle(request *contracts.SignUpRequest) (*contracts.AuthResponse, error) {
+func (uc *SignUpUseCase) Handle(request contracts.SignUpRequest) (*contracts.AuthResponse, error) {
 	email, err := vo.NewEmail(request.Email)
 
 	if err != nil {
@@ -88,7 +88,7 @@ func (uc *SignUpUseCase) Handle(request *contracts.SignUpRequest) (*contracts.Au
 		*address,
 	)
 
-	if err := uc.authRepository.CreateUser(auth, user); err != nil {
+	if err := uc.authRepository.CreateAccount(auth, user); err != nil {
 		return nil, err
 	}
 

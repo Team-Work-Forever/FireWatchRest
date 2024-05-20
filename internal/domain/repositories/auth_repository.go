@@ -43,7 +43,7 @@ func (repo *AuthRepository) ExistsUserWithNif(nif *vo.NIF) bool {
 	return true
 }
 
-func (repo *AuthRepository) CreateUser(auth *entities.Auth, user *entities.User) error {
+func (repo *AuthRepository) CreateAccount(auth *entities.Auth, user *entities.User) error {
 	tx := repo.dbContext.Begin()
 
 	if err := tx.Create(&auth).Error; err != nil {

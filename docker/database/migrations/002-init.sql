@@ -1,3 +1,13 @@
+create table tokens (
+  id uuid not null,
+  token text not null,
+  type varchar(20) not null,
+  expire_at timestamp not null,
+  created_at timestamp default now(),
+  updated_at timestamp default now(),
+  deleted_at timestamp default null,
+  primary key (id)
+);
 create table auth_keys (
   id uuid not null,
   password varchar(72) not null,

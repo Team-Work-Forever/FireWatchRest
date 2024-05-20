@@ -30,5 +30,5 @@ func (hs *HttpServer) GetVersion(version string) fiber.Router {
 func (hs *HttpServer) Serve() {
 	env := config.GetCofig()
 
-	log.Fatal(hs.Instance.Listen(fmt.Sprintf(":%s", env.FIRE_WATCH_PORT)))
+	log.Fatal(hs.Instance.Listen(fmt.Sprintf(":%s", env.FIRE_WATCH_API_PORT)))
 }

@@ -26,6 +26,22 @@ info:
   title: FireWatch API
   version: "1.0"
 paths:
+  /auth/forgot_password:
+    post:
+      parameters:
+      - description: Email address associated with the account
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Request a Password Reset
+      tags:
+      - Auth
   /auth/login:
     post:
       consumes:
@@ -44,11 +60,9 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/contracts.AuthResponse'
-      security:
-      - BearerAuth: []
       summary: Authenticate with account
       tags:
-      - auth
+      - Auth
   /auth/signUp:
     post:
       consumes:
@@ -110,9 +124,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/contracts.AuthResponse'
-      security:
-      - BearerAuth: []
       summary: Create an Account
       tags:
-      - auth
+      - Auth
 swagger: "2.0"

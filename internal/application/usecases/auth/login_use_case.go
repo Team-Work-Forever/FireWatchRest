@@ -20,7 +20,7 @@ func NewLoginUseCase(authRepository *repositories.AuthRepository) *LoginUseCase 
 	}
 }
 
-func (uc *LoginUseCase) Handle(request *contracts.LoginRequest) (*contracts.AuthResponse, error) {
+func (uc *LoginUseCase) Handle(request contracts.LoginRequest) (*contracts.AuthResponse, error) {
 	email, err := vo.NewEmail(request.Email)
 
 	if err != nil {
