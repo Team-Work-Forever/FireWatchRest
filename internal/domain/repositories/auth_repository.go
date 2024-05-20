@@ -3,6 +3,7 @@ package repositories
 import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"gorm.io/gorm"
 )
 
@@ -16,26 +17,26 @@ func NewAuthRepository(database adapters.Database) *AuthRepository {
 	}
 }
 
-func (repo *AuthRepository) GetAuthByEmail(email string) (*entities.Auth, error) {
+func (repo *AuthRepository) GetAuthByEmail(email *vo.Email) (*entities.Auth, error) {
 	var auth *entities.Auth
 
-	if err := repo.dbContext.Where("email = ?", email).First(&auth).Error; err != nil {
+	if err := repo.dbContext.Where("email = ?", email.GetValue()).First(&auth).Error; err != nil {
 		return nil, err
 	}
 
 	return auth, nil
 }
 
-func (repo *AuthRepository) ExistsUserWithEmail(email string) bool {
-	if err := repo.dbContext.Where("email = ?", email).First(&entities.Auth{}).Error; err != nil {
+func (repo *AuthRepository) ExistsUserWithEmail(email *vo.Email) bool {
+	if err := repo.dbContext.Where("email = ?", email.GetValue()).First(&entities.Auth{}).Error; err != nil {
 		return false
 	}
 
 	return true
 }
 
-func (repo *AuthRepository) ExistsUserWithNif(nif string) bool {
-	if err := repo.dbContext.Where("nif = ?", nif).First(&entities.Auth{}).Error; err != nil {
+func (repo *AuthRepository) ExistsUserWithNif(nif *vo.NIF) bool {
+	if err := repo.dbContext.Where("nif = ?", nif.GetValue()).First(&entities.Auth{}).Error; err != nil {
 		return false
 	}
 

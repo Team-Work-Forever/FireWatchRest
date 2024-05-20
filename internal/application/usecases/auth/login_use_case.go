@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/jwt"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pwd"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
@@ -20,16 +21,20 @@ func NewLoginUseCase(authRepository *repositories.AuthRepository) *LoginUseCase 
 }
 
 func (uc *LoginUseCase) Handle(request *contracts.LoginRequest) (*contracts.AuthResponse, error) {
-	// validate email
+	email, err := vo.NewEmail(request.Email)
 
-	foundAuth, err := uc.authRepository.GetAuthByEmail(request.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	foundAuth, err := uc.authRepository.GetAuthByEmail(email)
 
 	if err != nil {
 		return nil, err
 	}
 
 	// verify if the password is correct
-	if ok := pwd.CheckPasswordHash(request.Password, foundAuth.Salt, foundAuth.Password); !ok {
+	if ok := pwd.CheckPasswordHash(request.Password, foundAuth.Salt, foundAuth.Password.GetValue()); !ok {
 		return nil, errors.New("the email or password is wrong")
 	}
 

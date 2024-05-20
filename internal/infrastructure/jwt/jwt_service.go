@@ -42,7 +42,7 @@ func CreateAuthTokens(auth *entities.Auth) (string, string, error) {
 	env := config.GetCofig()
 
 	accessToken, err := CreateJwtToken(&TokenPayload{
-		Email:    auth.Email,
+		Email:    auth.Email.GetValue(),
 		UserId:   auth.ID,
 		Role:     "admin",
 		Duration: time.Now().Add(time.Duration(env.FIRE_WATCH_ACCESS_EXPIRED) * 24 * time.Hour).Unix(),
@@ -53,7 +53,7 @@ func CreateAuthTokens(auth *entities.Auth) (string, string, error) {
 	}
 
 	refreshToken, err := CreateJwtToken(&TokenPayload{
-		Email:    auth.Email,
+		Email:    auth.Email.GetValue(),
 		UserId:   auth.ID,
 		Role:     "admin",
 		Duration: time.Now().Add(time.Duration(env.FIRE_WATCH_REFRESH_EXPIRED) * 60 * time.Minute).Unix(),

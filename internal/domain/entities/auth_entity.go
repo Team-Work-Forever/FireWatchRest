@@ -1,28 +1,28 @@
 package entities
 
 import (
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pwd"
 	"gorm.io/gorm"
 )
 
 type Auth struct {
 	EntityBase
-	Email            string `gorm:"column:email"`
-	Password         string `gorm:"column:password"`
-	Salt             string `gorm:"column:salt"`
-	NIF              string `gorm:"column:nif"`
-	IsAccountEnabled bool   `gorm:"column:is_account_enabled"`
+	Email            vo.Email    `gorm:"embedded"`
+	Password         vo.Password `gorm:"embedded"`
+	Salt             string      `gorm:"column:salt"`
+	NIF              vo.NIF      `gorm:"embedded"`
+	IsAccountEnabled bool        `gorm:"column:is_account_enabled"`
 }
 
 func (e *Auth) TableName() string {
 	return "auth_keys"
 }
 
-func NewAuth(email string, password string, nif string) *Auth {
+func NewAuth(email vo.Email, password vo.Password, nif vo.NIF) *Auth {
 	return &Auth{
 		Email:    email,
 		Password: password,
-		Salt:     "assdads",
 		NIF:      nif,
 	}
 }
@@ -36,13 +36,13 @@ func (u *Auth) BeforeCreate(tx *gorm.DB) error {
 		return err
 	}
 
-	password, err := pwd.HashPassword(u.Password, salt)
+	password, err := pwd.HashPassword(u.Password.GetValue(), salt)
 
 	if err != nil {
 		return err
 	}
 
-	u.Password = password
+	u.Password = vo.NewHash(password)
 	u.Salt = salt
 
 	return nil
