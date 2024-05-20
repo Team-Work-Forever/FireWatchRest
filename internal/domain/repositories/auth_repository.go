@@ -1,0 +1,61 @@
+package repositories
+
+import (
+	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
+	"gorm.io/gorm"
+)
+
+type AuthRepository struct {
+	dbContext *gorm.DB
+}
+
+func NewAuthRepository(database adapters.Database) *AuthRepository {
+	return &AuthRepository{
+		dbContext: database.GetDatabase(),
+	}
+}
+
+func (repo *AuthRepository) GetAuthByEmail(email string) (*entities.Auth, error) {
+	var auth *entities.Auth
+
+	if err := repo.dbContext.Where("email = ?", email).First(&auth).Error; err != nil {
+		return nil, err
+	}
+
+	return auth, nil
+}
+
+func (repo *AuthRepository) ExistsUserWithEmail(email string) bool {
+	if err := repo.dbContext.Where("email = ?", email).First(&entities.Auth{}).Error; err != nil {
+		return false
+	}
+
+	return true
+}
+
+func (repo *AuthRepository) ExistsUserWithNif(nif string) bool {
+	if err := repo.dbContext.Where("nif = ?", nif).First(&entities.Auth{}).Error; err != nil {
+		return false
+	}
+
+	return true
+}
+
+func (repo *AuthRepository) CreateUser(auth *entities.Auth, user *entities.User) error {
+	tx := repo.dbContext.Begin()
+
+	if err := tx.Create(&auth).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// link auth keys to account
+	user.AsignAuthKey(auth)
+	if err := tx.Create(&user).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
+}

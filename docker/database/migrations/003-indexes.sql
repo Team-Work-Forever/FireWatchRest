@@ -4,7 +4,7 @@ create unique index nif_index on auth_keys (nif);
 -- users table
 create index first_name_index on users (first_name);
 create index last_name_index on users (last_name);
-create unique index phone_number_index on users (phone_number);
+create index phone_number_index on users (phone_number);
 -- burn
 create index burn_title_index on burn (title);
 -- autarchy
