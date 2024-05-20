@@ -36,4 +36,10 @@ type (
 	ForgotPasswordRequest struct {
 		Email string
 	}
+
+	ResetPasswordRequest struct {
+		ForgotToken     string `swaggerignore:"true"`
+		Password        string `json:"password" binding:"required"`
+		ConfirmPassword string `json:"confirm_password" binding:"required"`
+	}
 )

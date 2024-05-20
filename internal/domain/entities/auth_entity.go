@@ -1,6 +1,8 @@
 package entities
 
 import (
+	"errors"
+
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pwd"
 	"gorm.io/gorm"
@@ -27,8 +29,10 @@ func NewAuth(email vo.Email, password vo.Password, nif vo.NIF) *Auth {
 	}
 }
 
-func (u *Auth) BeforeCreate(tx *gorm.DB) error {
-	u.EntityBase.BeforeCreate(tx)
+func (a *Auth) ChangePassword(password *vo.Password) error {
+	if pwd.CheckPasswordHash(password.GetValue(), a.Salt, a.Password.GetValue()) {
+		return errors.New("it's not possible to reset to the same password")
+	}
 
 	salt, err := pwd.GenerateSalt(pwd.BCRYPT_COST)
 
@@ -36,14 +40,35 @@ func (u *Auth) BeforeCreate(tx *gorm.DB) error {
 		return err
 	}
 
-	password, err := pwd.HashPassword(u.Password.GetValue(), salt)
+	hash, err := pwd.HashPassword(password.GetValue(), salt)
 
 	if err != nil {
 		return err
 	}
 
-	u.Password = vo.NewHash(password)
-	u.Salt = salt
+	a.Password = vo.NewHash(hash)
+	a.Salt = salt
+
+	return nil
+}
+
+func (a *Auth) BeforeCreate(tx *gorm.DB) error {
+	a.EntityBase.BeforeCreate(tx)
+
+	salt, err := pwd.GenerateSalt(pwd.BCRYPT_COST)
+
+	if err != nil {
+		return err
+	}
+
+	password, err := pwd.HashPassword(a.Password.GetValue(), salt)
+
+	if err != nil {
+		return err
+	}
+
+	a.Password = vo.NewHash(password)
+	a.Salt = salt
 
 	return nil
 }

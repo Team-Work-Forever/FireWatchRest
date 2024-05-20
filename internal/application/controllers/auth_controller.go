@@ -11,17 +11,20 @@ type AuthController struct {
 	loginUseCase          *usecases.LoginUseCase
 	signUpUseCase         *usecases.SignUpUseCase
 	forgotPasswordUseCase *usecases.ForgotPasswordUseCase
+	resetPasswordUseCase  *usecases.ResetPasswordUseCase
 }
 
 func NewAuthController(
 	loginUseCase *usecases.LoginUseCase,
 	signUpUseCase *usecases.SignUpUseCase,
 	forgotPasswordUseCase *usecases.ForgotPasswordUseCase,
+	resetPasswordUseCase *usecases.ResetPasswordUseCase,
 ) *AuthController {
 	return &AuthController{
 		loginUseCase:          loginUseCase,
 		signUpUseCase:         signUpUseCase,
 		forgotPasswordUseCase: forgotPasswordUseCase,
+		resetPasswordUseCase:  resetPasswordUseCase,
 	}
 }
 
@@ -31,6 +34,7 @@ func (c *AuthController) Route(router fiber.Router) {
 	authRoutes.Post("login", middlewares.ShouldAcceptJson, c.LoginRoute)
 	authRoutes.Post("signUp", middlewares.ShouldAcceptMultiPart, c.SignUpRoute)
 	authRoutes.Get("forgot_password", c.ForgotPasswordRoute)
+	authRoutes.Post("reset_password", middlewares.ShouldAcceptJson, c.ResetPasswordRoute)
 }
 
 // // ShowAccount godoc
@@ -81,7 +85,7 @@ func (c *AuthController) SignUpRoute(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(tokens)
+	return ctx.Status(fiber.StatusCreated).JSON(tokens)
 
 }
 
@@ -90,9 +94,7 @@ func (c *AuthController) SignUpRoute(ctx *fiber.Ctx) error {
 //	@Summary	Request a Password Reset
 //	@Tags		Auth
 //	@Produce	json
-//
-// @Param email query string true "Email address associated with the account"
-//
+//	@Param		email	query	string	true	"Email address associated with the account"
 //	@Success	200
 //	@Router		/auth/forgot_password [get]
 func (c *AuthController) ForgotPasswordRoute(ctx *fiber.Ctx) error {
@@ -107,4 +109,32 @@ func (c *AuthController) ForgotPasswordRoute(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(fiber.StatusOK).SendString(`an email with password recovery instructions has been sent to your email address. If you have not received the email, please try again.`)
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Reset Password
+//	@Tags		Auth
+//	@Accept		json
+//	@Produce	json
+//	@Param		forgot_token	query		string							true	"A unique token sent to the user's email for password reset"
+//	@Param		data			body		contracts.ResetPasswordRequest	true	"Reset Password Payload"
+//	@Success	200				{string}	string							"Password reset successfully"
+//	@Router		/auth/reset_password [post]
+func (c *AuthController) ResetPasswordRoute(ctx *fiber.Ctx) error {
+	var resetPasswordRequest contracts.ResetPasswordRequest
+	forgot_token := ctx.Query("forgot_token")
+
+	if err := ctx.BodyParser(&resetPasswordRequest); err != nil {
+		return err
+	}
+
+	resetPasswordRequest.ForgotToken = forgot_token
+	err := c.resetPasswordUseCase.Handle(resetPasswordRequest)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusOK).SendString("the password was resetted")
 }

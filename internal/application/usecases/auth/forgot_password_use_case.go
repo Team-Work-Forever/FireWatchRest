@@ -48,7 +48,7 @@ func (f *ForgotPasswordUseCase) Handle(request contracts.ForgotPasswordRequest) 
 		UserId:   foundAuth.ID,
 		Email:    foundAuth.Email.GetValue(),
 		Role:     "admin",
-		Duration: expire_at.Unix(),
+		Duration: expire_at,
 	})
 
 	if err != nil {

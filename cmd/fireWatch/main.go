@@ -46,9 +46,10 @@ func main() {
 	loginUseCase := usecases.NewLoginUseCase(authRepository)
 	signUpUseCase := usecases.NewSignUpUseCase(authRepository)
 	forgotPasswordUseCase := usecases.NewForgotPasswordUseCase(authRepository, tokenRepository)
+	resetPasswordUseCase := usecases.NewResetPasswordUseCase(authRepository, tokenRepository)
 
 	// controllers
-	authController := controllers.NewAuthController(loginUseCase, signUpUseCase, forgotPasswordUseCase)
+	authController := controllers.NewAuthController(loginUseCase, signUpUseCase, forgotPasswordUseCase, resetPasswordUseCase)
 	authController.Route(version)
 
 	// Serve application

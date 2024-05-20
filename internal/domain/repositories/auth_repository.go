@@ -60,3 +60,7 @@ func (repo *AuthRepository) CreateAccount(auth *entities.Auth, user *entities.Us
 
 	return tx.Commit().Error
 }
+
+func (repo *AuthRepository) Update(auth *entities.Auth) error {
+	return repo.dbContext.Save(auth).Error
+}

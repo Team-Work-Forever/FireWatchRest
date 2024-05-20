@@ -14,6 +14,16 @@ definitions:
       password:
         type: string
     type: object
+  contracts.ResetPasswordRequest:
+    properties:
+      confirm_password:
+        type: string
+      password:
+        type: string
+    required:
+    - confirm_password
+    - password
+    type: object
 info:
   contact:
     email: fiber@swagger.io
@@ -61,6 +71,32 @@ paths:
           schema:
             $ref: '#/definitions/contracts.AuthResponse'
       summary: Authenticate with account
+      tags:
+      - Auth
+  /auth/reset_password:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: A unique token sent to the user's email for password reset
+        in: query
+        name: forgot_token
+        required: true
+        type: string
+      - description: Reset Password Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/contracts.ResetPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password reset successfully
+          schema:
+            type: string
+      summary: Reset Password
       tags:
       - Auth
   /auth/signUp:

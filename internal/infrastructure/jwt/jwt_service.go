@@ -1,41 +1,49 @@
 package jwt
 
 import (
+	"errors"
+	"fmt"
 	"time"
 
 	"github.com/Team-Work-Forever/FireWatchRest/config"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
-type TokenPayload struct {
-	UserId   string
-	Email    string
-	Role     string
-	Duration int64
-}
+type (
+	TokenPayload struct {
+		UserId   string
+		Email    string
+		Role     string
+		Duration time.Time
+	}
+
+	AuthClaims struct {
+		jwt.RegisteredClaims
+		Email string `json:"email,omitempty"`
+		Role  string `json:"role,omitempty"`
+	}
+)
 
 func CreateJwtToken(payload TokenPayload) (string, error) {
 	env := config.GetCofig()
 
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-
-	claims["sub"] = payload.UserId
-	claims["email"] = payload.Email
-	claims["role"] = payload.Role
-	claims["iss"] = env.JWT_ISSUER
-	claims["aud"] = env.JWT_AUDIENCE
-	claims["iat"] = time.Now().Unix()
-	claims["exp"] = payload.Duration
-
-	tokenString, err := token.SignedString([]byte(env.JWT_SECRET))
-
-	if err != nil {
-		return "", err
+	claims := AuthClaims{
+		Email: payload.Email,
+		Role:  payload.Role,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Issuer:    env.JWT_ISSUER,
+			Audience:  jwt.ClaimStrings{env.JWT_AUDIENCE},
+			IssuedAt:  &jwt.NumericDate{Time: time.Now()},
+			ExpiresAt: &jwt.NumericDate{Time: payload.Duration},
+			Subject:   payload.UserId,
+			ID:        uuid.New().String(),
+		},
 	}
 
-	return tokenString, nil
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString([]byte(env.JWT_SECRET))
 }
 
 func CreateAuthTokens(auth *entities.Auth) (string, string, error) {
@@ -45,7 +53,7 @@ func CreateAuthTokens(auth *entities.Auth) (string, string, error) {
 		Email:    auth.Email.GetValue(),
 		UserId:   auth.ID,
 		Role:     "admin",
-		Duration: time.Now().Add(time.Duration(env.JWT_ACCESS_EXPIRED) * time.Minute).Unix(),
+		Duration: time.Now().Add(time.Duration(env.JWT_ACCESS_EXPIRED) * time.Minute),
 	})
 
 	if err != nil {
@@ -56,7 +64,7 @@ func CreateAuthTokens(auth *entities.Auth) (string, string, error) {
 		Email:    auth.Email.GetValue(),
 		UserId:   auth.ID,
 		Role:     "admin",
-		Duration: time.Now().Add(time.Duration(env.JWT_REFRESH_EXPIRED) * 24 * time.Hour).Unix(),
+		Duration: time.Now().Add(time.Duration(env.JWT_REFRESH_EXPIRED) * 24 * time.Hour),
 	})
 
 	if err != nil {
@@ -64,4 +72,32 @@ func CreateAuthTokens(auth *entities.Auth) (string, string, error) {
 	}
 
 	return accessToken, refreshToken, nil
+}
+
+func GetClaims(token string, claims jwt.Claims) (interface{}, error) {
+	env := config.GetCofig()
+
+	jwtToken, err := jwt.ParseWithClaims(token, claims, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+		}
+
+		return []byte(env.JWT_SECRET), nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !jwtToken.Valid {
+		return nil, errors.New("token is no longer valid")
+	}
+
+	return claims, nil
+}
+
+func ValidateToken(token string) bool {
+	_, err := GetClaims(token, &AuthClaims{})
+
+	return err == nil
 }
