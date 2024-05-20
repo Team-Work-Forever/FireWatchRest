@@ -24,7 +24,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/auth/forgot_password": {
-            "post": {
+            "get": {
                 "produces": [
                     "application/json"
                 ],

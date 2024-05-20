@@ -27,7 +27,7 @@ info:
   version: "1.0"
 paths:
   /auth/forgot_password:
-    post:
+    get:
       parameters:
       - description: Email address associated with the account
         in: query
