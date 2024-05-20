@@ -1,23 +1,29 @@
 package controllers
 
 import (
+	"log"
+
+	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
 	usecases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/auth"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	"github.com/gofiber/fiber/v2"
 )
 
 type AuthController struct {
+	LoginUseCase *usecases.LoginUseCase
 }
 
-func NewAuthController() *AuthController {
-	return &AuthController{}
+func NewAuthController(loginUseCase *usecases.LoginUseCase) *AuthController {
+	return &AuthController{
+		LoginUseCase: loginUseCase,
+	}
 }
 
 func (c *AuthController) Route(router fiber.Router) {
 	authRoutes := router.Group("auth")
 
-	authRoutes.Post("login", LoginRoute)
-	authRoutes.Post("signUp", SignUpRoute)
+	authRoutes.Post("login", middlewares.ShouldAcceptJson, c.LoginRoute)
+	authRoutes.Post("signUp", middlewares.ShouldAcceptMultiPart, SignUpRoute)
 }
 
 // // ShowAccount godoc
@@ -27,19 +33,23 @@ func (c *AuthController) Route(router fiber.Router) {
 //	@Accept		json
 //	@Produce	json
 //	@Param		data	body		contracts.LoginRequest	true	"Login Payload"
-//	@Success	200		{object}	contracts.DefaultResponse
+//	@Success	200		{object}	contracts.AuthResponse
 //	@Security	BearerAuth
-//	@Router		/api/v1/auth/login [post]
-func LoginRoute(ctx *fiber.Ctx) error {
-	useCase := usecases.NewLoginUseCase()
-	result := useCase.Handle()
+//	@Router		/auth/login [post]
+func (c *AuthController) LoginRoute(ctx *fiber.Ctx) error {
+	loginRequest := new(contracts.LoginRequest)
 
-	ctx.Status(fiber.StatusOK).JSON(contracts.DefaultResponse{
-		Code:  fiber.StatusOK,
-		Title: result,
-	})
+	if err := ctx.BodyParser(loginRequest); err != nil {
+		return err
+	}
 
-	return nil
+	tokens, err := c.LoginUseCase.Handle(loginRequest)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(tokens)
 }
 
 // // ShowAccount godoc
@@ -49,17 +59,38 @@ func LoginRoute(ctx *fiber.Ctx) error {
 //	@Accept		multipart/form-data
 //	@Produce	json
 //	@Param		data formData contracts.SignUpRequest true "Form data"
-//	@Param		file formData file true "User avatar"
-//	@Success	200	{object}	contracts.DefaultResponse
+//	@Param		avatar formData file true "User avatar"
+//	@Success	200	{object}	contracts.AuthResponse
 //	@Security	BearerAuth
-//	@Router		/api/v1/auth/signUp [post]
+//	@Router		/auth/signUp [post]
 func SignUpRoute(ctx *fiber.Ctx) error {
-	useCase := usecases.NewLoginUseCase()
-	result := useCase.Handle()
+	signUpRequest := new(contracts.SignUpRequest)
+	log.Print("Estou cá")
 
-	ctx.Status(fiber.StatusOK).JSON(contracts.DefaultResponse{
-		Code:  fiber.StatusOK,
-		Title: result,
+	form, err := ctx.MultipartForm()
+
+	if err != nil {
+		return err
+	}
+
+	if err := ctx.BodyParser(signUpRequest); err != nil {
+		return err
+	}
+
+	log.Printf("Email: %s", signUpRequest.Email)
+	log.Printf("Password: %s", signUpRequest.Password)
+	log.Printf("FirstName: %s", signUpRequest.FirstName)
+	log.Printf("LastName: %s", signUpRequest.LastName)
+
+	files := form.File["avatar"]
+
+	for _, file := range files {
+		log.Printf("File name: %s", file.Filename)
+	}
+
+	ctx.Status(fiber.StatusOK).JSON(contracts.AuthResponse{
+		AccessToken:  "",
+		RefreshToken: "",
 	})
 
 	return nil

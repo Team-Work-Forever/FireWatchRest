@@ -23,7 +23,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/auth/login": {
+        "/auth/login": {
             "post": {
                 "security": [
                     {
@@ -55,13 +55,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/contracts.DefaultResponse"
+                            "$ref": "#/definitions/contracts.AuthResponse"
                         }
                     }
                 }
             }
         },
-        "/api/v1/auth/signUp": {
+        "/auth/signUp": {
             "post": {
                 "security": [
                     {
@@ -106,7 +106,7 @@ const docTemplate = `{
                     {
                         "type": "file",
                         "description": "User avatar",
-                        "name": "file",
+                        "name": "avatar",
                         "in": "formData",
                         "required": true
                     }
@@ -115,7 +115,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/contracts.DefaultResponse"
+                            "$ref": "#/definitions/contracts.AuthResponse"
                         }
                     }
                 }
@@ -123,13 +123,13 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "contracts.DefaultResponse": {
+        "contracts.AuthResponse": {
             "type": "object",
             "properties": {
-                "code": {
-                    "type": "integer"
+                "access_token": {
+                    "type": "string"
                 },
-                "title": {
+                "refresh_token": {
                     "type": "string"
                 }
             }

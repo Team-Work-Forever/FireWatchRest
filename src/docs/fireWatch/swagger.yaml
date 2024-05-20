@@ -1,10 +1,10 @@
 basePath: /api/v1
 definitions:
-  contracts.DefaultResponse:
+  contracts.AuthResponse:
     properties:
-      code:
-        type: integer
-      title:
+      access_token:
+        type: string
+      refresh_token:
         type: string
     type: object
   contracts.LoginRequest:
@@ -26,7 +26,7 @@ info:
   title: FireWatch API
   version: "1.0"
 paths:
-  /api/v1/auth/login:
+  /auth/login:
     post:
       consumes:
       - application/json
@@ -43,13 +43,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/contracts.DefaultResponse'
+            $ref: '#/definitions/contracts.AuthResponse'
       security:
       - BearerAuth: []
       summary: Authenticate with account
       tags:
       - auth
-  /api/v1/auth/signUp:
+  /auth/signUp:
     post:
       consumes:
       - multipart/form-data
@@ -72,7 +72,7 @@ paths:
         type: string
       - description: User avatar
         in: formData
-        name: file
+        name: avatar
         required: true
         type: file
       produces:
@@ -81,7 +81,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/contracts.DefaultResponse'
+            $ref: '#/definitions/contracts.AuthResponse'
       security:
       - BearerAuth: []
       summary: Create an Account

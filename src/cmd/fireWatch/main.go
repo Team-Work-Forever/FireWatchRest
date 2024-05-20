@@ -1,24 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"log"
-
 	"github.com/Team-Work-Forever/FireWatchRest/config"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/controllers"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/swagger"
-
-	docs "github.com/Team-Work-Forever/FireWatchRest/docs/fireWatch"
+	usecases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/auth"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 )
-
-func ConfigureSwagger(app *fiber.App, port string) {
-	docs.SwaggerInfo.Host = fmt.Sprintf("localhost:%s", port)
-	docs.SwaggerInfo.Schemes = []string{"http"}
-
-	app.Get("/swagger/*", swagger.HandlerDefault)
-	app.Get("/swagger/*", swagger.New(swagger.Config{}))
-}
 
 // @title			FireWatch API
 // @version		1.0
@@ -34,14 +22,23 @@ func main() {
 	config.LoadEnv("../.env")
 	env := config.GetCofig()
 
-	app := fiber.New()
-	v1 := app.Group("api/v1")
+	// Setup Fiber
+	app := adapters.NewHttpServer()
+	version := app.GetVersion("v1")
 
-	authController := controllers.NewAuthController()
-	authController.Route(v1)
+	// Setup Swagger
+	adapters.UseSwagger(app.Instance, env.FIRE_WATCH_PORT)
 
-	app.Get("/", controllers.LoginRoute)
-	ConfigureSwagger(app, env.FIRE_WATCH_PORT)
+	// repositories
+	authRepository := repositories.NewAuthRepository()
 
-	log.Fatal(app.Listen(fmt.Sprintf(":%s", env.FIRE_WATCH_PORT)))
+	// use cases
+	loginUseCase := usecases.NewLoginUseCase(authRepository)
+
+	// controllers
+	authController := controllers.NewAuthController(loginUseCase)
+	authController.Route(version)
+
+	// Serve application
+	app.Serve()
 }

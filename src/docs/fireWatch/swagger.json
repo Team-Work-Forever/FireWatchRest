@@ -16,7 +16,7 @@
     },
     "basePath": "/api/v1",
     "paths": {
-        "/api/v1/auth/login": {
+        "/auth/login": {
             "post": {
                 "security": [
                     {
@@ -48,13 +48,13 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/contracts.DefaultResponse"
+                            "$ref": "#/definitions/contracts.AuthResponse"
                         }
                     }
                 }
             }
         },
-        "/api/v1/auth/signUp": {
+        "/auth/signUp": {
             "post": {
                 "security": [
                     {
@@ -99,7 +99,7 @@
                     {
                         "type": "file",
                         "description": "User avatar",
-                        "name": "file",
+                        "name": "avatar",
                         "in": "formData",
                         "required": true
                     }
@@ -108,7 +108,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/contracts.DefaultResponse"
+                            "$ref": "#/definitions/contracts.AuthResponse"
                         }
                     }
                 }
@@ -116,13 +116,13 @@
         }
     },
     "definitions": {
-        "contracts.DefaultResponse": {
+        "contracts.AuthResponse": {
             "type": "object",
             "properties": {
-                "code": {
-                    "type": "integer"
+                "access_token": {
+                    "type": "string"
                 },
-                "title": {
+                "refresh_token": {
                     "type": "string"
                 }
             }
