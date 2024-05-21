@@ -8,7 +8,7 @@ definitions:
         type: integer
       street:
         type: string
-      zipCode:
+      zip_code:
         $ref: '#/definitions/contracts.ZipCodeResponse'
     type: object
   contracts.AuthResponse:
@@ -27,7 +27,7 @@ definitions:
     type: object
   contracts.PhoneResponse:
     properties:
-      countryCode:
+      country_code:
         type: string
       number:
         type: string
@@ -38,13 +38,13 @@ definitions:
         $ref: '#/definitions/contracts.AddressResponse'
       email:
         type: string
-      firstName:
+      first_name:
         type: string
-      lastName:
+      last_name:
         type: string
       phone:
         $ref: '#/definitions/contracts.PhoneResponse'
-      userType:
+      user_type:
         type: string
     type: object
   contracts.ResetPasswordRequest:
@@ -109,6 +109,26 @@ paths:
           schema:
             $ref: '#/definitions/contracts.AuthResponse'
       summary: Authenticate with account
+      tags:
+      - Auth
+  /auth/refresh_tokens:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: JWT token to be refreshed
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/contracts.AuthResponse'
+      summary: Refresh Tokens
       tags:
       - Auth
   /auth/reset_password:
@@ -212,7 +232,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/contracts.ProfileResponse'
+      security:
+      - Bearer: []
       summary: Fetch Profile Information
       tags:
       - Profile
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

@@ -10,15 +10,19 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 )
 
-// @title			FireWatch API
-// @version		1.0
-// @description	This is the api for Fire Watch Mobile Application
-// @termsOfService	http://swagger.io/terms/
-// @contact.name	API Support
-// @contact.email	fiber@swagger.io
-// @license.name	Apache 2.0
-// @license.url	http://www.apache.org/licenses/LICENSE-2.0.html
-// @BasePath		/api/v1
+//	@title						FireWatch API
+//	@version					1.0
+//	@description				This is the api for Fire Watch Mobile Application
+//	@termsOfService				http://swagger.io/terms/
+//	@contact.name				API Support
+//	@contact.email				fiber@swagger.io
+//	@license.name				Apache 2.0
+//	@license.url				http://www.apache.org/licenses/LICENSE-2.0.html
+//	@BasePath					/api/v1
+//	@securityDefinitions.apikey	Bearer
+//	@in							header
+//	@name						Authorization
+//
 // @ Schemas http
 func main() {
 	config.LoadEnv(".env")
@@ -47,11 +51,12 @@ func main() {
 	signUpUseCase := uca.NewSignUpUseCase(authRepository)
 	forgotPasswordUseCase := uca.NewForgotPasswordUseCase(authRepository, tokenRepository)
 	resetPasswordUseCase := uca.NewResetPasswordUseCase(authRepository, tokenRepository)
+	refreshTokensUseCase := uca.NewRefreshTokesUseCase(authRepository)
 
 	whoamiUseCase := ucp.NewWhoamiUseCase(authRepository, profileRepository)
 
 	// controllers
-	authController := controllers.NewAuthController(loginUseCase, signUpUseCase, forgotPasswordUseCase, resetPasswordUseCase)
+	authController := controllers.NewAuthController(loginUseCase, signUpUseCase, forgotPasswordUseCase, resetPasswordUseCase, refreshTokensUseCase)
 	profileController := controllers.NewProfileController(whoamiUseCase)
 
 	// Serve application

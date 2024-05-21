@@ -12,6 +12,7 @@ type AuthController struct {
 	signUpUseCase         *usecases.SignUpUseCase
 	forgotPasswordUseCase *usecases.ForgotPasswordUseCase
 	resetPasswordUseCase  *usecases.ResetPasswordUseCase
+	refreshTokensUseCase  *usecases.RefreshTokensUseCase
 }
 
 func NewAuthController(
@@ -19,12 +20,14 @@ func NewAuthController(
 	signUpUseCase *usecases.SignUpUseCase,
 	forgotPasswordUseCase *usecases.ForgotPasswordUseCase,
 	resetPasswordUseCase *usecases.ResetPasswordUseCase,
+	refreshTokensUseCase *usecases.RefreshTokensUseCase,
 ) *AuthController {
 	return &AuthController{
 		loginUseCase:          loginUseCase,
 		signUpUseCase:         signUpUseCase,
 		forgotPasswordUseCase: forgotPasswordUseCase,
 		resetPasswordUseCase:  resetPasswordUseCase,
+		refreshTokensUseCase:  refreshTokensUseCase,
 	}
 }
 
@@ -35,6 +38,7 @@ func (c *AuthController) Route(router fiber.Router) {
 	authRoutes.Post("signUp", middlewares.ShouldAcceptMultiPart, c.SignUpRoute)
 	authRoutes.Get("forgot_password", c.ForgotPasswordRoute)
 	authRoutes.Post("reset_password", middlewares.ShouldAcceptJson, c.ResetPasswordRoute)
+	authRoutes.Get("refresh_tokens", c.RefreshTokensRoute)
 }
 
 // // ShowAccount godoc
@@ -137,4 +141,28 @@ func (c *AuthController) ResetPasswordRoute(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(fiber.StatusOK).SendString("the password was resetted")
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Refresh Tokens
+//	@Tags		Auth
+//	@Accept		json
+//
+// @Param		token	query	string	true	"JWT token to be refreshed"
+// @Produce	json
+// @Success	201		{object}	contracts.AuthResponse
+// @Router		/auth/refresh_tokens [get]
+func (c *AuthController) RefreshTokensRoute(ctx *fiber.Ctx) error {
+	token := ctx.Query("token")
+
+	tokens, err := c.refreshTokensUseCase.Handle(contracts.RefreshTokensRequest{
+		RefreshToken: token,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(tokens)
 }

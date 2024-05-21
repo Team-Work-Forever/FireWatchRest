@@ -81,6 +81,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/refresh_tokens": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Refresh Tokens",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token to be refreshed",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/contracts.AuthResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/reset_password": {
             "post": {
                 "consumes": [
@@ -220,6 +251,11 @@ const docTemplate = `{
         },
         "/whoami": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -254,7 +290,7 @@ const docTemplate = `{
                 "street": {
                     "type": "string"
                 },
-                "zipCode": {
+                "zip_code": {
                     "$ref": "#/definitions/contracts.ZipCodeResponse"
                 }
             }
@@ -284,7 +320,7 @@ const docTemplate = `{
         "contracts.PhoneResponse": {
             "type": "object",
             "properties": {
-                "countryCode": {
+                "country_code": {
                     "type": "string"
                 },
                 "number": {
@@ -301,16 +337,16 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "firstName": {
+                "first_name": {
                     "type": "string"
                 },
-                "lastName": {
+                "last_name": {
                     "type": "string"
                 },
                 "phone": {
                     "$ref": "#/definitions/contracts.PhoneResponse"
                 },
-                "userType": {
+                "user_type": {
                     "type": "string"
                 }
             }
@@ -337,6 +373,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

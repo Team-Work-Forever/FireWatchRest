@@ -29,7 +29,10 @@ func (c *ProfileController) Route(router fiber.Router) {
 //	@Tags		Profile
 //	@Accept		json
 //	@Produce	json
-//	@Success	200		{object}	contracts.ProfileResponse
+//	@Success	200	{object}	contracts.ProfileResponse
+//
+//	@security	Bearer
+//
 //	@Router		/whoami [get]
 func (c *ProfileController) WhoamiRoute(ctx *fiber.Ctx) error {
 	userId := shared.GetUserId(ctx)

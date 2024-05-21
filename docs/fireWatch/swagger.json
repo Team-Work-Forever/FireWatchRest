@@ -74,6 +74,37 @@
                 }
             }
         },
+        "/auth/refresh_tokens": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Refresh Tokens",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token to be refreshed",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/contracts.AuthResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/reset_password": {
             "post": {
                 "consumes": [
@@ -213,6 +244,11 @@
         },
         "/whoami": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -247,7 +283,7 @@
                 "street": {
                     "type": "string"
                 },
-                "zipCode": {
+                "zip_code": {
                     "$ref": "#/definitions/contracts.ZipCodeResponse"
                 }
             }
@@ -277,7 +313,7 @@
         "contracts.PhoneResponse": {
             "type": "object",
             "properties": {
-                "countryCode": {
+                "country_code": {
                     "type": "string"
                 },
                 "number": {
@@ -294,16 +330,16 @@
                 "email": {
                     "type": "string"
                 },
-                "firstName": {
+                "first_name": {
                     "type": "string"
                 },
-                "lastName": {
+                "last_name": {
                     "type": "string"
                 },
                 "phone": {
                     "$ref": "#/definitions/contracts.PhoneResponse"
                 },
-                "userType": {
+                "user_type": {
                     "type": "string"
                 }
             }
@@ -330,6 +366,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
