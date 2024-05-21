@@ -80,6 +80,7 @@ func (uc *SignUpUseCase) Handle(request contracts.SignUpRequest) (*contracts.Aut
 		*email,
 		*password,
 		*nif,
+		int(vo.User),
 	)
 
 	user := entities.NewUser(
@@ -95,7 +96,11 @@ func (uc *SignUpUseCase) Handle(request contracts.SignUpRequest) (*contracts.Aut
 		return nil, err
 	}
 
-	accessToken, refreshToken, err := jwt.CreateAuthTokens(auth)
+	accessToken, refreshToken, err := jwt.CreateAuthTokens(jwt.AuthTokenPayload{
+		Email:  auth.Email.GetValue(),
+		UserId: auth.ID,
+		Role:   auth.GetRole(),
+	})
 
 	if err != nil {
 		return nil, err

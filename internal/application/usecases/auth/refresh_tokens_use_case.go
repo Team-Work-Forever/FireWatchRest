@@ -38,7 +38,11 @@ func (r *RefreshTokensUseCase) Handle(request contracts.RefreshTokensRequest) (*
 		return nil, exec.USER_NOT_FOUND
 	}
 
-	accessToken, refreshToken, err := jwt.CreateAuthTokens(auth)
+	accessToken, refreshToken, err := jwt.CreateAuthTokens(jwt.AuthTokenPayload{
+		Email:  auth.Email.GetValue(),
+		UserId: auth.ID,
+		Role:   auth.GetRole(),
+	})
 
 	if err != nil {
 		return nil, err

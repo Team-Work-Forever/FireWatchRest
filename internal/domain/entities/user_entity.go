@@ -13,7 +13,6 @@ type User struct {
 	LastName      string     `gorm:"column:last_name"`
 	PhoneNumber   vo.Phone   `gorm:"embedded"`
 	Address       vo.Address `gorm:"embedded"`
-	UserType      int        `gorm:"column:user_type"`
 }
 
 func NewUser(avatar string, userName string, firstName string, lastName string, phone vo.Phone, address vo.Address) *User {
@@ -24,7 +23,6 @@ func NewUser(avatar string, userName string, firstName string, lastName string, 
 		LastName:      lastName,
 		PhoneNumber:   phone,
 		Address:       address,
-		UserType:      0,
 	}
 }
 

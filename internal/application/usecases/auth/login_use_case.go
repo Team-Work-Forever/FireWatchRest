@@ -44,7 +44,10 @@ func (uc *LoginUseCase) Handle(request contracts.LoginRequest) (*contracts.AuthR
 	}
 
 	// generate jwt tokens
-	accessToken, refreshToken, err := jwt.CreateAuthTokens(foundAuth)
+	accessToken, refreshToken, err := jwt.CreateAuthTokens(jwt.AuthTokenPayload{
+		Email:  foundAuth.Email.GetValue(),
+		UserId: foundAuth.ID,
+	})
 
 	if err != nil {
 		return nil, err

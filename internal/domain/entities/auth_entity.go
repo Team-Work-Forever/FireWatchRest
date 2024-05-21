@@ -14,18 +14,26 @@ type Auth struct {
 	Salt             string      `gorm:"column:salt"`
 	NIF              vo.NIF      `gorm:"embedded"`
 	IsAccountEnabled bool        `gorm:"column:is_account_enabled"`
+	UserType         int         `gorm:"column:user_type"`
 }
 
 func (e *Auth) TableName() string {
 	return "auth_keys"
 }
 
-func NewAuth(email vo.Email, password vo.Password, nif vo.NIF) *Auth {
+func NewAuth(email vo.Email, password vo.Password, nif vo.NIF, userType int) *Auth {
 	return &Auth{
 		Email:    email,
 		Password: password,
 		NIF:      nif,
+		UserType: userType,
 	}
+}
+
+func (a *Auth) GetRole() string {
+	value, _ := vo.GetUserType(a.UserType)
+
+	return value
 }
 
 func (a *Auth) ChangePassword(password *vo.Password) error {

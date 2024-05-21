@@ -6,12 +6,17 @@ import (
 	"time"
 
 	"github.com/Team-Work-Forever/FireWatchRest/config"
-	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
 type (
+	AuthTokenPayload struct {
+		Email  string
+		UserId string
+		Role   string
+	}
+
 	TokenPayload struct {
 		UserId   string
 		Email    string
@@ -46,13 +51,13 @@ func CreateJwtToken(payload TokenPayload) (string, error) {
 	return token.SignedString([]byte(env.JWT_SECRET))
 }
 
-func CreateAuthTokens(auth *entities.Auth) (string, string, error) {
+func CreateAuthTokens(payload AuthTokenPayload) (string, string, error) {
 	env := config.GetCofig()
 
 	accessToken, err := CreateJwtToken(TokenPayload{
-		Email:    auth.Email.GetValue(),
-		UserId:   auth.ID,
-		Role:     "admin",
+		Email:    payload.Email,
+		UserId:   payload.UserId,
+		Role:     payload.Role,
 		Duration: time.Now().Add(time.Duration(env.JWT_ACCESS_EXPIRED) * time.Minute),
 	})
 
@@ -61,9 +66,9 @@ func CreateAuthTokens(auth *entities.Auth) (string, string, error) {
 	}
 
 	refreshToken, err := CreateJwtToken(TokenPayload{
-		Email:    auth.Email.GetValue(),
-		UserId:   auth.ID,
-		Role:     "admin",
+		Email:    payload.Email,
+		UserId:   payload.UserId,
+		Role:     payload.Role,
 		Duration: time.Now().Add(time.Duration(env.JWT_REFRESH_EXPIRED) * 24 * time.Hour),
 	})
 

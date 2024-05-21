@@ -53,6 +53,6 @@ func (w *WhoamiUseCase) Handle(request contracts.WhoamiRequest) (*contracts.Prof
 			},
 			City: profileFound.Address.City,
 		},
-		UserType: "admin",
+		UserType: foundAuth.GetRole(),
 	}, nil
 }
