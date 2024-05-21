@@ -3,11 +3,6 @@ package contracts
 import "mime/multipart"
 
 type (
-	DefaultResponse struct {
-		Code  int
-		Title string
-	}
-
 	AuthResponse struct {
 		AccessToken  string `json:"access_token"`
 		RefreshToken string `json:"refresh_token"`

@@ -90,7 +90,6 @@ func (c *AuthController) SignUpRoute(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(fiber.StatusCreated).JSON(tokens)
-
 }
 
 // // ShowAccount godoc

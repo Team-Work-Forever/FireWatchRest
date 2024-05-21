@@ -3,31 +3,31 @@ package exec
 import "github.com/gofiber/fiber/v2"
 
 var (
-	ADDRESS_PROVIDE_STREET          = fiber.NewError(fiber.StatusBadRequest, "Provide street field")
-	ADDRESS_PROVIDE_NUMBER          = fiber.NewError(fiber.StatusBadRequest, "Provide street number field")
-	ADDRESS_PROVIDE_AN_VALID_NUMBER = fiber.NewError(fiber.StatusBadRequest, "Provide an valid street number field")
-	ADDRESS_PROVIDE_CITY            = fiber.NewError(fiber.StatusBadRequest, "Provide city field")
+	ADDRESS_PROVIDE_STREET          = NewError(fiber.StatusBadRequest, "Adress Validation", "Provide street field")
+	ADDRESS_PROVIDE_NUMBER          = NewError(fiber.StatusBadRequest, "Adress Validation", "Provide street number field")
+	ADDRESS_PROVIDE_AN_VALID_NUMBER = NewError(fiber.StatusBadRequest, "Adress Validation", "Provide an valid street number field")
+	ADDRESS_PROVIDE_CITY            = NewError(fiber.StatusBadRequest, "Adress Validation", "Provide city field")
 
-	EMAIL_PROVIDE          = fiber.NewError(fiber.StatusBadRequest, "Provide email field")
-	EMAIL_PROVIDE_AN_VALID = fiber.NewError(fiber.StatusBadRequest, "Provide an valid email field")
+	EMAIL_PROVIDE          = NewError(fiber.StatusBadRequest, "Email Validation", "Provide email field")
+	EMAIL_PROVIDE_AN_VALID = NewError(fiber.StatusBadRequest, "Email Validation", "Provide an valid email field")
 
-	NIF_PROVIDE          = fiber.NewError(fiber.StatusBadRequest, "Provide NIF field")
-	NIF_PROVIDE_AN_VALID = fiber.NewError(fiber.StatusBadRequest, "Provide an valid NIF field")
+	NIF_PROVIDE          = NewError(fiber.StatusBadRequest, "NIF Validation", "Provide NIF field")
+	NIF_PROVIDE_AN_VALID = NewError(fiber.StatusBadRequest, "NIF Validation", "Provide an valid NIF field")
 
-	PASSWORD_PROVIDE                  = fiber.NewError(fiber.StatusBadRequest, "Provide password field")
-	PASSWORD_BTW_6_16                 = fiber.NewError(fiber.StatusBadRequest, "Password must be between 6 and 16 characters")
-	PASSWORD_MUST_CONTAIN_ONE_NUMBER  = fiber.NewError(fiber.StatusBadRequest, "Password must contain at least one number")
-	PASSWORD_MUST_CONTAIN_ONE_CAPITAL = fiber.NewError(fiber.StatusBadRequest, "Password must contain at least one capital letter")
-	PASSWORD_MUST_CONTAIN_NON_CAPITAL = fiber.NewError(fiber.StatusBadRequest, "Password must contain at least one non-capital letter")
+	PASSWORD_PROVIDE                  = NewError(fiber.StatusBadRequest, "Password Validation", "Provide password field")
+	PASSWORD_BTW_6_16                 = NewError(fiber.StatusBadRequest, "Password Validation", "Password must be between 6 and 16 characters")
+	PASSWORD_MUST_CONTAIN_ONE_NUMBER  = NewError(fiber.StatusBadRequest, "Password Validation", "Password must contain at least one number")
+	PASSWORD_MUST_CONTAIN_ONE_CAPITAL = NewError(fiber.StatusBadRequest, "Password Validation", "Password must contain at least one capital letter")
+	PASSWORD_MUST_CONTAIN_NON_CAPITAL = NewError(fiber.StatusBadRequest, "Password Validation", "Password must contain at least one non-capital letter")
 
-	PHONE_PROVIDE                = fiber.NewError(fiber.StatusBadRequest, "Provide phone field")
-	PHONE_INVALID_COUNTRY_NUMBER = fiber.NewError(fiber.StatusBadRequest, "Country Code is Invalid")
-	PHONE_MUST_BE_NINE_DIGITS    = fiber.NewError(fiber.StatusBadRequest, "Phone number must be nine digits long")
+	PHONE_PROVIDE                = NewError(fiber.StatusBadRequest, "Phone Validation", "Provide phone field")
+	PHONE_INVALID_COUNTRY_NUMBER = NewError(fiber.StatusBadRequest, "Phone Validation", "Country Code is Invalid")
+	PHONE_MUST_BE_NINE_DIGITS    = NewError(fiber.StatusBadRequest, "Phone Validation", "Phone number must be nine digits long")
 
-	ZIP_CODE_PROVIDE = fiber.NewError(fiber.StatusBadRequest, "Provide phone field")
-	ZIP_CODE_INVALID = fiber.NewError(fiber.StatusBadRequest, "Invalid Zip Code: format 4444-444")
+	ZIP_CODE_PROVIDE = NewError(fiber.StatusBadRequest, "Zip Code Validation", "Provide phone field")
+	ZIP_CODE_INVALID = NewError(fiber.StatusBadRequest, "Zip Code Validation", "Invalid Zip Code: format 4444-444")
 
-	USER_NAME_PROVIDE  = fiber.NewError(fiber.StatusBadRequest, "Provide user name field")
-	FIRST_NAME_PROVIDE = fiber.NewError(fiber.StatusBadRequest, "Provide first name field")
-	LAST_NAME_PROVIDE  = fiber.NewError(fiber.StatusBadRequest, "Provide last name field")
+	USER_NAME_PROVIDE  = NewError(fiber.StatusBadRequest, "User Validation", "Provide user name field")
+	FIRST_NAME_PROVIDE = NewError(fiber.StatusBadRequest, "User Validation", "Provide first name field")
+	LAST_NAME_PROVIDE  = NewError(fiber.StatusBadRequest, "User Validation", "Provide last name field")
 )

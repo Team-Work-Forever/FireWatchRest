@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/Team-Work-Forever/FireWatchRest/config"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -16,7 +17,9 @@ type HttpServer struct {
 }
 
 func NewHttpServer(version int) *HttpServer {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		ErrorHandler: middlewares.ErrorHandler,
+	})
 
 	app.Use(logger.New())
 

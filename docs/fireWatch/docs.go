@@ -352,6 +352,9 @@ const docTemplate = `{
                 "phone": {
                     "$ref": "#/definitions/contracts.PhoneResponse"
                 },
+                "user_name": {
+                    "type": "string"
+                },
                 "user_type": {
                     "type": "string"
                 }
