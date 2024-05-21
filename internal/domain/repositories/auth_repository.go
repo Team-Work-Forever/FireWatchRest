@@ -17,6 +17,16 @@ func NewAuthRepository(database adapters.Database) *AuthRepository {
 	}
 }
 
+func (repo *AuthRepository) GetAuthById(authId string) (*entities.Auth, error) {
+	var auth *entities.Auth
+
+	if err := repo.dbContext.Where("id = ?", authId).First(&auth).Error; err != nil {
+		return nil, err
+	}
+
+	return auth, nil
+}
+
 func (repo *AuthRepository) GetAuthByEmail(email *vo.Email) (*entities.Auth, error) {
 	var auth *entities.Auth
 

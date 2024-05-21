@@ -209,10 +209,32 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/contracts.AuthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/whoami": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Fetch Profile Information",
+                "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/contracts.AuthResponse"
+                            "$ref": "#/definitions/contracts.ProfileResponse"
                         }
                     }
                 }
@@ -220,6 +242,23 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "contracts.AddressResponse": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "integer"
+                },
+                "street": {
+                    "type": "string"
+                },
+                "zipCode": {
+                    "$ref": "#/definitions/contracts.ZipCodeResponse"
+                }
+            }
+        },
         "contracts.AuthResponse": {
             "type": "object",
             "properties": {
@@ -242,6 +281,40 @@ const docTemplate = `{
                 }
             }
         },
+        "contracts.PhoneResponse": {
+            "type": "object",
+            "properties": {
+                "countryCode": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "string"
+                }
+            }
+        },
+        "contracts.ProfileResponse": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "$ref": "#/definitions/contracts.AddressResponse"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "$ref": "#/definitions/contracts.PhoneResponse"
+                },
+                "userType": {
+                    "type": "string"
+                }
+            }
+        },
         "contracts.ResetPasswordRequest": {
             "type": "object",
             "required": [
@@ -253,6 +326,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "contracts.ZipCodeResponse": {
+            "type": "object",
+            "properties": {
+                "value": {
                     "type": "string"
                 }
             }

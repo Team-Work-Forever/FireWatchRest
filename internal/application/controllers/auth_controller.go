@@ -70,7 +70,7 @@ func (c *AuthController) LoginRoute(ctx *fiber.Ctx) error {
 //	@Produce	json
 //	@Param		data	formData	contracts.SignUpRequest	true	"Form data"
 //	@Param		avatar	formData	file					true	"User avatar"
-//	@Success	200		{object}	contracts.AuthResponse
+//	@Success	201		{object}	contracts.AuthResponse
 //	@Router		/auth/signUp [post]
 func (c *AuthController) SignUpRoute(ctx *fiber.Ctx) error {
 	var signUpRequest contracts.SignUpRequest

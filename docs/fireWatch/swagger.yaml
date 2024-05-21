@@ -1,5 +1,16 @@
 basePath: /api/v1
 definitions:
+  contracts.AddressResponse:
+    properties:
+      city:
+        type: string
+      number:
+        type: integer
+      street:
+        type: string
+      zipCode:
+        $ref: '#/definitions/contracts.ZipCodeResponse'
+    type: object
   contracts.AuthResponse:
     properties:
       access_token:
@@ -14,6 +25,28 @@ definitions:
       password:
         type: string
     type: object
+  contracts.PhoneResponse:
+    properties:
+      countryCode:
+        type: string
+      number:
+        type: string
+    type: object
+  contracts.ProfileResponse:
+    properties:
+      address:
+        $ref: '#/definitions/contracts.AddressResponse'
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phone:
+        $ref: '#/definitions/contracts.PhoneResponse'
+      userType:
+        type: string
+    type: object
   contracts.ResetPasswordRequest:
     properties:
       confirm_password:
@@ -23,6 +56,11 @@ definitions:
     required:
     - confirm_password
     - password
+    type: object
+  contracts.ZipCodeResponse:
+    properties:
+      value:
+        type: string
     type: object
 info:
   contact:
@@ -156,11 +194,25 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/contracts.AuthResponse'
       summary: Create an Account
       tags:
       - Auth
+  /whoami:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contracts.ProfileResponse'
+      summary: Fetch Profile Information
+      tags:
+      - Profile
 swagger: "2.0"

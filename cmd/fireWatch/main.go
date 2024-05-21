@@ -4,8 +4,10 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/config"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/controllers"
-	usecases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/auth"
+	uca "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/auth"
+	ucp "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/profile"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
+	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 )
 
 // @title			FireWatch API
@@ -30,28 +32,33 @@ func main() {
 	}
 
 	// Setup Fiber
-	app := adapters.NewHttpServer()
-	version := app.GetVersion("v1")
+	app := adapters.NewHttpServer(1)
 
 	// Setup Swagger
 	adapters.UseSwagger(app.Instance, env.FIRE_WATCH_API_PORT)
 
-	// Setup aux services
-
 	// repositories
 	authRepository := repositories.NewAuthRepository(db)
 	tokenRepository := repositories.NewTokenRepository(db)
+	profileRepository := repositories.NewProfileRepository(db)
 
 	// use cases
-	loginUseCase := usecases.NewLoginUseCase(authRepository)
-	signUpUseCase := usecases.NewSignUpUseCase(authRepository)
-	forgotPasswordUseCase := usecases.NewForgotPasswordUseCase(authRepository, tokenRepository)
-	resetPasswordUseCase := usecases.NewResetPasswordUseCase(authRepository, tokenRepository)
+	loginUseCase := uca.NewLoginUseCase(authRepository)
+	signUpUseCase := uca.NewSignUpUseCase(authRepository)
+	forgotPasswordUseCase := uca.NewForgotPasswordUseCase(authRepository, tokenRepository)
+	resetPasswordUseCase := uca.NewResetPasswordUseCase(authRepository, tokenRepository)
+
+	whoamiUseCase := ucp.NewWhoamiUseCase(authRepository, profileRepository)
 
 	// controllers
 	authController := controllers.NewAuthController(loginUseCase, signUpUseCase, forgotPasswordUseCase, resetPasswordUseCase)
-	authController.Route(version)
+	profileController := controllers.NewProfileController(whoamiUseCase)
 
 	// Serve application
+	app.AddControllers([]shared.Controller{
+		authController,
+		profileController,
+	})
+
 	app.Serve()
 }

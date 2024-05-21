@@ -5,26 +5,35 @@ import (
 	"log"
 
 	"github.com/Team-Work-Forever/FireWatchRest/config"
+	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 type HttpServer struct {
 	Instance *fiber.App
+	Version  string
 }
 
-func NewHttpServer() *HttpServer {
+func NewHttpServer(version int) *HttpServer {
 	app := fiber.New()
 
 	app.Use(logger.New())
 
 	return &HttpServer{
 		Instance: app,
+		Version:  fmt.Sprintf("v%d", version),
 	}
 }
 
-func (hs *HttpServer) GetVersion(version string) fiber.Router {
-	return hs.Instance.Group(fmt.Sprintf("api/%s", version))
+func (hs *HttpServer) GetVersion() fiber.Router {
+	return hs.Instance.Group(fmt.Sprintf("api/%s", hs.Version))
+}
+
+func (hs *HttpServer) AddControllers(controllers []shared.Controller) {
+	for i := 0; i < len(controllers); i++ {
+		controllers[i].Route(hs.GetVersion())
+	}
 }
 
 func (hs *HttpServer) Serve() {
