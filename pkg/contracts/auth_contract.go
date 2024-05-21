@@ -22,6 +22,7 @@ type (
 		Email       string                `form:"email" binding:"required"`
 		NIF         string                `form:"nif" binding:"required"`
 		Password    string                `form:"password" binding:"required"`
+		UserName    string                `form:"user_name" binding:"required"`
 		FirstName   string                `form:"first_name" binding:"required"`
 		LastName    string                `form:"last_name" binding:"required"`
 		PhoneCode   string                `form:"phone_code" binding:"required"`

@@ -27,6 +27,7 @@ var (
 	ZIP_CODE_PROVIDE = fiber.NewError(fiber.StatusBadRequest, "Provide phone field")
 	ZIP_CODE_INVALID = fiber.NewError(fiber.StatusBadRequest, "Invalid Zip Code: format 4444-444")
 
+	USER_NAME_PROVIDE  = fiber.NewError(fiber.StatusBadRequest, "Provide user name field")
 	FIRST_NAME_PROVIDE = fiber.NewError(fiber.StatusBadRequest, "Provide first name field")
 	LAST_NAME_PROVIDE  = fiber.NewError(fiber.StatusBadRequest, "Provide last name field")
 )

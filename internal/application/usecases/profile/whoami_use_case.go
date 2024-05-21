@@ -38,6 +38,7 @@ func (w *WhoamiUseCase) Handle(request contracts.WhoamiRequest) (*contracts.Prof
 
 	return &contracts.ProfileResponse{
 		Email:     foundAuth.Email.GetValue(),
+		UserName:  profileFound.UserName,
 		FirstName: profileFound.FirstName,
 		LastName:  profileFound.LastName,
 		Phone: contracts.PhoneResponse{

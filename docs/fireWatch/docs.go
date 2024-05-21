@@ -227,6 +227,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "name": "user_name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "name": "zip_code",
                         "in": "formData",
                         "required": true

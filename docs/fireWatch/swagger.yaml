@@ -203,6 +203,10 @@ paths:
         required: true
         type: integer
       - in: formData
+        name: user_name
+        required: true
+        type: string
+      - in: formData
         name: zip_code
         required: true
         type: string

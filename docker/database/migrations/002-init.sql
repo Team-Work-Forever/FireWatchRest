@@ -25,6 +25,7 @@ create table users (
   id uuid not null,
   auth_key_id uuid not null,
   profile_avatar text not null,
+  user_name varchar(50) not null,
   first_name varchar(50) not null,
   last_name varchar(50) not null,
   phone_code varchar(4) not null,

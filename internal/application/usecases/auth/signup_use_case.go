@@ -38,6 +38,10 @@ func (uc *SignUpUseCase) Handle(request contracts.SignUpRequest) (*contracts.Aut
 		return nil, err
 	}
 
+	if request.UserName == "" {
+		return nil, exec.USER_NAME_PROVIDE
+	}
+
 	if request.FirstName == "" {
 		return nil, exec.FIRST_NAME_PROVIDE
 	}
@@ -80,6 +84,7 @@ func (uc *SignUpUseCase) Handle(request contracts.SignUpRequest) (*contracts.Aut
 
 	user := entities.NewUser(
 		"adashdahhhad",
+		request.UserName,
 		request.FirstName,
 		request.LastName,
 		*phone,
