@@ -1,8 +1,9 @@
 package vo
 
 import (
-	"errors"
 	"regexp"
+
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 const EMAIL_REGEX = `^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$`
@@ -15,11 +16,11 @@ func NewEmail(email string) (*Email, error) {
 	emailRegex := regexp.MustCompile(EMAIL_REGEX)
 
 	if email == "" {
-		return nil, errors.New("empty email")
+		return nil, exec.EMAIL_PROVIDE
 	}
 
 	if !emailRegex.MatchString(email) {
-		return nil, errors.New("provide an valid email")
+		return nil, exec.EMAIL_PROVIDE_AN_VALID
 	}
 
 	return &Email{

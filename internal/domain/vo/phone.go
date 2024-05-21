@@ -1,8 +1,9 @@
 package vo
 
 import (
-	"errors"
 	"strings"
+
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type Phone struct {
@@ -24,15 +25,15 @@ func shouldHaveLength(value string, length int) bool {
 
 func NewPhone(code string, value string) (*Phone, error) {
 	if shouldNotBeNull(code, value) {
-		return nil, errors.New("empty phone")
+		return nil, exec.PHONE_PROVIDE
 	}
 
 	if !validateCountryCode(code) {
-		return nil, errors.New("invalid country code")
+		return nil, exec.PHONE_INVALID_COUNTRY_NUMBER
 	}
 
 	if shouldHaveLength(value, 9) {
-		return nil, errors.New("phone number must be nine digits long")
+		return nil, exec.PHONE_MUST_BE_NINE_DIGITS
 	}
 
 	return &Phone{

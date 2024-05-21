@@ -1,8 +1,9 @@
 package vo
 
 import (
-	"errors"
 	"unicode"
+
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type Password struct {
@@ -40,23 +41,23 @@ func containsNonCapitalLetter(s string) bool {
 }
 func NewPassword(password string) (*Password, error) {
 	if password == "" {
-		return nil, errors.New("empty password")
+		return nil, exec.PASSWORD_PROVIDE
 	}
 
 	if len(password) < 6 || len(password) > 16 {
-		return nil, errors.New("password must be between 6 and 16 characters")
+		return nil, exec.PASSWORD_BTW_6_16
 	}
 
 	if !containsNumber(password) {
-		return nil, errors.New("password must contain at least one number")
+		return nil, exec.PASSWORD_MUST_CONTAIN_ONE_NUMBER
 	}
 
 	if !containsCapitalLetter(password) {
-		return nil, errors.New("password must contain at least one capital letter")
+		return nil, exec.PASSWORD_MUST_CONTAIN_ONE_CAPITAL
 	}
 
 	if !containsNonCapitalLetter(password) {
-		return nil, errors.New("password must contain at least one non-capital letter")
+		return nil, exec.PASSWORD_MUST_CONTAIN_NON_CAPITAL
 	}
 
 	return &Password{

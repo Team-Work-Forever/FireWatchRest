@@ -3,6 +3,7 @@ package usecases
 import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type WhoamiUseCase struct {
@@ -25,14 +26,14 @@ func (w *WhoamiUseCase) Handle(request contracts.WhoamiRequest) (*contracts.Prof
 	foundAuth, err := w.authRepository.GetAuthById(request.UserId)
 
 	if err != nil {
-		return nil, err
+		return nil, exec.USER_NOT_FOUND
 	}
 
 	// fetch user
 	profileFound, err := w.profileRepository.GetUserByAuthId(foundAuth.ID)
 
 	if err != nil {
-		return nil, err
+		return nil, exec.USER_NOT_FOUND
 	}
 
 	return &contracts.ProfileResponse{

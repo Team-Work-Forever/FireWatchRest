@@ -1,10 +1,9 @@
 package entities
 
 import (
-	"errors"
-
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pwd"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 	"gorm.io/gorm"
 )
 
@@ -31,7 +30,7 @@ func NewAuth(email vo.Email, password vo.Password, nif vo.NIF) *Auth {
 
 func (a *Auth) ChangePassword(password *vo.Password) error {
 	if pwd.CheckPasswordHash(password.GetValue(), a.Salt, a.Password.GetValue()) {
-		return errors.New("it's not possible to reset to the same password")
+		return exec.CANNOT_CHANGE_PASSWORD_AGAIN
 	}
 
 	salt, err := pwd.GenerateSalt(pwd.BCRYPT_COST)

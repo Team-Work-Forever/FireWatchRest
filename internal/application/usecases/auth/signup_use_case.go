@@ -1,14 +1,12 @@
 package usecases
 
 import (
-	"errors"
-	"fmt"
-
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/jwt"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type SignUpUseCase struct {
@@ -41,11 +39,11 @@ func (uc *SignUpUseCase) Handle(request contracts.SignUpRequest) (*contracts.Aut
 	}
 
 	if request.FirstName == "" {
-		return nil, errors.New("provide an first name")
+		return nil, exec.FIRST_NAME_PROVIDE
 	}
 
 	if request.LastName == "" {
-		return nil, errors.New("provide an last name")
+		return nil, exec.LAST_NAME_PROVIDE
 	}
 
 	phone, err := vo.NewPhone(request.PhoneCode, request.PhoneNumber)
@@ -67,11 +65,11 @@ func (uc *SignUpUseCase) Handle(request contracts.SignUpRequest) (*contracts.Aut
 	}
 
 	if ok := uc.authRepository.ExistsUserWithEmail(email); ok {
-		return nil, fmt.Errorf("o utilizador já existe")
+		return nil, exec.USER_ALREADY_EXISTS
 	}
 
 	if ok := uc.authRepository.ExistsUserWithNif(nif); ok {
-		return nil, fmt.Errorf("o utilizador já existe")
+		return nil, exec.USER_ALREADY_EXISTS_NIF
 	}
 
 	auth := entities.NewAuth(

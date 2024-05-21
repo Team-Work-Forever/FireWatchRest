@@ -1,8 +1,9 @@
 package vo
 
 import (
-	"errors"
 	"regexp"
+
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 const ZIP_CODE_REGEX = `^\d{4}(-\d{3})?$`
@@ -15,11 +16,11 @@ func NewZipCode(value string) (*ZipCode, error) {
 	zipCodeRegex := regexp.MustCompile(ZIP_CODE_REGEX)
 
 	if value == "" {
-		return nil, errors.New("empty postal code")
+		return nil, exec.ZIP_CODE_PROVIDE
 	}
 
 	if !zipCodeRegex.MatchString(value) {
-		return nil, errors.New("invalid postal code")
+		return nil, exec.ZIP_CODE_INVALID
 	}
 
 	return &ZipCode{

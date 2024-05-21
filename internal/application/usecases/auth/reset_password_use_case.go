@@ -1,12 +1,11 @@
 package usecases
 
 import (
-	"errors"
-
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/jwt"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type ResetPasswordUseCase struct {
@@ -28,13 +27,13 @@ func (r *ResetPasswordUseCase) Handle(request contracts.ResetPasswordRequest) er
 	token, err := r.tokenRepository.GetByToken(request.ForgotToken)
 
 	if err != nil {
-		return err
+		return exec.TOKEN_NOT_FOUND
 	}
 
 	if !jwt.ValidateToken(request.ForgotToken) {
 		r.tokenRepository.Delete(token)
 
-		return errors.New("token is invalid")
+		return exec.TOKEN_ISNT_VALD
 	}
 
 	claims, err := jwt.GetClaims(token.Token, &jwt.AuthClaims{})
@@ -42,7 +41,7 @@ func (r *ResetPasswordUseCase) Handle(request contracts.ResetPasswordRequest) er
 	if err != nil {
 		r.tokenRepository.Delete(token)
 
-		return err
+		return exec.FAILED_FETCHING_TOKEN
 	}
 
 	authClaims, ok := claims.(*jwt.AuthClaims)
@@ -50,7 +49,7 @@ func (r *ResetPasswordUseCase) Handle(request contracts.ResetPasswordRequest) er
 	if !ok {
 		r.tokenRepository.Delete(token)
 
-		return err
+		return exec.FAILED_FETCHING_TOKEN
 	}
 
 	email, err := vo.NewEmail(authClaims.Email)
@@ -62,7 +61,7 @@ func (r *ResetPasswordUseCase) Handle(request contracts.ResetPasswordRequest) er
 	foundAuth, err := r.authRepository.GetAuthByEmail(email)
 
 	if err != nil {
-		return err
+		return exec.USER_NOT_FOUND
 	}
 
 	password, err := vo.NewPassword(request.Password)
@@ -78,7 +77,7 @@ func (r *ResetPasswordUseCase) Handle(request contracts.ResetPasswordRequest) er
 	}
 
 	if password.GetValue() != confirmPassword.GetValue() {
-		return errors.New("the password don't match")
+		return exec.PASSWORDS_DONT_MATCH
 	}
 
 	if err := foundAuth.ChangePassword(password); err != nil {

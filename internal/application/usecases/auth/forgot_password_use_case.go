@@ -11,6 +11,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/jwt"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/smtp"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type ForgotPasswordUseCase struct {
@@ -39,7 +40,7 @@ func (f *ForgotPasswordUseCase) Handle(request contracts.ForgotPasswordRequest) 
 	foundAuth, err := f.authRepository.GetAuthByEmail(email)
 
 	if err != nil {
-		return err
+		return exec.USER_NOT_FOUND
 	}
 
 	// generate an token to safe guard the request

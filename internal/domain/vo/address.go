@@ -1,6 +1,8 @@
 package vo
 
-import "errors"
+import (
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
+)
 
 type Address struct {
 	Street  string `gorm:"column:address_street"`
@@ -16,19 +18,19 @@ func NewAddress(
 	city string,
 ) (*Address, error) {
 	if street == "" {
-		return nil, errors.New("provide an street")
+		return nil, exec.ADDRESS_PROVIDE_STREET
 	}
 
 	if number == 0 {
-		return nil, errors.New("provide an number")
+		return nil, exec.ADDRESS_PROVIDE_NUMBER
 	}
 
 	if number < 0 {
-		return nil, errors.New("provide an valid number")
+		return nil, exec.ADDRESS_PROVIDE_AN_VALID_NUMBER
 	}
 
 	if city == "" {
-		return nil, errors.New("provide an city")
+		return nil, exec.ADDRESS_PROVIDE_CITY
 	}
 
 	return &Address{
