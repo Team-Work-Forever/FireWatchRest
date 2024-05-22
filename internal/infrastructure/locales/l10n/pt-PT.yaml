@@ -42,7 +42,7 @@ password-mst-number: A palavra-passe deve conter pelo menos uma letra maiúscula
 password-mst-number-header: Validação da palavra-passe
 password-mst-n-capital: A palavra-passe deve conter pelo menos uma letra não maiúscula
 password-mst-n-capital-header: Validação da palavra-passe
-phone-pv: Fornecer campo de telefone
+phone-pv: Fornecer campo de telefone contendo o número e o codigo do país, respetivamente
 phone-pv-header: Validação do telefone
 phone-i-country: Código do país é inválido
 phone-i-country-header: Validação do telefone

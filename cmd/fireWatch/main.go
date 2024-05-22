@@ -54,10 +54,11 @@ func main() {
 	refreshTokensUseCase := uca.NewRefreshTokesUseCase(authRepository)
 
 	whoamiUseCase := ucp.NewWhoamiUseCase(authRepository, profileRepository)
+	updateProfileUseCase := ucp.NewUpdateProfileUIseCase(authRepository, profileRepository)
 
 	// controllers
 	authController := controllers.NewAuthController(loginUseCase, signUpUseCase, forgotPasswordUseCase, resetPasswordUseCase, refreshTokensUseCase)
-	profileController := controllers.NewProfileController(whoamiUseCase)
+	profileController := controllers.NewProfileController(whoamiUseCase, updateProfileUseCase)
 
 	// Serve application
 	app.AddControllers([]shared.Controller{

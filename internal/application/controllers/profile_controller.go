@@ -9,25 +9,33 @@ import (
 )
 
 type ProfileController struct {
-	whoamiUseCase *usecases.WhoamiUseCase
+	whoamiUseCase        *usecases.WhoamiUseCase
+	updateProfileUseCase *usecases.UpdateProfileUseCase
 }
 
-func NewProfileController(whoamiUseCase *usecases.WhoamiUseCase) *ProfileController {
+func NewProfileController(
+	whoamiUseCase *usecases.WhoamiUseCase,
+	updateProfileUseCase *usecases.UpdateProfileUseCase,
+) *ProfileController {
 	return &ProfileController{
-		whoamiUseCase: whoamiUseCase,
+		whoamiUseCase:        whoamiUseCase,
+		updateProfileUseCase: updateProfileUseCase,
 	}
 }
 
 func (c *ProfileController) Route(router fiber.Router) {
 	auth := router.Group("", middlewares.AuthorizationMiddleware)
 	auth.Get("whoami", c.WhoamiRoute)
+
+	profile := auth.Group("profile")
+	profile.Put("", middlewares.ShouldAcceptMultiPart, c.UpdateProfile)
 }
 
 // // ShowAccount godoc
 //
 //	@Summary	Fetch Profile Information
 //	@Tags		Profile
-//	@Accept		json
+//	@Accept		multipart/form-data
 //	@Produce	json
 //
 // @Param   accept-language  header     string     false  "some description"
@@ -49,4 +57,40 @@ func (c *ProfileController) WhoamiRoute(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(result)
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Update Profile Information
+//	@Tags		Profile
+//	@Accept		json
+//	@Produce	json
+//
+// @Param   accept-language  header     string     false  "some description"
+//
+//	@Param		data	formData	contracts.UpdateProfileResponse	true	"Form data"
+//	@Param		avatar	formData	file					true	"User avatar"
+//
+//	@Success	204	{object}	contracts.ProfileResponse
+//
+//	@security	Bearer
+//
+//	@Router		/profile [put]
+func (c *ProfileController) UpdateProfile(ctx *fiber.Ctx) error {
+	var updateRequest contracts.UpdateProfileResponse
+
+	userId := shared.GetUserId(ctx)
+
+	if err := ctx.BodyParser(&updateRequest); err != nil {
+		return err
+	}
+
+	updateRequest.UserId = userId
+	result, err := c.updateProfileUseCase.Handle(updateRequest)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusAccepted).JSON(result)
 }

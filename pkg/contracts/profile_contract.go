@@ -1,5 +1,7 @@
 package contracts
 
+import "mime/multipart"
+
 type (
 	ProfileResponse struct {
 		Email     string          `json:"email"`
@@ -13,5 +15,18 @@ type (
 
 	WhoamiRequest struct {
 		UserId string
+	}
+
+	UpdateProfileResponse struct {
+		UserId      string                `swaggerignore:"true"`
+		Email       string                `form:"email" binding:"required"`
+		UserName    string                `form:"user_name" binding:"required"`
+		PhoneCode   string                `form:"phone_code" binding:"required"`
+		PhoneNumber string                `form:"phone_number" binding:"required"`
+		Street      string                `form:"street" binding:"required"`
+		StreetPort  *int                  `form:"street_port" binding:"required"`
+		ZipCode     string                `form:"zip_code" binding:"required"`
+		City        string                `form:"city" binding:"required"`
+		Avatar      *multipart.FileHeader `form:"avatar" binding:"required" swaggerignore:"true"`
 	}
 )

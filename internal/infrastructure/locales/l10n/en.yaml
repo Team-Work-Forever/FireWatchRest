@@ -42,7 +42,7 @@ password-mst-number: Password must contain at least one capital letter
 password-mst-number-header: Password Validation
 password-mst-n-capital: Password must contain at least one non-capital letter
 password-mst-n-capital-header: Password Validation
-phone-pv: Provide phone field
+phone-pv: Provide phone number and country code field
 phone-pv-header: Phone Validation
 phone-i-country: Country Code is Invalid
 phone-i-country-header: Phone Validation

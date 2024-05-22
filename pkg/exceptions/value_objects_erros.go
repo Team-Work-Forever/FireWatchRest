@@ -20,7 +20,7 @@ var (
 	PASSWORD_MUST_CONTAIN_ONE_CAPITAL = NewError("password-mst-capital", fiber.StatusBadRequest, "Password Validation", "Password must contain at least one capital letter")
 	PASSWORD_MUST_CONTAIN_NON_CAPITAL = NewError("password-mst-n-capital", fiber.StatusBadRequest, "Password Validation", "Password must contain at least one non-capital letter")
 
-	PHONE_PROVIDE                = NewError("phone-pv", fiber.StatusBadRequest, "Phone Validation", "Provide phone field")
+	PHONE_PROVIDE                = NewError("phone-pv", fiber.StatusBadRequest, "Phone Validation", "Provide phone number and country code field")
 	PHONE_INVALID_COUNTRY_NUMBER = NewError("phone-i-country", fiber.StatusBadRequest, "Phone Validation", "Country Code is Invalid")
 	PHONE_MUST_BE_NINE_DIGITS    = NewError("phone-mst-9", fiber.StatusBadRequest, "Phone Validation", "Phone number must be nine digits long")
 

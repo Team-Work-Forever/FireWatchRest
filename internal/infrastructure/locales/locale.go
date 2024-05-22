@@ -17,9 +17,17 @@ func New() fiber.Handler {
 }
 
 func Localize(ctx *fiber.Ctx, key string, fallback string) string {
+	if key == "" {
+		return fallback
+	}
+
 	return fiberi18n.MustLocalize(ctx, key)
 }
 
 func LocalizeHeader(ctx *fiber.Ctx, key string, fallback string) string {
+	if key == "" {
+		return fallback
+	}
+
 	return fiberi18n.MustLocalize(ctx, fmt.Sprintf("%s-header", key))
 }

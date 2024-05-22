@@ -25,3 +25,7 @@ func (repo *ProfileRepository) GetUserByAuthId(authId string) (*entities.User, e
 
 	return user, nil
 }
+
+func (repo *ProfileRepository) Update(profile *entities.User) error {
+	return repo.dbContext.Save(profile).Error
+}

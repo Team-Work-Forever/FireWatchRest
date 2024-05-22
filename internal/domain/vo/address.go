@@ -11,6 +11,18 @@ type Address struct {
 	City    string `gorm:"column:address_city"`
 }
 
+func checkStreetNumber(number int) error {
+	if number == 0 {
+		return exec.ADDRESS_PROVIDE_NUMBER
+	}
+
+	if number < 0 {
+		return exec.ADDRESS_PROVIDE_AN_VALID_NUMBER
+	}
+
+	return nil
+}
+
 func NewAddress(
 	street string,
 	number int,
@@ -21,12 +33,8 @@ func NewAddress(
 		return nil, exec.ADDRESS_PROVIDE_STREET
 	}
 
-	if number == 0 {
-		return nil, exec.ADDRESS_PROVIDE_NUMBER
-	}
-
-	if number < 0 {
-		return nil, exec.ADDRESS_PROVIDE_AN_VALID_NUMBER
+	if err := checkStreetNumber(number); err != nil {
+		return nil, err
 	}
 
 	if city == "" {
@@ -39,4 +47,13 @@ func NewAddress(
 		ZipCode: zipCode.GetValue(),
 		City:    city,
 	}, nil
+}
+
+func (a *Address) SetStreetNumber(number int) error {
+	if err := checkStreetNumber(number); err != nil {
+		return err
+	}
+
+	a.Number = number
+	return nil
 }
