@@ -29,6 +29,9 @@ func (c *ProfileController) Route(router fiber.Router) {
 //	@Tags		Profile
 //	@Accept		json
 //	@Produce	json
+//
+// @Param   accept-language  header     string     false  "some description"
+//
 //	@Success	200	{object}	contracts.ProfileResponse
 //
 //	@security	Bearer

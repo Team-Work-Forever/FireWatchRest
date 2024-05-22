@@ -12,7 +12,7 @@ func New() fiber.Handler {
 	return fiberi18n.New(&fiberi18n.Config{
 		RootPath:        "internal/infrastructure/locales/l10n",
 		AcceptLanguages: []language.Tag{language.EuropeanPortuguese, language.English},
-		DefaultLanguage: language.EuropeanPortuguese,
+		DefaultLanguage: language.English,
 	})
 }
 

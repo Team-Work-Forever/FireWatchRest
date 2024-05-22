@@ -28,6 +28,12 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "Email address associated with the account",
                         "name": "email",
                         "in": "query",
@@ -54,6 +60,12 @@
                 ],
                 "summary": "Authenticate with account",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
                     {
                         "description": "Login Payload",
                         "name": "data",
@@ -89,6 +101,12 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "JWT token to be refreshed",
                         "name": "token",
                         "in": "query",
@@ -118,6 +136,12 @@
                 ],
                 "summary": "Reset Password",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "A unique token sent to the user's email for password reset",
@@ -158,6 +182,12 @@
                 ],
                 "summary": "Create an Account",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "name": "city",
@@ -265,6 +295,14 @@
                     "Profile"
                 ],
                 "summary": "Fetch Profile Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

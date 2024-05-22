@@ -35,6 +35,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "Email address associated with the account",
                         "name": "email",
                         "in": "query",
@@ -61,6 +67,12 @@ const docTemplate = `{
                 ],
                 "summary": "Authenticate with account",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
                     {
                         "description": "Login Payload",
                         "name": "data",
@@ -96,6 +108,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "JWT token to be refreshed",
                         "name": "token",
                         "in": "query",
@@ -125,6 +143,12 @@ const docTemplate = `{
                 ],
                 "summary": "Reset Password",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "A unique token sent to the user's email for password reset",
@@ -165,6 +189,12 @@ const docTemplate = `{
                 ],
                 "summary": "Create an Account",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "name": "city",
@@ -272,6 +302,14 @@ const docTemplate = `{
                     "Profile"
                 ],
                 "summary": "Fetch Profile Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

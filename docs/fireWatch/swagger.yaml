@@ -79,6 +79,10 @@ paths:
   /auth/forgot_password:
     get:
       parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
       - description: Email address associated with the account
         in: query
         name: email
@@ -97,6 +101,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
       - description: Login Payload
         in: body
         name: data
@@ -118,6 +126,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
       - description: JWT token to be refreshed
         in: query
         name: token
@@ -138,6 +150,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
       - description: A unique token sent to the user's email for password reset
         in: query
         name: forgot_token
@@ -164,6 +180,10 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
       - in: formData
         name: city
         required: true
@@ -231,6 +251,11 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
       produces:
       - application/json
       responses:
