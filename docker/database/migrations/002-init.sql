@@ -47,21 +47,21 @@ create table burn (
   id uuid not null,
   title varchar(50) not null,
   map_picture text not null,
-  address_street varchar(95) not null,
-  address_number int not null,
-  address_zip_code varchar(8) not null,
-  address_city varchar(35) not null,
+  -- address_street varchar(95) default null,
+  -- address_number int default null,
+  -- address_zip_code varchar(8) default null,
+  -- address_city varchar(35) default null,
   geo_location GEOMETRY(Point, 4326) DEFAULT NULL,
   has_aid_team boolean default false,
   reason int not null,
   type int not null,
   begin_at timestamp not null,
-  completed_at timestamp not null,
+  completed_at timestamp default null,
   created_at timestamp default now(),
   updated_at timestamp default now(),
   deleted_at timestamp default null,
-  primary key(id),
-  check (length(address_zip_code) = 8)
+  primary key(id)
+  -- check (length(address_zip_code) = 8)
 );
 create table autarchy (
   id uuid not null,
@@ -89,15 +89,30 @@ create table autarchy_employee (
 );
 create table burn_requests (
   auth_key_id uuid not null,
-  autarchy_id uuid not null,
+  -- autarchy_id uuid not null,
   burn_id uuid not null,
-  initial_propose xml not null,
+  initial_propose text not null,
   accepted boolean default false,
   created_at timestamp default now(),
   updated_at timestamp default now(),
   deleted_at timestamp default null,
-  primary key (auth_key_id, autarchy_id, burn_id),
+  -- primary key (auth_key_id, autarchy_id, burn_id),
+  primary key (auth_key_id, burn_id),
   constraint auth_key_id_fk foreign key (auth_key_id) references auth_keys(id),
-  constraint autarchy_fk foreign key (autarchy_id) references autarchy(id),
+  -- constraint autarchy_fk foreign key (autarchy_id) references autarchy(id),
   constraint burn_fk foreign key (burn_id) references burn(id)
+);
+create table burn_requests_states (
+  auth_key_id uuid not null,
+  -- autarchy_id uuid not null,
+  burn_id uuid not null,
+  state int default 0,
+  observation text not null,
+  created_at timestamp default now(),
+  updated_at timestamp default now(),
+  deleted_at timestamp default null,
+  -- primary key (auth_key_id, autarchy_id, burn_id),
+  primary key (auth_key_id, burn_id),
+  -- constraint autarchy_fk foreign key (autarchy_id) references autarchy(id),
+  FOREIGN KEY (auth_key_id, burn_id) REFERENCES burn_requests(auth_key_id, burn_id)
 );

@@ -63,7 +63,7 @@ func (c *ProfileController) WhoamiRoute(ctx *fiber.Ctx) error {
 //
 //	@Summary	Update Profile Information
 //	@Tags		Profile
-//	@Accept		json
+//	@Accept		multipart/form-data
 //	@Produce	json
 //
 // @Param   accept-language  header     string     false  "some description"
@@ -71,7 +71,7 @@ func (c *ProfileController) WhoamiRoute(ctx *fiber.Ctx) error {
 //	@Param		data	formData	contracts.UpdateProfileResponse	true	"Form data"
 //	@Param		avatar	formData	file					true	"User avatar"
 //
-//	@Success	204	{object}	contracts.ProfileResponse
+//	@Success	202	{object}	contracts.ProfileResponse
 //
 //	@security	Bearer
 //
