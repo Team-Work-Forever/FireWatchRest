@@ -23,6 +23,16 @@ func GetBurnReason(burnReason int) (string, bool) {
 	return result, ok
 }
 
+func GetAllBurnReasons() []string {
+	reasons := make([]string, 0, len(burnReasonLookup))
+
+	for _, v := range burnReasonLookup {
+		reasons = append(reasons, v)
+	}
+
+	return reasons
+}
+
 func GetBurnReasonKey(value string) (uint16, bool) {
 	for k, v := range burnReasonLookup {
 		if v == value {

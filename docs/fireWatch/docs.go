@@ -322,6 +322,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
+                        "type": "string",
+                        "name": "initial_propose",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
                         "type": "number",
                         "name": "lat",
                         "in": "formData",
@@ -357,6 +363,111 @@ const docTemplate = `{
                         "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/contracts.ProfileResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/burn/reasons": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Burn"
+                ],
+                "summary": "Burn Available Reasons",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/burn/states": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Burn"
+                ],
+                "summary": "Burn Available States",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/burn/types": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Burn"
+                ],
+                "summary": "Burn Available Types",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 }

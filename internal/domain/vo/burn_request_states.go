@@ -21,6 +21,16 @@ func GetBurnRequestState(burnRequestState uint16) (string, bool) {
 	return result, ok
 }
 
+func GetAllBurnStates() []string {
+	states := make([]string, 0, len(burnRequestStateLookUp))
+
+	for _, v := range burnRequestStateLookUp {
+		states = append(states, v)
+	}
+
+	return states
+}
+
 func GetBurnRequestStateKey(value string) (uint16, bool) {
 	for k, v := range burnRequestStateLookUp {
 		if v == value {

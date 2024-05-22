@@ -19,6 +19,7 @@ func AuthorizationMiddleware(ctx *fiber.Ctx) error {
 			JWTAlg: jwt.SigningMethodHS256.Name,
 			Key:    []byte(env.JWT_SECRET),
 		},
+
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
 			return shared.WriteProblemDetails(ctx, exec.Error{
 				Title:  "Authorization Failed",

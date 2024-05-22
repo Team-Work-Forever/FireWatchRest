@@ -265,6 +265,10 @@ paths:
         required: true
         type: string
       - in: formData
+        name: initial_propose
+        required: true
+        type: string
+      - in: formData
         name: lat
         required: true
         type: number
@@ -294,6 +298,69 @@ paths:
       security:
       - Bearer: []
       summary: Create an Burn Request
+      tags:
+      - Burn
+  /burn/reasons:
+    get:
+      parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      security:
+      - Bearer: []
+      summary: Burn Available Reasons
+      tags:
+      - Burn
+  /burn/states:
+    get:
+      parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      security:
+      - Bearer: []
+      summary: Burn Available States
+      tags:
+      - Burn
+  /burn/types:
+    get:
+      parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      security:
+      - Bearer: []
+      summary: Burn Available Types
       tags:
       - Burn
   /profile:
