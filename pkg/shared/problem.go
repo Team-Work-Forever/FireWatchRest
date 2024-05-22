@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/locales"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 	"github.com/gofiber/fiber/v2"
 )
@@ -42,9 +43,9 @@ func WriteProblemDetails(ctx *fiber.Ctx, err exec.Error, extensions ...map[strin
 
 	problem := ProblemDetails{
 		Type:     fmt.Sprintf("%s.%s.%s", RFC_URL, section, index),
-		Title:    err.Title,
+		Title:    locales.LocalizeHeader(ctx, err.Id, err.Title),
 		Status:   err.Status,
-		Detail:   err.Detail,
+		Detail:   locales.Localize(ctx, err.Id, err.Detail),
 		Instance: ctx.Path(),
 	}
 

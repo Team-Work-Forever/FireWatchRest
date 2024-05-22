@@ -2,14 +2,16 @@ package exec
 
 type (
 	Error struct {
+		Id     string
 		Status int
 		Title  string
 		Detail string
 	}
 )
 
-func NewError(status int, title string, detail string) *Error {
+func NewError(id string, status int, title string, detail string) *Error {
 	return &Error{
+		Id:     id,
 		Status: status,
 		Title:  title,
 		Detail: detail,

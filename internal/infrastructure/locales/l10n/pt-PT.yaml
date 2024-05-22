@@ -1,0 +1,64 @@
+user-ae-header: O utilizador já existe
+user-ae: Já existe um utilizador com esse e-mail
+user-an-header: O utilizador já existe
+user-an: Já existe um utilizador com esse NIF
+user-nf-header: Utilizador não encontrado
+user-nf: Utilizador não encontrado
+password-wrg-header: Autenticação
+password-wrg: O e-mail ou a palavra-passe estão errados
+password-d-mtch-header: Autorização
+password-d-mtch: A palavra-passe não corresponde
+password-ch-header: Repor a palavra-passe
+password-ch: Não é possível repor a mesma palavra-passe
+token-nf-header: Token não encontrado
+token-nf: Nenhum token foi encontrado
+token-isn-v-header: Token inválido
+token-isn-v: O token não é válido
+token-f-header: Fetch Failed
+token-f: O token não é válido
+address-pv-rua: Fornecer campo de rua
+address-pv-street-header: Validação do endereço
+address-pv-number: Fornecer o campo do número da rua
+address-pv-number-header: Validação do endereço
+address-pv-number-v: Fornecer um campo de número de rua válido
+address-pv-number-v-header: Validação do endereço
+address-pv-city: Fornecer o campo da cidade
+address-pv-cidade-cabeçalho: Validação do endereço
+email-pv: Fornecer campo de correio eletrónico"
+email-pv-header: Validação do correio eletrónico
+email-pv-v: Fornecer um campo de correio eletrónico válido
+email-pv-header: Validação de correio eletrónico
+nif-pv: Fornecer campo Nif"
+nif-pv-header: Validação NIF
+nif-pv-v: Fornecer um campo Nif válido
+nif-pv-header: Validação NIF
+password-pv: Fornecer um campo de palavra-passe
+password-pv-header: Validação da palavra-passe
+password-btw-6-16: A palavra-passe deve ter entre 6 e 16 caracteres
+password-btw-6-16-header: Validação da palavra-passe
+password-mst-number: A palavra-passe tem de conter pelo menos um número
+password-mst-number-header: Validação da palavra-passe
+password-mst-number: A palavra-passe deve conter pelo menos uma letra maiúscula
+password-mst-number-header: Validação da palavra-passe
+password-mst-n-capital: A palavra-passe deve conter pelo menos uma letra não maiúscula
+password-mst-n-capital-header: Validação da palavra-passe
+phone-pv: Fornecer campo de telefone
+phone-pv-header: Validação do telefone
+phone-i-country: Código do país é inválido
+phone-i-country-header: Validação do telefone
+phone-mst-9: O número de telefone tem de ter nove dígitos
+phone-mst-9-header: Validação do telefone
+zip-code-pv: Fornecer campo de código postal
+zip-code-pv-header: Validação do código postal
+zip-code-i: "Código postal inválido: formato 4444-444"
+zip-code-i-header: Validação do código postal
+usern-pv: Fornecer campo de nome de utilizador
+usern-pv-header: Validação do utilizador
+firstn-pv: Fornecer o campo do primeiro nome
+firstn-pv-header: Validação do utilizador
+lastn-pv: Fornecer o campo do último nome
+lastn-pv-header: Validação do utilizador
+email-pv: Fornecer campo de correio eletrónico
+email-pv-header: Validação do correio eletrónico
+email-pv-v: Fornecer um campo de correio eletrónico válido
+email-pv-v-header: Validação de correio eletrónico

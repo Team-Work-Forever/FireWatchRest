@@ -6,6 +6,7 @@ import (
 
 	"github.com/Team-Work-Forever/FireWatchRest/config"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/locales"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -22,6 +23,7 @@ func NewHttpServer(version int) *HttpServer {
 	})
 
 	app.Use(logger.New())
+	app.Use(locales.New())
 
 	return &HttpServer{
 		Instance: app,

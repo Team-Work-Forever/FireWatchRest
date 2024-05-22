@@ -1,0 +1,64 @@
+user-ae-header: User Already Exists
+user-ae: There is already an user with that email
+user-an-header: User Already Exists
+user-an: There is already an user with that NIF
+user-nf-header: User Not Found
+user-nf: User not found
+password-wrg-header: Authetication
+password-wrg: The email or password is wrong
+password-d-mtch-header: Authorization
+password-d-mtch: The password don't match
+password-ch-header: Reset Password
+password-ch: It's not possible to reset to the same password
+token-nf-header: Token Not Found
+token-nf: No token was found
+token-isn-v-header: Token Invalid
+token-isn-v: Token is not valid
+token-f-header: Fetch Failed
+token-f: Token is not valid
+address-pv-street: Provide street field
+address-pv-street-header: Adress Validation
+address-pv-number: Provide street number field
+address-pv-number-header: Adress Validation
+address-pv-number-v: Provide an valid street number field
+address-pv-number-v-header: Adress Validation
+address-pv-city: Provide city field
+address-pv-city-header: Adress Validation
+email-pv: Provide email field"
+email-pv-header: Email Validation
+email-pv-v: Provide an valid email field
+email-pv-header: Email Validation
+nif-pv: Provide Nif field"
+nif-pv-header: NIF Validation
+nif-pv-v: Provide an valid Nif field
+nif-pv-header: NIF Validation
+password-pv: Provide password field
+password-pv-header: Password Validation
+password-btw-6-16: Password must be between 6 and 16 characters
+password-btw-6-16-header: Password Validation
+password-mst-number: Password must contain at least one number
+password-mst-number-header: Password Validation
+password-mst-number: Password must contain at least one capital letter
+password-mst-number-header: Password Validation
+password-mst-n-capital: Password must contain at least one non-capital letter
+password-mst-n-capital-header: Password Validation
+phone-pv: Provide phone field
+phone-pv-header: Phone Validation
+phone-i-country: Country Code is Invalid
+phone-i-country-header: Phone Validation
+phone-mst-9: Phone number must be nine digits long
+phone-mst-9-header: Phone Validation
+zip-code-pv: Provide zip code field
+zip-code-pv-header: Zip Code Validation
+zip-code-i: "Invalid Zip Code: format 4444-444"
+zip-code-i-header: Zip Code Validation
+usern-pv: Provide user name field
+usern-pv-header: User Validation
+firstn-pv: Provide first name field
+firstn-pv-header: User Validation
+lastn-pv: Provide last name field
+lastn-pv-header: User Validation
+email-pv: Provide email field
+email-pv-header: Email Validation
+email-pv-v: Provide an valid email field
+email-pv-v-header: Email Validation
