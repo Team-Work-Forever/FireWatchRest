@@ -659,6 +659,43 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Burn"
+                ],
+                "summary": "Delete an Record if it is Scheduale",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Delete the burn by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/contracts.BurnActionResponse"
+                        }
+                    }
+                }
             }
         },
         "/profile": {

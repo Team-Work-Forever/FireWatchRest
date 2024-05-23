@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
@@ -40,7 +41,7 @@ func (repo *BurnRepository) CreateBurn(request daos.CreateBurnDao) (*entities.Bu
 		return nil, err
 	}
 
-	state := burnRequest.SetState(vo.Active, request.InitialPropose)
+	state := burnRequest.SetState(vo.Scheduled, request.InitialPropose)
 
 	if err := tx.Create(&state).Error; err != nil {
 		tx.Rollback()
@@ -61,17 +62,43 @@ func (repo *BurnRepository) UserOwnsBurn(authId string, burnId string) bool {
 func (repo *BurnRepository) GetBurnById(burnId string) (*entities.Burn, error) {
 	var result *entities.Burn
 
-	if err := repo.dbContext.Where("id = ?", burnId).First(&result).Error; err != nil {
+	if err := repo.dbContext.Where("id = ?", burnId).Where("deleted_at is null").First(&result).Error; err != nil {
 		return nil, err
 	}
 
 	return result, nil
 }
 
+func (repo *BurnRepository) Delete(burn *entities.Burn) error {
+	deletedAt := time.Now()
+
+	burn.DeletedAt = deletedAt
+
+	if err := repo.dbContext.Model(&entities.BurnRequest{}).Where("burn_id = ?", burn.ID).Update("deleted_at", deletedAt).Error; err != nil {
+		return err
+	}
+
+	if err := repo.dbContext.Model(&entities.BurnRequestState{}).Where("burn_id = ?", burn.ID).Update("deleted_at", deletedAt).Error; err != nil {
+		return err
+	}
+
+	return repo.dbContext.Save(burn).Error
+}
+
+func (repo *BurnRepository) GetBurnStatus(authId string, burnId string) (*uint16, error) {
+	var burnRequest *entities.BurnRequestState
+
+	if err := repo.dbContext.Where("burn_id = ?", burnId).Where("auth_key_id = ?", authId).First(&burnRequest).Error; err != nil {
+		return nil, err
+	}
+
+	return &burnRequest.State, nil
+}
+
 func (repo *BurnRepository) GetBurnDetailById(authId string, burnId string) (*daos.BurnDetailsView, error) {
 	var result *daos.BurnDetailsView
 
-	if err := repo.dbContext.Where("id = ?", burnId).Where("author = ?", authId).First(&result).Error; err != nil {
+	if err := repo.dbContext.Where("id = ?", burnId).Where("author = ?", authId).Where("deleted_at is null").First(&result).Error; err != nil {
 		return nil, err
 	}
 
@@ -81,7 +108,7 @@ func (repo *BurnRepository) GetBurnDetailById(authId string, burnId string) (*da
 func (repo *BurnRepository) GetAllBurns(authId string, params map[string]interface{}, pagination *pagination.Pagination) ([]daos.BurnDetailsView, error) {
 	var result []daos.BurnDetailsView
 
-	expr := repo.dbContext.Where("author = ?", authId)
+	expr := repo.dbContext.Where("author = ?", authId).Where("deleted_at is null")
 
 	if search, ok := params["search"]; ok {
 		expr.Where("title like ?", fmt.Sprintf("%%%s%%", search))

@@ -12,7 +12,10 @@ select
 		b."type",
 		b.begin_at,
 		b.completed_at,
-		brs.state
+		brs.state,
+		b.created_at,
+		b.updated_at,
+		b.deleted_at
 	FROM
 			burn b
 	inner join burn_requests br 

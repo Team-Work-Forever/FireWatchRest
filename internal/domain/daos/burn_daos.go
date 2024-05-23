@@ -14,6 +14,7 @@ type (
 	}
 
 	BurnDetailsView struct {
+		entities.Entity
 		Author      string    `gorm:"column:author"`
 		Id          string    `gorm:"column:id"`
 		Title       string    `gorm:"column:title"`

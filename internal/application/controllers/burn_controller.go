@@ -16,6 +16,7 @@ type BurnController struct {
 	getBurnByIdUc *usecases.GetBurnByIdUseCase
 	getAllBurnsUc *usecases.GetAllBurnsUseCase
 	updateBurnUc  *usecases.UpdateBurnUseCase
+	deleteBurnUc  *usecases.DeleteBurnUseCase
 }
 
 func NewBurnController(
@@ -23,12 +24,14 @@ func NewBurnController(
 	getBurnByIdUc *usecases.GetBurnByIdUseCase,
 	getAllBurnsUc *usecases.GetAllBurnsUseCase,
 	updateBurnUc *usecases.UpdateBurnUseCase,
+	deleteBurnUc *usecases.DeleteBurnUseCase,
 ) *BurnController {
 	return &BurnController{
 		createBurnUc:  createBurnUc,
 		getBurnByIdUc: getBurnByIdUc,
 		getAllBurnsUc: getAllBurnsUc,
 		updateBurnUc:  updateBurnUc,
+		deleteBurnUc:  deleteBurnUc,
 	}
 }
 
@@ -45,6 +48,7 @@ func (c *BurnController) Route(router fiber.Router) {
 	burn.Get(":id", c.GetBurnById)
 
 	burn.Put(":id", middlewares.ShouldAcceptMultiPart, c.UpdateBurn)
+	burn.Delete(":id", c.DeleteBurn)
 }
 
 // // ShowAccount godoc
@@ -80,6 +84,37 @@ func (c *BurnController) CreateBurn(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(fiber.StatusCreated).JSON(result)
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Delete an Record if it is Scheduale
+//	@Tags		Burn
+//	@Produce	json
+//
+//	@Param		accept-language	header		string						false	"some description"
+//
+//	@Param		id			path		string	true	"Delete the burn by id"
+//
+//	@Success	202				{object}	contracts.BurnActionResponse
+//
+//	@security	Bearer
+//
+//	@Router		/burns/{id} [delete]
+func (c *BurnController) DeleteBurn(ctx *fiber.Ctx) error {
+	userId := shared.GetUserId(ctx)
+	burnId := ctx.Params("id", "")
+
+	result, err := c.deleteBurnUc.Handle(contracts.DeleteRequest{
+		UserId: userId,
+		BurnId: burnId,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusAccepted).JSON(result)
 }
 
 // // ShowAccount godoc
@@ -147,7 +182,7 @@ func (c *BurnController) GetBurnById(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.Status(fiber.StatusCreated).JSON(result)
+	return ctx.Status(fiber.StatusOK).JSON(result)
 }
 
 // // ShowAccount godoc

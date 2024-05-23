@@ -369,6 +369,29 @@ paths:
       tags:
       - Burn
   /burns/{id}:
+    delete:
+      parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
+      - description: Delete the burn by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/contracts.BurnActionResponse'
+      security:
+      - Bearer: []
+      summary: Delete an Record if it is Scheduale
+      tags:
+      - Burn
     get:
       parameters:
       - description: some description

@@ -10,7 +10,7 @@ import (
 type Entity struct {
 	CreatedAt time.Time `gorm:"column:created_at;<-:update"`
 	UpdatedAt time.Time `gorm:"column:updated_at;<-:update"`
-	DeletedAt time.Time `gorm:"column:deleted_at;<-:update"`
+	DeletedAt time.Time `gorm:"column:deleted_at;<-:update;softDelete"`
 }
 
 type EntityBase struct {
