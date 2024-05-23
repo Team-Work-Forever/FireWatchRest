@@ -392,6 +392,63 @@ paths:
       summary: Fetch Burn By Id
       tags:
       - Burn
+    put:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
+      - description: Fetch the burn by id
+        in: path
+        name: id
+        required: true
+        type: string
+      - in: formData
+        name: has_backup_team
+        required: true
+        type: boolean
+      - in: formData
+        name: init_date
+        required: true
+        type: string
+      - in: formData
+        name: initial_propose
+        required: true
+        type: string
+      - in: formData
+        name: lat
+        required: true
+        type: number
+      - in: formData
+        name: lon
+        required: true
+        type: number
+      - in: formData
+        name: reason
+        required: true
+        type: string
+      - in: formData
+        name: title
+        required: true
+        type: string
+      - in: formData
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/contracts.BurnActionResponse'
+      security:
+      - Bearer: []
+      summary: Create an Burn Request
+      tags:
+      - Burn
   /burns/reasons:
     get:
       parameters:

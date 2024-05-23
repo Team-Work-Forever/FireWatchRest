@@ -15,17 +15,20 @@ type BurnController struct {
 	createBurnUc  *usecases.CreateBurnUseCase
 	getBurnByIdUc *usecases.GetBurnByIdUseCase
 	getAllBurnsUc *usecases.GetAllBurnsUseCase
+	updateBurnUc  *usecases.UpdateBurnUseCase
 }
 
 func NewBurnController(
 	createBurnUc *usecases.CreateBurnUseCase,
 	getBurnByIdUc *usecases.GetBurnByIdUseCase,
 	getAllBurnsUc *usecases.GetAllBurnsUseCase,
+	updateBurnUc *usecases.UpdateBurnUseCase,
 ) *BurnController {
 	return &BurnController{
 		createBurnUc:  createBurnUc,
 		getBurnByIdUc: getBurnByIdUc,
 		getAllBurnsUc: getAllBurnsUc,
+		updateBurnUc:  updateBurnUc,
 	}
 }
 
@@ -37,8 +40,11 @@ func (c *BurnController) Route(router fiber.Router) {
 	burn.Get("states", c.GetBurnStates)
 
 	burn.Post("", middlewares.ShouldAcceptMultiPart, c.CreateBurn)
+
 	burn.Get("", c.GetAllBurns)
 	burn.Get(":id", c.GetBurnById)
+
+	burn.Put(":id", middlewares.ShouldAcceptMultiPart, c.UpdateBurn)
 }
 
 // // ShowAccount godoc
@@ -74,6 +80,43 @@ func (c *BurnController) CreateBurn(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(fiber.StatusCreated).JSON(result)
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Create an Burn Request
+//	@Tags		Burn
+//	@Accept		multipart/form-data
+//	@Produce	json
+//
+//	@Param		accept-language	header		string						false	"some description"
+//
+//	@Param		id			path		string	true	"Fetch the burn by id"
+//	@Param		data			formData	contracts.CreateBurnRequest	true	"Form data"
+//
+//	@Success	202				{object}	contracts.BurnActionResponse
+//
+//	@security	Bearer
+//
+//	@Router		/burns/{id} [put]
+func (c *BurnController) UpdateBurn(ctx *fiber.Ctx) error {
+	var updateBurnRequest contracts.UpdateBurnRequest
+	userId := shared.GetUserId(ctx)
+	burnId := ctx.Params("id", "")
+
+	updateBurnRequest.UserId = userId
+	updateBurnRequest.BurnId = burnId
+	if err := ctx.BodyParser(&updateBurnRequest); err != nil {
+		return err
+	}
+
+	result, err := c.updateBurnUc.Handle(updateBurnRequest)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusAccepted).JSON(result)
 }
 
 // // ShowAccount godoc

@@ -20,7 +20,7 @@ func NewGetBurnByIdUseCase(burnRepository *repositories.BurnRepository) *GetBurn
 }
 
 func (uc *GetBurnByIdUseCase) Handle(request contracts.GetBurnRequest) (*geojson.GeoJsonFeature, error) {
-	result, err := uc.burnRepository.GetBurnById(request.AuthId, request.BurnId)
+	result, err := uc.burnRepository.GetBurnDetailById(request.AuthId, request.BurnId)
 
 	if err != nil {
 		return nil, errors.New("burn not found")

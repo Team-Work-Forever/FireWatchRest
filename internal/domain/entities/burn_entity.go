@@ -13,7 +13,7 @@ type Burn struct {
 	HasAidTeam  bool          `gorm:"column:has_aid_team"`
 	Reason      uint16        `gorm:"column:reason"`
 	Type        uint16        `gorm:"column:type"`
-	Coordinates vo.Coordinate `gorm:"column:geo_location;type:geometry(Point,4326)"`
+	Coordinates vo.Coordinate `gorm:"column:geo_location;type:geometry"`
 	BeginAt     time.Time     `gorm:"column:begin_at"`
 	CompletedAt time.Time     `gorm:"column:completed_at"`
 	Picture     string        `gorm:"column:map_picture"`

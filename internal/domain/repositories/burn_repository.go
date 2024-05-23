@@ -50,7 +50,25 @@ func (repo *BurnRepository) CreateBurn(request daos.CreateBurnDao) (*entities.Bu
 	return burnRequest, tx.Commit().Error
 }
 
-func (repo *BurnRepository) GetBurnById(authId string, burnId string) (*daos.BurnDetailsView, error) {
+func (repo *BurnRepository) UserOwnsBurn(authId string, burnId string) bool {
+	if err := repo.dbContext.Where("auth_key_id = ?", authId).Where("burn_id = ?", burnId).First(&entities.BurnRequest{}).Error; err != nil {
+		return false
+	}
+
+	return true
+}
+
+func (repo *BurnRepository) GetBurnById(burnId string) (*entities.Burn, error) {
+	var result *entities.Burn
+
+	if err := repo.dbContext.Where("id = ?", burnId).First(&result).Error; err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (repo *BurnRepository) GetBurnDetailById(authId string, burnId string) (*daos.BurnDetailsView, error) {
 	var result *daos.BurnDetailsView
 
 	if err := repo.dbContext.Where("id = ?", burnId).Where("author = ?", authId).First(&result).Error; err != nil {
@@ -89,4 +107,8 @@ func (repo *BurnRepository) GetAllBurns(authId string, params map[string]interfa
 
 	pagination.SetTotalPages(len(result))
 	return result, nil
+}
+
+func (repo *BurnRepository) Update(burn *entities.Burn) error {
+	return repo.dbContext.Save(burn).Error
 }

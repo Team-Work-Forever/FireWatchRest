@@ -17,6 +17,18 @@ type (
 		InitialProprose string  `form:"initial_propose" binding:"required"`
 	}
 
+	UpdateBurnRequest struct {
+		UserId        string `swaggerignore:"true"`
+		BurnId        string `swaggerignore:"true"`
+		Title         string `form:"title" binding:"required"`
+		Type          string `form:"type" binding:"required"`
+		HasBackUpTeam string `form:"has_backup_team" binding:"required"`
+		Reason        string `form:"reason" binding:"required"`
+		InitDate      string `form:"init_date" binding:"required"`
+		Lat           string `form:"lat" binding:"required"`
+		Lon           string `form:"lon" binding:"required"`
+	}
+
 	GetBurnRequest struct {
 		AuthId string
 		BurnId string
