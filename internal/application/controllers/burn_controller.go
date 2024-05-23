@@ -10,12 +10,17 @@ import (
 )
 
 type BurnController struct {
-	createBurnUc *usecases.CreateBurnUseCase
+	createBurnUc  *usecases.CreateBurnUseCase
+	getBurnByIdUc *usecases.GetBurnByIdUseCase
 }
 
-func NewBurnController(createBurnUc *usecases.CreateBurnUseCase) *BurnController {
+func NewBurnController(
+	createBurnUc *usecases.CreateBurnUseCase,
+	getBurnByIdUc *usecases.GetBurnByIdUseCase,
+) *BurnController {
 	return &BurnController{
-		createBurnUc: createBurnUc,
+		createBurnUc:  createBurnUc,
+		getBurnByIdUc: getBurnByIdUc,
 	}
 }
 
@@ -23,6 +28,7 @@ func (c *BurnController) Route(router fiber.Router) {
 	burn := router.Group("burn", middlewares.AuthorizationMiddleware)
 
 	burn.Post("", middlewares.ShouldAcceptMultiPart, c.CreateBurn)
+	burn.Get(":id", c.GetBurnById)
 
 	burn.Get("types", c.GetBurnTypes)
 	burn.Get("reasons", c.GetBurnReasons)
@@ -56,6 +62,37 @@ func (c *BurnController) CreateBurn(ctx *fiber.Ctx) error {
 	}
 
 	result, err := c.createBurnUc.Handler(createBurnRequest)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusCreated).JSON(result)
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Fetch Burn By Id
+//	@Tags		Burn
+//	@Produce	json
+//
+// @Param   accept-language  header     string     false  "some description"
+//
+//	@Param		burnId	query	string	true	"Fetch the burn by id"
+//
+//	@Success	200	{object}	geojson.GeoJsonFeature
+//
+//	@security	Bearer
+//
+//	@Router		/burn [get]
+func (c *BurnController) GetBurnById(ctx *fiber.Ctx) error {
+	burnId := ctx.Params("id", "")
+	userId := shared.GetUserId(ctx)
+
+	result, err := c.getBurnByIdUc.Handle(contracts.GetBurnRequest{
+		AuthId: userId,
+		BurnId: burnId,
+	})
 
 	if err != nil {
 		return err

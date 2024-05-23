@@ -1,5 +1,9 @@
 package contracts
 
+import (
+	"time"
+)
+
 type (
 	CreateBurnRequest struct {
 		UserId          string  `swaggerignore:"true"`
@@ -11,6 +15,22 @@ type (
 		Lon             float32 `form:"lon" binding:"required"`
 		Lat             float32 `form:"lat" binding:"required"`
 		InitialProprose string  `form:"initial_propose" binding:"required"`
+	}
+
+	GetBurnRequest struct {
+		AuthId string
+		BurnId string
+	}
+
+	BurnResponse struct {
+		Title       string    `json:"title"`
+		HasAidTeam  bool      `json:"has_aid_team"`
+		Reason      string    `json:"reason"`
+		Type        string    `json:"type"`
+		BeginAt     time.Time `json:"begin_at"`
+		CompletedAt time.Time `json:"completed_at"`
+		Picture     string    `json:"map_picture"`
+		State       string    `json:"state"`
 	}
 
 	BurnActionResponse struct {

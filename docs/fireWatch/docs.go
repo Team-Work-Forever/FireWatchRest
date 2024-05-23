@@ -286,6 +286,43 @@ const docTemplate = `{
             }
         },
         "/burn": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Burn"
+                ],
+                "summary": "Fetch Burn By Id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Fetch the burn by id",
+                        "name": "burnId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/geojson.GeoJsonFeature"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -695,6 +732,32 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "geojson.GeoJsonFeature": {
+            "type": "object",
+            "properties": {
+                "geometry": {
+                    "$ref": "#/definitions/geojson.Geometry"
+                },
+                "properties": {},
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "geojson.Geometry": {
+            "type": "object",
+            "properties": {
+                "coordinates": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "type": {
                     "type": "string"
                 }
             }

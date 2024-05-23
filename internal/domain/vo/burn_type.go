@@ -15,6 +15,11 @@ func GetBurnType(burnType int) (string, bool) {
 	return result, ok
 }
 
+func MustGetBurnType(burnType int) string {
+	result := burnTypeLookup[uint16(burnType)]
+	return result
+}
+
 func GetAllBurnTypes() []string {
 	types := make([]string, 0, len(burnTypeLookup))
 

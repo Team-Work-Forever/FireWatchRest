@@ -21,6 +21,11 @@ func GetBurnRequestState(burnRequestState uint16) (string, bool) {
 	return result, ok
 }
 
+func MustGetBurnRequestState(burnRequestState uint16) string {
+	result := burnRequestStateLookUp[uint16(burnRequestState)]
+	return result
+}
+
 func GetAllBurnStates() []string {
 	states := make([]string, 0, len(burnRequestStateLookUp))
 
