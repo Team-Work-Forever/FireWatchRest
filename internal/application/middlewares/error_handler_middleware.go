@@ -7,9 +7,19 @@ import (
 )
 
 func ErrorHandler(ctx *fiber.Ctx, err error) error {
-	problem, ok := err.(*exec.Error)
-
-	if !ok {
+	switch e := err.(type) {
+	case *exec.Error:
+		return shared.WriteProblemDetails(ctx, *e)
+	case *fiber.Error:
+		return shared.WriteProblemDetails(
+			ctx,
+			exec.Error{
+				Title:  "Bad Input",
+				Status: e.Code,
+				Detail: e.Message,
+			},
+		)
+	default:
 		return shared.WriteProblemDetails(
 			ctx,
 			exec.Error{
@@ -20,5 +30,4 @@ func ErrorHandler(ctx *fiber.Ctx, err error) error {
 		)
 	}
 
-	return shared.WriteProblemDetails(ctx, *problem)
 }
