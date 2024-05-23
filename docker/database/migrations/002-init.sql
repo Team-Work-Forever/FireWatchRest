@@ -65,9 +65,13 @@ create table burn (
 );
 create table autarchy (
   id uuid not null,
-  manager_id uuid not null,
+  auth_key_id uuid not null,
+  -- manager_id uuid not null,
   title varchar(50) not null,
+  autarchy_avatar text not null,
   geo_location GEOMETRY(Point, 4326) DEFAULT NULL,
+  phone_code varchar(4) not null,
+  phone_number varchar(9) not null,
   address_street varchar(95) not null,
   address_number int not null,
   address_zip_code varchar(8) not null,
@@ -76,17 +80,20 @@ create table autarchy (
   updated_at timestamp default now(),
   deleted_at timestamp default null,
   primary key (id),
-  constraint manager_id_fk foreign key (manager_id) references auth_keys(id)
+  check (length(phone_number) = 9),
+  check (length(address_zip_code) = 8),
+  constraint auth_key_fk foreign key (auth_key_id) references auth_keys (id)
+  -- constraint manager_id_fk foreign key (manager_id) references auth_keys(id)
 );
-create table autarchy_employee (
-  id uuid not null,
-  employee_id uuid not null,
-  created_at timestamp default now(),
-  updated_at timestamp default now(),
-  deleted_at timestamp default null,
-  primary key (id),
-  constraint employee_id_fk foreign key (employee_id) references auth_keys(id)
-);
+-- create table autarchy_employee (
+--   id uuid not null,
+--   employee_id uuid not null,
+--   created_at timestamp default now(),
+--   updated_at timestamp default now(),
+--   deleted_at timestamp default null,
+--   primary key (id),
+--   constraint employee_id_fk foreign key (employee_id) references auth_keys(id)
+-- );
 create table burn_requests (
   auth_key_id uuid not null,
   -- autarchy_id uuid not null,

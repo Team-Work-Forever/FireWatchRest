@@ -31,7 +31,7 @@ email-pv-header: Email Validation
 nif-pv: Provide Nif field"
 nif-pv-header: NIF Validation
 nif-pv-v: Provide an valid Nif field
-nif-pv-header: NIF Validation
+nif-pv-v-header: NIF Validation
 password-pv: Provide password field
 password-pv-header: Password Validation
 password-btw-6-16: Password must be between 6 and 16 characters

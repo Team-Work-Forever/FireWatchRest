@@ -31,7 +31,7 @@ email-pv-header: Validação de correio eletrónico
 nif-pv: Fornecer campo Nif"
 nif-pv-header: Validação NIF
 nif-pv-v: Fornecer um campo Nif válido
-nif-pv-header: Validação NIF
+nif-pv-v-header: Validação NIF
 password-pv: Fornecer um campo de palavra-passe
 password-pv-header: Validação da palavra-passe
 password-btw-6-16: A palavra-passe deve ter entre 6 e 16 caracteres

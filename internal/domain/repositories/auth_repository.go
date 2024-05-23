@@ -1,6 +1,9 @@
 package repositories
 
 import (
+	"errors"
+	"log"
+
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
@@ -53,7 +56,7 @@ func (repo *AuthRepository) ExistsUserWithNif(nif *vo.NIF) bool {
 	return true
 }
 
-func (repo *AuthRepository) CreateAccount(auth *entities.Auth, user *entities.User) error {
+func (repo *AuthRepository) CreateAccount(auth *entities.Auth, user interface{}) error {
 	tx := repo.dbContext.Begin()
 
 	if err := tx.Create(&auth).Error; err != nil {
@@ -61,11 +64,22 @@ func (repo *AuthRepository) CreateAccount(auth *entities.Auth, user *entities.Us
 		return err
 	}
 
-	// link auth keys to account
-	user.AsignAuthKey(auth)
-	if err := tx.Create(&user).Error; err != nil {
-		tx.Rollback()
-		return err
+	switch userType := user.(type) {
+	case *entities.User:
+		userType.AsignAuthKey(auth)
+		if err := tx.Create(&userType).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+	case *entities.Autarchy:
+		log.Printf("Error - why")
+		userType.AsignAuthKey(auth)
+		if err := tx.Create(&userType).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+	default:
+		return errors.New("failed to create account user type undefined")
 	}
 
 	return tx.Commit().Error

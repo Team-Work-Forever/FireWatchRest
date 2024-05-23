@@ -4,6 +4,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/config"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/controllers"
+	ucy "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/autarchy"
 	uca "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/auth"
 	ucb "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/burn"
 	ucp "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/profile"
@@ -47,6 +48,7 @@ func main() {
 	tokenRepository := repositories.NewTokenRepository(db)
 	profileRepository := repositories.NewProfileRepository(db)
 	burnRepository := repositories.NewBurnRepository(db)
+	autarchyRepository := repositories.NewAutarchyRepository(db)
 
 	// use cases
 	loginUseCase := uca.NewLoginUseCase(authRepository)
@@ -64,16 +66,20 @@ func main() {
 	updateBurnUseCase := ucb.NewUpdateBurnUseCase(burnRepository)
 	deleteBurnUseCase := ucb.NewDeleteBurnUseCase(burnRepository)
 
+	createAutarchyUseCase := ucy.NewCreateAutarchyUseCase(autarchyRepository, authRepository)
+
 	// controllers
 	authController := controllers.NewAuthController(loginUseCase, signUpUseCase, forgotPasswordUseCase, resetPasswordUseCase, refreshTokensUseCase)
 	profileController := controllers.NewProfileController(whoamiUseCase, updateProfileUseCase)
 	burnController := controllers.NewBurnController(createBurnUseCase, getBurnbyIdUseCase, getAllBurnsUseCase, updateBurnUseCase, deleteBurnUseCase)
+	autarchyController := controllers.NewAutarchyController(createAutarchyUseCase)
 
 	// Serve application
 	app.AddControllers([]shared.Controller{
 		authController,
 		profileController,
 		burnController,
+		autarchyController,
 	})
 
 	app.Serve()
