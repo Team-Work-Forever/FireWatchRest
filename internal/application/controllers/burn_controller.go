@@ -56,7 +56,7 @@ func (c *BurnController) Route(router fiber.Router) {
 //
 //	@security	Bearer
 //
-//	@Router		/burn [post]
+//	@Router		/burns [post]
 func (c *BurnController) CreateBurn(ctx *fiber.Ctx) error {
 	var createBurnRequest contracts.CreateBurnRequest
 
@@ -84,13 +84,13 @@ func (c *BurnController) CreateBurn(ctx *fiber.Ctx) error {
 //
 //	@Param		accept-language	header		string	false	"some description"
 //
-//	@Param		burnId			query		string	true	"Fetch the burn by id"
+//	@Param		id			path		string	true	"Fetch the burn by id"
 //
 //	@Success	200				{object}	geojson.GeoJsonFeature
 //
 //	@security	Bearer
 //
-//	@Router		/burn/{burnId} [get]
+//	@Router		/burns/{id} [get]
 func (c *BurnController) GetBurnById(ctx *fiber.Ctx) error {
 	burnId := ctx.Params("id", "")
 	userId := shared.GetUserId(ctx)
@@ -115,18 +115,18 @@ func (c *BurnController) GetBurnById(ctx *fiber.Ctx) error {
 //
 //	@Param		accept-language	header		string	false	"some description"
 //
-//	@Param		search			query		string	true	"search burn title"
-//	@Param		state			query		string	true	"search by burn state"
-//	@Param		start_date		query		string	true	"search by an inital date"
-//	@Param		end_date		query		string	true	"search by an end date"
-//	@Param		page			query		int	true	"view page"  default(1)
-//	@Param		page_size		query		int	true	"number of returned elements" default(10)
+//	@Param		search			query		string	false	"search burn title"
+//	@Param		state			query		string	false	"search by burn state"
+//	@Param		start_date		query		string	false	"search by an inital date"
+//	@Param		end_date		query		string	false	"search by an end date"
+//	@Param		page			query		int	false	"view page"  default(1)
+//	@Param		page_size		query		int	false	"number of returned elements" default(10)
 //
 //	@Success	200				{object}	geojson.GeoJsonFeature
 //
 //	@security	Bearer
 //
-//	@Router		/burn [get]
+//	@Router		/burns [get]
 func (c *BurnController) GetAllBurns(ctx *fiber.Ctx) error {
 	userId := shared.GetUserId(ctx)
 	search := ctx.Query("search", "")
@@ -162,7 +162,7 @@ func (c *BurnController) GetAllBurns(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.Status(fiber.StatusCreated).JSON(result)
+	return ctx.Status(fiber.StatusOK).JSON(result)
 }
 
 // // ShowAccount godoc
@@ -177,7 +177,7 @@ func (c *BurnController) GetAllBurns(ctx *fiber.Ctx) error {
 //
 //	@security	Bearer
 //
-//	@Router		/burn/types [get]
+//	@Router		/burns/types [get]
 func (c *BurnController) GetBurnTypes(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusAccepted).JSON(vo.GetAllBurnTypes())
 }
@@ -194,7 +194,7 @@ func (c *BurnController) GetBurnTypes(ctx *fiber.Ctx) error {
 //
 //	@security	Bearer
 //
-//	@Router		/burn/reasons [get]
+//	@Router		/burns/reasons [get]
 func (c *BurnController) GetBurnReasons(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusAccepted).JSON(vo.GetAllBurnReasons())
 }
@@ -211,7 +211,7 @@ func (c *BurnController) GetBurnReasons(ctx *fiber.Ctx) error {
 //
 //	@security	Bearer
 //
-//	@Router		/burn/states [get]
+//	@Router		/burns/states [get]
 func (c *BurnController) GetBurnStates(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusAccepted).JSON(vo.GetAllBurnStates())
 }

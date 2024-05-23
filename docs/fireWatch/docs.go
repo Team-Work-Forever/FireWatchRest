@@ -285,7 +285,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/burn": {
+        "/burns": {
             "get": {
                 "security": [
                     {
@@ -310,45 +310,39 @@ const docTemplate = `{
                         "type": "string",
                         "description": "search burn title",
                         "name": "search",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "string",
                         "description": "search by burn state",
                         "name": "state",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "string",
                         "description": "search by an inital date",
                         "name": "start_date",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "string",
                         "description": "search by an end date",
                         "name": "end_date",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "integer",
                         "default": 1,
                         "description": "view page",
                         "name": "page",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "integer",
                         "default": 10,
                         "description": "number of returned elements",
                         "name": "page_size",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -442,7 +436,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/burn/reasons": {
+        "/burns/reasons": {
             "get": {
                 "security": [
                     {
@@ -477,7 +471,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/burn/states": {
+        "/burns/states": {
             "get": {
                 "security": [
                     {
@@ -512,7 +506,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/burn/types": {
+        "/burns/types": {
             "get": {
                 "security": [
                     {
@@ -547,7 +541,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/burn/{burnId}": {
+        "/burns/{id}": {
             "get": {
                 "security": [
                     {
@@ -571,8 +565,8 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Fetch the burn by id",
-                        "name": "burnId",
-                        "in": "query",
+                        "name": "id",
+                        "in": "path",
                         "required": true
                     }
                 ],

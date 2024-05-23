@@ -40,7 +40,7 @@ func (repo *BurnRepository) CreateBurn(request daos.CreateBurnDao) (*entities.Bu
 		return nil, err
 	}
 
-	state := burnRequest.SetState(vo.Scheduled, request.InitialPropose)
+	state := burnRequest.SetState(vo.Active, request.InitialPropose)
 
 	if err := tx.Create(&state).Error; err != nil {
 		tx.Rollback()
@@ -87,6 +87,6 @@ func (repo *BurnRepository) GetAllBurns(authId string, params map[string]interfa
 		return nil, err
 	}
 
-	pagination.TotalPages = uint64(len(result))
+	pagination.SetTotalPages(len(result))
 	return result, nil
 }

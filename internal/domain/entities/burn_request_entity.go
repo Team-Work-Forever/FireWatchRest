@@ -21,12 +21,14 @@ func NewBurnRequest(authId string, burnId string, initialPropose string) *BurnRe
 }
 
 func (br *BurnRequest) SetState(state vo.BurnRequestStates, obs string) *BurnRequestState {
-	return NewBurnRequestState(
+	br.State = *NewBurnRequestState(
 		br.AuthId,
 		br.BurnId,
 		state,
 		obs,
 	)
+
+	return &br.State
 }
 
 func (br *BurnRequest) TableName() string {

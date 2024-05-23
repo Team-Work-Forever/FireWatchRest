@@ -271,7 +271,7 @@ paths:
       summary: Create an Account
       tags:
       - Auth
-  /burn:
+  /burns:
     get:
       parameters:
       - description: some description
@@ -281,34 +281,28 @@ paths:
       - description: search burn title
         in: query
         name: search
-        required: true
         type: string
       - description: search by burn state
         in: query
         name: state
-        required: true
         type: string
       - description: search by an inital date
         in: query
         name: start_date
-        required: true
         type: string
       - description: search by an end date
         in: query
         name: end_date
-        required: true
         type: string
       - default: 1
         description: view page
         in: query
         name: page
-        required: true
         type: integer
       - default: 10
         description: number of returned elements
         in: query
         name: page_size
-        required: true
         type: integer
       produces:
       - application/json
@@ -374,7 +368,7 @@ paths:
       summary: Create an Burn Request
       tags:
       - Burn
-  /burn/{burnId}:
+  /burns/{id}:
     get:
       parameters:
       - description: some description
@@ -382,8 +376,8 @@ paths:
         name: accept-language
         type: string
       - description: Fetch the burn by id
-        in: query
-        name: burnId
+        in: path
+        name: id
         required: true
         type: string
       produces:
@@ -398,7 +392,7 @@ paths:
       summary: Fetch Burn By Id
       tags:
       - Burn
-  /burn/reasons:
+  /burns/reasons:
     get:
       parameters:
       - description: some description
@@ -419,7 +413,7 @@ paths:
       summary: Burn Available Reasons
       tags:
       - Burn
-  /burn/states:
+  /burns/states:
     get:
       parameters:
       - description: some description
@@ -440,7 +434,7 @@ paths:
       summary: Burn Available States
       tags:
       - Burn
-  /burn/types:
+  /burns/types:
     get:
       parameters:
       - description: some description
