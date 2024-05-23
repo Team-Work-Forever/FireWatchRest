@@ -1,4 +1,4 @@
-package burn
+package usecases
 
 import (
 	"errors"

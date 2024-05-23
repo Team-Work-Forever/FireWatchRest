@@ -22,7 +22,18 @@ type (
 		BurnId string
 	}
 
+	GetAllBurnsRequest struct {
+		AuthId    string
+		Search    string
+		State     string
+		StartDate string
+		EndDate   string
+		PageSize  uint64
+		Page      uint64
+	}
+
 	BurnResponse struct {
+		Id          string    `json:"id"`
 		Title       string    `json:"title"`
 		HasAidTeam  bool      `json:"has_aid_team"`
 		Reason      string    `json:"reason"`

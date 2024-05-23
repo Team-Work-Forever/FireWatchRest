@@ -9,6 +9,7 @@ type BurnRequest struct {
 	InitialPropose string           `gorm:"column:initial_propose"`
 	Accepted       bool             `gorm:"column:accepted"`
 	State          BurnRequestState `gorm:"foreignKey:AuthId,BurnId;references:AuthId,BurnId"`
+	Burn           Burn             `gorm:"foreignKey:BurnId;references:ID"`
 }
 
 func NewBurnRequest(authId string, burnId string, initialPropose string) *BurnRequest {

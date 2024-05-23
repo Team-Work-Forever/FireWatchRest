@@ -18,6 +18,13 @@ definitions:
       refresh_token:
         type: string
     type: object
+  contracts.BurnActionResponse:
+    properties:
+      burn_id:
+        type: string
+      state:
+        type: string
+    type: object
   contracts.LoginRequest:
     properties:
       email:
@@ -271,11 +278,38 @@ paths:
         in: header
         name: accept-language
         type: string
-      - description: Fetch the burn by id
+      - description: search burn title
         in: query
-        name: burnId
+        name: search
         required: true
         type: string
+      - description: search by burn state
+        in: query
+        name: state
+        required: true
+        type: string
+      - description: search by an inital date
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: search by an end date
+        in: query
+        name: end_date
+        required: true
+        type: string
+      - default: 1
+        description: view page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - default: 10
+        description: number of returned elements
+        in: query
+        name: page_size
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -285,7 +319,7 @@ paths:
             $ref: '#/definitions/geojson.GeoJsonFeature'
       security:
       - Bearer: []
-      summary: Fetch Burn By Id
+      summary: Fetch burns
       tags:
       - Burn
     post:
@@ -334,10 +368,34 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/contracts.ProfileResponse'
+            $ref: '#/definitions/contracts.BurnActionResponse'
       security:
       - Bearer: []
       summary: Create an Burn Request
+      tags:
+      - Burn
+  /burn/{burnId}:
+    get:
+      parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
+      - description: Fetch the burn by id
+        in: query
+        name: burnId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/geojson.GeoJsonFeature'
+      security:
+      - Bearer: []
+      summary: Fetch Burn By Id
       tags:
       - Burn
   /burn/reasons:

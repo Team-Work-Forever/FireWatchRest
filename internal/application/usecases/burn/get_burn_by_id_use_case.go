@@ -1,4 +1,4 @@
-package burn
+package usecases
 
 import (
 	"errors"
@@ -30,6 +30,7 @@ func (uc *GetBurnByIdUseCase) Handle(request contracts.GetBurnRequest) (*geojson
 		result.Lat,
 		result.Lon,
 		contracts.BurnResponse{
+			Id:          result.Id,
 			Title:       result.Title,
 			HasAidTeam:  result.HasAidTeam,
 			Reason:      vo.MustGetBurnReason(result.Reason),

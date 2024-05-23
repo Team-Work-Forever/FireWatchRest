@@ -298,7 +298,7 @@ const docTemplate = `{
                 "tags": [
                     "Burn"
                 ],
-                "summary": "Fetch Burn By Id",
+                "summary": "Fetch burns",
                 "parameters": [
                     {
                         "type": "string",
@@ -308,8 +308,45 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Fetch the burn by id",
-                        "name": "burnId",
+                        "description": "search burn title",
+                        "name": "search",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "search by burn state",
+                        "name": "state",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "search by an inital date",
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "search by an end date",
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "view page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "number of returned elements",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     }
@@ -399,7 +436,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/contracts.ProfileResponse"
+                            "$ref": "#/definitions/contracts.BurnActionResponse"
                         }
                     }
                 }
@@ -505,6 +542,45 @@ const docTemplate = `{
                             "items": {
                                 "type": "string"
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/burn/{burnId}": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Burn"
+                ],
+                "summary": "Fetch Burn By Id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Fetch the burn by id",
+                        "name": "burnId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/geojson.GeoJsonFeature"
                         }
                     }
                 }
@@ -661,6 +737,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "contracts.BurnActionResponse": {
+            "type": "object",
+            "properties": {
+                "burn_id": {
+                    "type": "string"
+                },
+                "state": {
                     "type": "string"
                 }
             }

@@ -1,12 +1,13 @@
 package repositories
 
 import (
-	"database/sql"
+	"fmt"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
 	"gorm.io/gorm"
 )
 
@@ -49,33 +50,43 @@ func (repo *BurnRepository) CreateBurn(request daos.CreateBurnDao) (*entities.Bu
 	return burnRequest, tx.Commit().Error
 }
 
-func (repo *BurnRepository) GetBurnById(authId string, burnId string) (*daos.GetBurnDao, error) {
-	var result *daos.GetBurnDao
+func (repo *BurnRepository) GetBurnById(authId string, burnId string) (*daos.BurnDetailsView, error) {
+	var result *daos.BurnDetailsView
 
-	sqlQuery := `
-		SELECT
-			b.id,
-			b.title,
-			b.map_picture,
-			ST_X(geo_location)::float AS lat,
-			ST_Y(geo_location)::float AS lon,
-			b.has_aid_team,
-			b.reason,
-			b."type",
-			b.begin_at,
-			b.completed_at,
-			brs.state
-		FROM
-				burn b
-		inner join burn_requests_states brs
-			on brs.burn_id = b.id and brs.auth_key_id = @authId
-		inner join burn_requests br 
-			on br.burn_id = b.id and br.auth_key_id = @authId
-	`
-
-	if err := repo.dbContext.Raw(sqlQuery, sql.Named("authId", authId)).Where("id = ?", burnId).First(&result).Error; err != nil {
+	if err := repo.dbContext.Where("id = ?", burnId).Where("author = ?", authId).First(&result).Error; err != nil {
 		return nil, err
 	}
 
+	return result, nil
+}
+
+func (repo *BurnRepository) GetAllBurns(authId string, params map[string]interface{}, pagination *pagination.Pagination) ([]daos.BurnDetailsView, error) {
+	var result []daos.BurnDetailsView
+
+	expr := repo.dbContext.Where("author = ?", authId)
+
+	if search, ok := params["search"]; ok {
+		expr.Where("title like ?", fmt.Sprintf("%%%s%%", search))
+	}
+
+	if state, ok := params["state"]; ok {
+		expr.Where("state = ?", state)
+	}
+
+	if startDate, ok := params["start_date"]; ok {
+		expr.Where("begin_at >= ?", startDate)
+	}
+
+	if endDate, ok := params["end_date"]; ok {
+		expr.Where("begin_at < ?", endDate)
+	}
+
+	expr = expr.Offset(pagination.GetOffset()).Limit(pagination.GetLimit())
+
+	if err := expr.Find(&result).Error; err != nil {
+		return nil, err
+	}
+
+	pagination.TotalPages = uint64(len(result))
 	return result, nil
 }

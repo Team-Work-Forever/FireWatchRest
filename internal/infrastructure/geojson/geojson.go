@@ -1,12 +1,8 @@
 package geojson
 
-type (
-	Pagination struct {
-		PageSize   int `json:"page_size"`
-		PageNumber int `json:"page_number"`
-		TotalPages int `json:"total_pages"`
-	}
+import "github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
 
+type (
 	Geometry struct {
 		Type        string    `json:"type"`
 		Coordinates []float32 `json:"coordinates"`
@@ -19,9 +15,9 @@ type (
 	}
 
 	GeoJsonCollection struct {
-		Type       string         `json:"type"`
-		Features   GeoJsonFeature `json:"features"`
-		Pagination Pagination     `json:"pagination"`
+		Type       string                `json:"type"`
+		Features   []GeoJsonFeature      `json:"features"`
+		Pagination pagination.Pagination `json:"pagination"`
 	}
 )
 
@@ -36,10 +32,10 @@ func NewFeature(x float32, y float32, properties interface{}) *GeoJsonFeature {
 	}
 }
 
-func NewCollection(features *GeoJsonFeature, pagination Pagination) *GeoJsonCollection {
+func NewCollection(features []GeoJsonFeature, pagination pagination.Pagination) *GeoJsonCollection {
 	return &GeoJsonCollection{
 		Type:       "FeatureCollection",
-		Features:   *features,
+		Features:   features,
 		Pagination: pagination,
 	}
 }

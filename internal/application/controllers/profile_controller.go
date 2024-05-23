@@ -38,9 +38,9 @@ func (c *ProfileController) Route(router fiber.Router) {
 //	@Accept		multipart/form-data
 //	@Produce	json
 //
-// @Param   accept-language  header     string     false  "some description"
+//	@Param		accept-language	header		string	false	"some description"
 //
-//	@Success	200	{object}	contracts.ProfileResponse
+//	@Success	200				{object}	contracts.ProfileResponse
 //
 //	@security	Bearer
 //
@@ -66,12 +66,12 @@ func (c *ProfileController) WhoamiRoute(ctx *fiber.Ctx) error {
 //	@Accept		multipart/form-data
 //	@Produce	json
 //
-// @Param   accept-language  header     string     false  "some description"
+//	@Param		accept-language	header		string							false	"some description"
 //
-//	@Param		data	formData	contracts.UpdateProfileResponse	true	"Form data"
-//	@Param		avatar	formData	file					true	"User avatar"
+//	@Param		data			formData	contracts.UpdateProfileResponse	true	"Form data"
+//	@Param		avatar			formData	file							true	"User avatar"
 //
-//	@Success	202	{object}	contracts.ProfileResponse
+//	@Success	202				{object}	contracts.ProfileResponse
 //
 //	@security	Bearer
 //

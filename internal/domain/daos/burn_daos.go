@@ -13,7 +13,8 @@ type (
 		InitialPropose string
 	}
 
-	GetBurnDao struct {
+	BurnDetailsView struct {
+		Author      string    `gorm:"column:author"`
 		Id          string    `gorm:"column:id"`
 		Title       string    `gorm:"column:title"`
 		MapPicture  string    `gorm:"column:map_picture"`
@@ -27,3 +28,7 @@ type (
 		State       uint16    `gorm:"column:state"`
 	}
 )
+
+func (bd *BurnDetailsView) TableName() string {
+	return "burn_details_view"
+}

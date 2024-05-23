@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"strconv"
+
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
 	usecases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/burn"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
@@ -12,27 +14,31 @@ import (
 type BurnController struct {
 	createBurnUc  *usecases.CreateBurnUseCase
 	getBurnByIdUc *usecases.GetBurnByIdUseCase
+	getAllBurnsUc *usecases.GetAllBurnsUseCase
 }
 
 func NewBurnController(
 	createBurnUc *usecases.CreateBurnUseCase,
 	getBurnByIdUc *usecases.GetBurnByIdUseCase,
+	getAllBurnsUc *usecases.GetAllBurnsUseCase,
 ) *BurnController {
 	return &BurnController{
 		createBurnUc:  createBurnUc,
 		getBurnByIdUc: getBurnByIdUc,
+		getAllBurnsUc: getAllBurnsUc,
 	}
 }
 
 func (c *BurnController) Route(router fiber.Router) {
-	burn := router.Group("burn", middlewares.AuthorizationMiddleware)
-
-	burn.Post("", middlewares.ShouldAcceptMultiPart, c.CreateBurn)
-	burn.Get(":id", c.GetBurnById)
+	burn := router.Group("burns", middlewares.AuthorizationMiddleware)
 
 	burn.Get("types", c.GetBurnTypes)
 	burn.Get("reasons", c.GetBurnReasons)
 	burn.Get("states", c.GetBurnStates)
+
+	burn.Post("", middlewares.ShouldAcceptMultiPart, c.CreateBurn)
+	burn.Get("", c.GetAllBurns)
+	burn.Get(":id", c.GetBurnById)
 }
 
 // // ShowAccount godoc
@@ -42,11 +48,11 @@ func (c *BurnController) Route(router fiber.Router) {
 //	@Accept		multipart/form-data
 //	@Produce	json
 //
-// @Param   accept-language  header     string     false  "some description"
+//	@Param		accept-language	header		string						false	"some description"
 //
-//	@Param		data	formData	contracts.CreateBurnRequest	true	"Form data"
+//	@Param		data			formData	contracts.CreateBurnRequest	true	"Form data"
 //
-//	@Success	201	{object}	contracts.ProfileResponse
+//	@Success	201				{object}	contracts.BurnActionResponse
 //
 //	@security	Bearer
 //
@@ -76,15 +82,15 @@ func (c *BurnController) CreateBurn(ctx *fiber.Ctx) error {
 //	@Tags		Burn
 //	@Produce	json
 //
-// @Param   accept-language  header     string     false  "some description"
+//	@Param		accept-language	header		string	false	"some description"
 //
-//	@Param		burnId	query	string	true	"Fetch the burn by id"
+//	@Param		burnId			query		string	true	"Fetch the burn by id"
 //
-//	@Success	200	{object}	geojson.GeoJsonFeature
+//	@Success	200				{object}	geojson.GeoJsonFeature
 //
 //	@security	Bearer
 //
-//	@Router		/burn [get]
+//	@Router		/burn/{burnId} [get]
 func (c *BurnController) GetBurnById(ctx *fiber.Ctx) error {
 	burnId := ctx.Params("id", "")
 	userId := shared.GetUserId(ctx)
@@ -103,13 +109,71 @@ func (c *BurnController) GetBurnById(ctx *fiber.Ctx) error {
 
 // // ShowAccount godoc
 //
+//	@Summary	Fetch burns
+//	@Tags		Burn
+//	@Produce	json
+//
+//	@Param		accept-language	header		string	false	"some description"
+//
+//	@Param		search			query		string	true	"search burn title"
+//	@Param		state			query		string	true	"search by burn state"
+//	@Param		start_date		query		string	true	"search by an inital date"
+//	@Param		end_date		query		string	true	"search by an end date"
+//	@Param		page			query		int	true	"view page"  default(1)
+//	@Param		page_size		query		int	true	"number of returned elements" default(10)
+//
+//	@Success	200				{object}	geojson.GeoJsonFeature
+//
+//	@security	Bearer
+//
+//	@Router		/burn [get]
+func (c *BurnController) GetAllBurns(ctx *fiber.Ctx) error {
+	userId := shared.GetUserId(ctx)
+	search := ctx.Query("search", "")
+	state := ctx.Query("state", "")
+	startDate := ctx.Query("start_date", "")
+	endDate := ctx.Query("end_date", "")
+	pageString := ctx.Query("page", "1")
+	pageSizeString := ctx.Query("page_size", "10")
+
+	page, err := strconv.ParseUint(pageString, 10, 64)
+
+	if err != nil {
+		return err
+	}
+
+	pageSize, err := strconv.ParseUint(pageSizeString, 10, 64)
+
+	if err != nil {
+		return err
+	}
+
+	result, err := c.getAllBurnsUc.Handle(contracts.GetAllBurnsRequest{
+		AuthId:    userId,
+		Search:    search,
+		State:     state,
+		StartDate: startDate,
+		EndDate:   endDate,
+		Page:      page,
+		PageSize:  pageSize,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusCreated).JSON(result)
+}
+
+// // ShowAccount godoc
+//
 //	@Summary	Burn Available Types
 //	@Tags		Burn
 //	@Produce	json
 //
-// @Param   accept-language  header     string     false  "some description"
+//	@Param		accept-language	header	string	false	"some description"
 //
-//	@Success	200	{array} string
+//	@Success	200				{array}	string
 //
 //	@security	Bearer
 //
@@ -124,9 +188,9 @@ func (c *BurnController) GetBurnTypes(ctx *fiber.Ctx) error {
 //	@Tags		Burn
 //	@Produce	json
 //
-// @Param   accept-language  header     string     false  "some description"
+//	@Param		accept-language	header	string	false	"some description"
 //
-//	@Success	200	{array} string
+//	@Success	200				{array}	string
 //
 //	@security	Bearer
 //
@@ -141,9 +205,9 @@ func (c *BurnController) GetBurnReasons(ctx *fiber.Ctx) error {
 //	@Tags		Burn
 //	@Produce	json
 //
-// @Param   accept-language  header     string     false  "some description"
+//	@Param		accept-language	header	string	false	"some description"
 //
-//	@Success	200	{array} string
+//	@Success	200				{array}	string
 //
 //	@security	Bearer
 //

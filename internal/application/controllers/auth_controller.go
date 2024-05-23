@@ -48,10 +48,10 @@ func (c *AuthController) Route(router fiber.Router) {
 //	@Accept		json
 //	@Produce	json
 //
-// @Param   accept-language  header     string     false  "some description"
+//	@Param		accept-language	header		string					false	"some description"
 //
-//	@Param		data	body		contracts.LoginRequest	true	"Login Payload"
-//	@Success	200		{object}	contracts.AuthResponse
+//	@Param		data			body		contracts.LoginRequest	true	"Login Payload"
+//	@Success	200				{object}	contracts.AuthResponse
 //	@Router		/auth/login [post]
 func (c *AuthController) LoginRoute(ctx *fiber.Ctx) error {
 	var loginRequest contracts.LoginRequest
@@ -76,11 +76,11 @@ func (c *AuthController) LoginRoute(ctx *fiber.Ctx) error {
 //	@Accept		multipart/form-data
 //	@Produce	json
 //
-// @Param   accept-language  header     string     false  "some description"
+//	@Param		accept-language	header		string					false	"some description"
 //
-//	@Param		data	formData	contracts.SignUpRequest	true	"Form data"
-//	@Param		avatar	formData	file					true	"User avatar"
-//	@Success	201		{object}	contracts.AuthResponse
+//	@Param		data			formData	contracts.SignUpRequest	true	"Form data"
+//	@Param		avatar			formData	file					true	"User avatar"
+//	@Success	201				{object}	contracts.AuthResponse
 //	@Router		/auth/signUp [post]
 func (c *AuthController) SignUpRoute(ctx *fiber.Ctx) error {
 	var signUpRequest contracts.SignUpRequest
@@ -104,9 +104,9 @@ func (c *AuthController) SignUpRoute(ctx *fiber.Ctx) error {
 //	@Tags		Auth
 //	@Produce	json
 //
-// @Param   accept-language  header     string     false  "some description"
+//	@Param		accept-language	header	string	false	"some description"
 //
-//	@Param		email	query	string	true	"Email address associated with the account"
+//	@Param		email			query	string	true	"Email address associated with the account"
 //	@Success	200
 //	@Router		/auth/forgot_password [get]
 func (c *AuthController) ForgotPasswordRoute(ctx *fiber.Ctx) error {
@@ -130,7 +130,7 @@ func (c *AuthController) ForgotPasswordRoute(ctx *fiber.Ctx) error {
 //	@Accept		json
 //	@Produce	json
 //
-// @Param   accept-language  header     string     false  "some description"
+//	@Param		accept-language	header		string							false	"some description"
 //
 //	@Param		forgot_token	query		string							true	"A unique token sent to the user's email for password reset"
 //	@Param		data			body		contracts.ResetPasswordRequest	true	"Reset Password Payload"
@@ -160,11 +160,11 @@ func (c *AuthController) ResetPasswordRoute(ctx *fiber.Ctx) error {
 //	@Tags		Auth
 //	@Accept		json
 //
-// @Param   accept-language  header     string     false  "some description"
-// @Param		token	query	string	true	"JWT token to be refreshed"
-// @Produce	json
-// @Success	201		{object}	contracts.AuthResponse
-// @Router		/auth/refresh_tokens [get]
+//	@Param		accept-language	header	string	false	"some description"
+//	@Param		token			query	string	true	"JWT token to be refreshed"
+//	@Produce	json
+//	@Success	201	{object}	contracts.AuthResponse
+//	@Router		/auth/refresh_tokens [get]
 func (c *AuthController) RefreshTokensRoute(ctx *fiber.Ctx) error {
 	token := ctx.Query("token")
 

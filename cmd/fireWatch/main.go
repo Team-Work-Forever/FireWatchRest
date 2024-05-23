@@ -60,11 +60,12 @@ func main() {
 
 	createBurnUseCase := ucb.NewCreateBurnUseCase(burnRepository)
 	getBurnbyIdUseCase := ucb.NewGetBurnByIdUseCase(burnRepository)
+	getAllBurnsUseCase := ucb.NewGetAllBurnsUseCase(burnRepository)
 
 	// controllers
 	authController := controllers.NewAuthController(loginUseCase, signUpUseCase, forgotPasswordUseCase, resetPasswordUseCase, refreshTokensUseCase)
 	profileController := controllers.NewProfileController(whoamiUseCase, updateProfileUseCase)
-	burnController := controllers.NewBurnController(createBurnUseCase, getBurnbyIdUseCase)
+	burnController := controllers.NewBurnController(createBurnUseCase, getBurnbyIdUseCase, getAllBurnsUseCase)
 
 	// Serve application
 	app.AddControllers([]shared.Controller{
