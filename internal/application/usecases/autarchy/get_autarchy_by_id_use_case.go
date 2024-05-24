@@ -29,6 +29,7 @@ func (uc *GetAutarchyByIdUseCase) Handle(request contracts.GetAutarchyRequest) (
 		result.Lat,
 		result.Lon,
 		contracts.AutarchyResponse{
+			Id:          result.Id,
 			Title:       result.Title,
 			Email:       result.Email,
 			PhoneCode:   result.PhoneNumber.CountryCode,
@@ -37,8 +38,6 @@ func (uc *GetAutarchyByIdUseCase) Handle(request contracts.GetAutarchyRequest) (
 			StreetPort:  result.Address.Number,
 			ZipCode:     result.Address.ZipCode,
 			City:        result.Address.City,
-			Lat:         result.Lat,
-			Lon:         result.Lon,
 			Avatar:      result.AutarchyAvatar,
 		},
 	), nil

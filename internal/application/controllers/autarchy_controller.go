@@ -13,17 +13,20 @@ type AutarchyController struct {
 	autarchyCreateUc  *usescases.CreateAutarchyUseCase
 	autarchyGetByIdUc *usescases.GetAutarchyByIdUseCase
 	autarchyGetAllUc  *usescases.GetAllAutarchies
+	updateAutarchyUc  *usescases.UpdateAutarchyUseCase
 }
 
 func NewAutarchyController(
 	autarchyCreateUc *usescases.CreateAutarchyUseCase,
 	autarchyGetByIdUc *usescases.GetAutarchyByIdUseCase,
 	autarchyGetAllUc *usescases.GetAllAutarchies,
+	updateAutarchyUc *usescases.UpdateAutarchyUseCase,
 ) *AutarchyController {
 	return &AutarchyController{
 		autarchyCreateUc:  autarchyCreateUc,
 		autarchyGetByIdUc: autarchyGetByIdUc,
 		autarchyGetAllUc:  autarchyGetAllUc,
+		updateAutarchyUc:  updateAutarchyUc,
 	}
 }
 
@@ -31,8 +34,10 @@ func (c *AutarchyController) Route(router fiber.Router) {
 	autarchies := router.Group("autarchies", middlewares.AuthorizationMiddleware)
 
 	autarchies.Post("", middlewares.ShouldAcceptMultiPart, c.CreateAutarchy)
-	autarchies.Get(":id", c.GetAutarchyById)
 	autarchies.Get("", c.GetAllAutarchies)
+
+	autarchies.Put(":id", middlewares.AuthorizationMiddleware, c.UpdateAutarchy)
+	autarchies.Get(":id", c.GetAutarchyById)
 }
 
 // // ShowAccount godoc
@@ -64,6 +69,41 @@ func (c *AutarchyController) CreateAutarchy(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(fiber.StatusCreated).JSON(result)
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Update an Burn Request
+//	@Tags		Autarchy
+//	@Accept		multipart/form-data
+//	@Produce	json
+//
+//	@Param		accept-language	header		string							false	"some description"
+//
+//	@Param		id				path		string							true	"Fetch the autarchy by id"
+//	@Param		data			formData	contracts.UpdateAutarchyRequest	true	"Form data"
+//
+//	@Success	202				{object}	geojson.GeoJsonFeature
+//
+//	@security	Bearer
+//
+//	@Router		/autarchies/{id} [put]
+func (c *AutarchyController) UpdateAutarchy(ctx *fiber.Ctx) error {
+	var updateAutarchyRequest contracts.UpdateAutarchyRequest
+	autarchyId := ctx.Params("id", "")
+
+	updateAutarchyRequest.AutarchyId = autarchyId
+	if err := ctx.BodyParser(&updateAutarchyRequest); err != nil {
+		return err
+	}
+
+	result, err := c.updateAutarchyUc.Handle(updateAutarchyRequest)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusAccepted).JSON(result)
 }
 
 // // ShowAccount godoc

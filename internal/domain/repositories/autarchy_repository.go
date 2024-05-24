@@ -38,6 +38,16 @@ func (repo *AutarchyRepository) GetAutarchtDetailById(autarchyId string) (*daos.
 	return result, nil
 }
 
+func (repo *AutarchyRepository) GetAutarchyById(autarchyId string) (*entities.Autarchy, error) {
+	var result *entities.Autarchy
+
+	if err := repo.dbContext.Where("id = ?", autarchyId).Where("deleted_at is null").First(&result).Error; err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
 func (repo *AutarchyRepository) GetAll(params map[string]interface{}, pagination *pagination.Pagination) ([]daos.AutarchyDetailsView, error) {
 	var result []daos.AutarchyDetailsView
 
@@ -55,4 +65,8 @@ func (repo *AutarchyRepository) GetAll(params map[string]interface{}, pagination
 
 	pagination.SetTotalPages(len(result))
 	return result, nil
+}
+
+func (repo *AutarchyRepository) Update(burn *entities.Autarchy) error {
+	return repo.dbContext.Save(burn).Error
 }

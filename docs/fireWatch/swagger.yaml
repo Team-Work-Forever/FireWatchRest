@@ -235,6 +235,71 @@ paths:
       summary: Get Autarchy By Id
       tags:
       - Autarchy
+    put:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
+      - description: Fetch the autarchy by id
+        in: path
+        name: id
+        required: true
+        type: string
+      - in: formData
+        name: city
+        required: true
+        type: string
+      - in: formData
+        name: email
+        required: true
+        type: string
+      - in: formData
+        name: lat
+        required: true
+        type: string
+      - in: formData
+        name: lon
+        required: true
+        type: string
+      - in: formData
+        name: phone_code
+        required: true
+        type: string
+      - in: formData
+        name: phone_number
+        required: true
+        type: string
+      - in: formData
+        name: street
+        required: true
+        type: string
+      - in: formData
+        name: street_port
+        required: true
+        type: integer
+      - in: formData
+        name: title
+        required: true
+        type: string
+      - in: formData
+        name: zip_code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/geojson.GeoJsonFeature'
+      security:
+      - Bearer: []
+      summary: Update an Burn Request
+      tags:
+      - Autarchy
   /auth/forgot_password:
     get:
       parameters:
