@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
 	usecases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/profile"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 	"github.com/gofiber/fiber/v2"
@@ -29,6 +30,8 @@ func (c *ProfileController) Route(router fiber.Router) {
 
 	profile := auth.Group("profile")
 	profile.Put("", middlewares.ShouldAcceptMultiPart, c.UpdateProfile)
+
+	profile.Get("locale", c.Locale)
 }
 
 // // ShowAccount godoc
@@ -93,4 +96,25 @@ func (c *ProfileController) UpdateProfile(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(fiber.StatusAccepted).JSON(result)
+}
+
+type Response struct {
+	Lat float32
+	Lon float32
+}
+
+func (c *ProfileController) Locale(ctx *fiber.Ctx) error {
+	lat := ctx.Query("lat", "")
+	lon := ctx.Query("lon", "")
+
+	latResult, lonResult, err := services.GetCoordinates(lat, lon)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusAccepted).JSON(&Response{
+		Lat: latResult,
+		Lon: lonResult,
+	})
 }

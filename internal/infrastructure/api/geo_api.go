@@ -69,7 +69,7 @@ type (
 	}
 )
 
-func GetLocation(x, y float32) (*Location, error) {
+func GetLocation(x, y float64) (*Location, error) {
 	var location Location
 
 	if err := geoApi.getJson(fmt.Sprintf("gps/%f,%f", x, y), &location); err != nil {

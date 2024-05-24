@@ -16,14 +16,14 @@ token-isn-v-header: Token inválido
 token-isn-v: O token não é válido
 token-f-header: Fetch Failed
 token-f: O token não é válido
-address-pv-rua: Fornecer campo de rua
+address-pv-street: Fornecer campo de rua
 address-pv-street-header: Validação do endereço
 address-pv-number: Fornecer o campo do número da rua
 address-pv-number-header: Validação do endereço
 address-pv-number-v: Fornecer um campo de número de rua válido
 address-pv-number-v-header: Validação do endereço
 address-pv-city: Fornecer o campo da cidade
-address-pv-cidade-cabeçalho: Validação do endereço
+address-pv-city-header: Validação do endereço
 email-pv: Fornecer campo de correio eletrónico"
 email-pv-header: Validação do correio eletrónico
 email-pv-v: Fornecer um campo de correio eletrónico válido

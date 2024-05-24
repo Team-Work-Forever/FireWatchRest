@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"errors"
-	"log"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
@@ -72,7 +71,6 @@ func (repo *AuthRepository) CreateAccount(auth *entities.Auth, user interface{})
 			return err
 		}
 	case *entities.Autarchy:
-		log.Printf("Error - why")
 		userType.AsignAuthKey(auth)
 		if err := tx.Create(&userType).Error; err != nil {
 			tx.Rollback()

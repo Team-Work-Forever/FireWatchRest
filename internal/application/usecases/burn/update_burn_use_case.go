@@ -89,7 +89,7 @@ func (uc *UpdateBurnUseCase) Handle(request contracts.UpdateBurnRequest) (*geojs
 			return nil, errors.New("provide an valid lon")
 		}
 
-		foundBurn.Coordinates = *vo.NewCoordinate(float32(lat), float32(lon))
+		foundBurn.Coordinates = *vo.NewCoordinate(lat, lon)
 	}
 
 	if err := uc.burnRepository.Update(foundBurn); err != nil {

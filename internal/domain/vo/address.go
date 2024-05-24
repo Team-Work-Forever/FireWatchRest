@@ -23,6 +23,32 @@ func checkStreetNumber(number int) error {
 	return nil
 }
 
+func NewAddressWithEmptyValues(
+	street string,
+	number int,
+	zipCode ZipCode,
+	city string,
+) (*Address, error) {
+	if street == "" {
+		street = "not defined"
+	}
+
+	if err := checkStreetNumber(number); err != nil {
+		return nil, err
+	}
+
+	if city == "" {
+		city = "not defined"
+	}
+
+	return &Address{
+		Street:  street,
+		Number:  number,
+		ZipCode: zipCode.GetValue(),
+		City:    city,
+	}, nil
+}
+
 func NewAddress(
 	street string,
 	number int,

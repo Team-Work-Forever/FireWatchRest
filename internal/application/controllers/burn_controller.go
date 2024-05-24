@@ -41,6 +41,7 @@ func (c *BurnController) Route(router fiber.Router) {
 	burn.Get("types", c.GetBurnTypes)
 	burn.Get("reasons", c.GetBurnReasons)
 	burn.Get("states", c.GetBurnStates)
+	burn.Get("availability", c.GetAvailabilty)
 
 	burn.Post("", middlewares.ShouldAcceptMultiPart, c.CreateBurn)
 
@@ -290,5 +291,22 @@ func (c *BurnController) GetBurnReasons(ctx *fiber.Ctx) error {
 //
 //	@Router		/burns/states [get]
 func (c *BurnController) GetBurnStates(ctx *fiber.Ctx) error {
+	return ctx.Status(fiber.StatusAccepted).JSON(vo.GetAllBurnStates())
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Check the availability to make burn
+//	@Tags		Burn
+//	@Produce	json
+//
+//	@Param		accept-language	header	string	false	"some description"
+//
+//	@Success	200				{array}	string
+//
+//	@security	Bearer
+//
+//	@Router		/burns/availability [get]
+func (c *BurnController) GetAvailabilty(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusAccepted).JSON(vo.GetAllBurnStates())
 }

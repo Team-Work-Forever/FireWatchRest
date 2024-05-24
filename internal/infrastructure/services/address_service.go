@@ -2,8 +2,6 @@ package services
 
 import (
 	"errors"
-	"log"
-	"strconv"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/api"
@@ -13,7 +11,7 @@ var (
 	ErrNotValidAddress error = errors.New("address is not valid")
 )
 
-func GetAddress(lat, lon float32) (*vo.Address, error) {
+func GetAddress(lat, lon float64) (*vo.Address, error) {
 	location, err := api.GetLocation(lat, lon)
 
 	if err != nil {
@@ -26,8 +24,7 @@ func GetAddress(lat, lon float32) (*vo.Address, error) {
 		return nil, err
 	}
 
-	log.Printf("Street %s", location.Rua)
-	return vo.NewAddress(
+	return vo.NewAddressWithEmptyValues(
 		location.Rua,
 		12,
 		*zipCode,
@@ -36,7 +33,7 @@ func GetAddress(lat, lon float32) (*vo.Address, error) {
 }
 
 func GetAutarchy(address vo.Address) (string, error) {
-	var okStreet, okNumber bool
+	var okStreet bool
 
 	housing, err := api.GetCPHousing(address.ZipCode)
 
@@ -59,20 +56,20 @@ func GetAutarchy(address vo.Address) (string, error) {
 		}
 	}
 
-	if !okStreet {
+	if !okStreet && len(housing.Partes) != 0 {
 		return "", ErrNotValidAddress
 	}
 
-	for _, value := range housing.Pontos {
-		if value.Casa == strconv.Itoa(address.Number) {
-			okNumber = true
-			break
-		}
-	}
+	// for _, value := range housing.Pontos {
+	// 	if value.Casa == strconv.Itoa(address.Number) {
+	// 		okNumber = true
+	// 		break
+	// 	}
+	// }
 
-	if !okNumber {
-		return "", ErrNotValidAddress
-	}
+	// if !okNumber && len(housing.Pontos) != 0 {
+	// 	return "", ErrNotValidAddress
+	// }
 
 	return housing.Municipio, nil
 }

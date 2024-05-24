@@ -10,7 +10,7 @@ const (
 	ICFN_URL = "https://fogos.icnf.pt:8443/localizador/"
 )
 
-var icfnApi *Api = New(GEO_API_URL)
+var icfnApi *Api = New(ICFN_URL)
 
 type (
 	ICNF struct {
@@ -30,7 +30,7 @@ type (
 		RCM           int      `xml:"RCM"`
 		Percentil15d  int      `xml:"Percentil_15d"`
 		PercentilAno  int      `xml:"Percentil_ano"`
-		Perigosidade  int      `xml:"Perigosidade"`
+		Perigosidade  float64  `xml:"Perigosidade"`
 		FWI           int      `xml:"FWI"`
 		Legalidade    string   `xml:"Legalidade"`
 		RiscoOperacao int      `xml:"RiscoOperacao"`
@@ -39,7 +39,7 @@ type (
 	}
 )
 
-func GetICNFIndex(x, y float32, has_aid_team bool) (*ICNF, error) {
+func GetICNFIndex(x, y float64, has_aid_team bool) (*ICNF, error) {
 	var index ICNF
 	var aidString string
 
@@ -49,9 +49,8 @@ func GetICNFIndex(x, y float32, has_aid_team bool) (*ICNF, error) {
 		aidString = "Não"
 	}
 
-	// aid team
 	aid := url.QueryEscape(aidString)
-	url := fmt.Sprintf("webservicequeimadas2019.asp?Operacao=Queima&data=2024-05-25&lat=%f&lon=%f&apoio=%s&tecnicoFC=DEFAULT", x, y, aid)
+	url := fmt.Sprintf("webservicequeimadas2019.asp?Operacao=Queima&data=2024-05-25&lat=%.16g&lon=%.16g&apoio=%s&tecnicoFC=DEFAULT", x, y, aid)
 
 	if err := icfnApi.getXml(url, &index); err != nil {
 		return nil, err

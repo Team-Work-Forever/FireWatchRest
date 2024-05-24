@@ -105,7 +105,7 @@ func (uc *UpdateAutarchyUseCase) Handle(request contracts.UpdateAutarchyRequest)
 			return nil, errors.New("provide an valid lon")
 		}
 
-		foundAutarchy.Coordinates = *vo.NewCoordinate(float32(lat), float32(lon))
+		foundAutarchy.Coordinates = *vo.NewCoordinate(lat, lon)
 	}
 
 	if err := uc.autarchyRepo.Update(foundAutarchy); err != nil {

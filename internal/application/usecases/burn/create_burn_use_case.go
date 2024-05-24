@@ -2,7 +2,6 @@ package usecases
 
 import (
 	"errors"
-	"log"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
@@ -60,11 +59,11 @@ func (uc *CreateBurnUseCase) Handler(request contracts.CreateBurnRequest) (*cont
 		return nil, err
 	}
 
-	log.Printf("Search - %s", foundAutarchy.ID)
-
 	// call api to check if possible to create an burn
+	if ok := services.CheckICFNIndex(request.Lat, request.Lon, request.HasBackUpTeam); !ok {
+		return nil, services.ErrCannotDoBurn
+	}
 
-	// create burn
 	burn, err := entities.NewBurn(
 		request.Title,
 		reason,

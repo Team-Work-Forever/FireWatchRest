@@ -12,8 +12,8 @@ type (
 		HasBackUpTeam   bool    `form:"has_backup_team" binding:"required"`
 		Reason          string  `form:"reason" binding:"required"`
 		InitDate        string  `form:"init_date" binding:"required"`
-		Lon             float32 `form:"lon" binding:"required"`
-		Lat             float32 `form:"lat" binding:"required"`
+		Lon             float64 `form:"lon" binding:"required"`
+		Lat             float64 `form:"lat" binding:"required"`
 		InitialProprose string  `form:"initial_propose" binding:"required"`
 	}
 

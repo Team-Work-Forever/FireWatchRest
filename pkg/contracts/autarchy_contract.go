@@ -14,8 +14,8 @@ type (
 		StreetPort  int                   `form:"street_port" binding:"required"`
 		ZipCode     string                `form:"zip_code" binding:"required"`
 		City        string                `form:"city" binding:"required"`
-		Lon         float32               `form:"lon" binding:"required"`
-		Lat         float32               `form:"lat" binding:"required"`
+		Lon         float64               `form:"lon" binding:"required"`
+		Lat         float64               `form:"lat" binding:"required"`
 		Avatar      *multipart.FileHeader `form:"avatar" binding:"required" swaggerignore:"true"`
 	}
 

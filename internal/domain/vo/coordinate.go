@@ -9,22 +9,22 @@ import (
 )
 
 type Coordinate struct {
-	x float32 `gorm:"-"`
-	y float32 `gorm:"-"`
+	x float64 `gorm:"-"`
+	y float64 `gorm:"-"`
 }
 
-func NewCoordinate(x float32, y float32) *Coordinate {
+func NewCoordinate(x float64, y float64) *Coordinate {
 	return &Coordinate{
 		x: x,
 		y: y,
 	}
 }
 
-func (c *Coordinate) GetX() float32 {
+func (c *Coordinate) GetX() float64 {
 	return c.x
 }
 
-func (c *Coordinate) GetY() float32 {
+func (c *Coordinate) GetY() float64 {
 	return c.y
 }
 
