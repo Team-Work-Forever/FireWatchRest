@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
@@ -43,6 +44,16 @@ func (repo *AutarchyRepository) GetAutarchyById(autarchyId string) (*entities.Au
 
 	if err := repo.dbContext.Where("id = ?", autarchyId).Where("deleted_at is null").First(&result).Error; err != nil {
 		return nil, err
+	}
+
+	return result, nil
+}
+
+func (repo *AutarchyRepository) GetAutarchyByCity(city string) (*entities.Autarchy, error) {
+	var result *entities.Autarchy
+
+	if err := repo.dbContext.Where("address_city = ?", city).Where("deleted_at is null").First(&result).Error; err != nil {
+		return nil, errors.New("could not find autarchy")
 	}
 
 	return result, nil

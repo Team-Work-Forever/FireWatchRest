@@ -31,6 +31,7 @@ func (repo *BurnRepository) CreateBurn(request daos.CreateBurnDao) (*entities.Bu
 
 	burnRequest := entities.NewBurnRequest(
 		request.AuthId,
+		request.AutarchyId,
 		request.Burn.ID,
 		request.InitialPropose,
 	)

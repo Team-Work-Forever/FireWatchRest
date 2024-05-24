@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"log"
 	"strconv"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
@@ -11,6 +12,28 @@ import (
 var (
 	ErrNotValidAddress error = errors.New("address is not valid")
 )
+
+func GetAddress(lat, lon float32) (*vo.Address, error) {
+	location, err := api.GetLocation(lat, lon)
+
+	if err != nil {
+		return nil, err
+	}
+
+	zipCode, err := vo.NewZipCode(location.CP)
+
+	if err != nil {
+		return nil, err
+	}
+
+	log.Printf("Street %s", location.Rua)
+	return vo.NewAddress(
+		location.Rua,
+		12,
+		*zipCode,
+		location.Concelho,
+	)
+}
 
 func GetAutarchy(address vo.Address) (string, error) {
 	var okStreet, okNumber bool

@@ -60,7 +60,7 @@ func main() {
 	whoamiUseCase := ucp.NewWhoamiUseCase(authRepository, profileRepository)
 	updateProfileUseCase := ucp.NewUpdateProfileUIseCase(authRepository, profileRepository)
 
-	createBurnUseCase := ucb.NewCreateBurnUseCase(burnRepository)
+	createBurnUseCase := ucb.NewCreateBurnUseCase(burnRepository, autarchyRepository)
 	getBurnbyIdUseCase := ucb.NewGetBurnByIdUseCase(burnRepository)
 	getAllBurnsUseCase := ucb.NewGetAllBurnsUseCase(burnRepository)
 	updateBurnUseCase := ucb.NewUpdateBurnUseCase(burnRepository)

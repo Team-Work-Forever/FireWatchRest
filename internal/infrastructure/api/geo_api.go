@@ -9,6 +9,11 @@ const (
 	GEO_API_URL = "https://json.geoapi.pt/"
 )
 
+var (
+	ErrLocalNotFound   = errors.New("there ins't any local with those coordinates")
+	ErrZipCodeNotFound = errors.New("there ins't any local with that zip code")
+)
+
 var geoApi *Api = New(GEO_API_URL)
 
 type (
@@ -68,7 +73,7 @@ func GetLocation(x, y float32) (*Location, error) {
 	var location Location
 
 	if err := geoApi.getJson(fmt.Sprintf("gps/%f,%f", x, y), &location); err != nil {
-		return nil, err
+		return nil, ErrLocalNotFound
 	}
 
 	return &location, nil
@@ -78,7 +83,7 @@ func GetCPHousing(zipCode string) (*CPHousing, error) {
 	var cp CPHousing
 
 	if err := geoApi.getJson(fmt.Sprintf("cp/%s", zipCode), &cp); err != nil {
-		return nil, errors.New("zip code was not found")
+		return nil, ErrZipCodeNotFound
 	}
 
 	return &cp, nil

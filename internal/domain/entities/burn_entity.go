@@ -13,6 +13,7 @@ type Burn struct {
 	HasAidTeam  bool          `gorm:"column:has_aid_team"`
 	Reason      uint16        `gorm:"column:reason"`
 	Type        uint16        `gorm:"column:type"`
+	Address     vo.Address    `gorm:"embedded"`
 	Coordinates vo.Coordinate `gorm:"column:geo_location;type:geometry"`
 	BeginAt     time.Time     `gorm:"column:begin_at"`
 	CompletedAt time.Time     `gorm:"column:completed_at"`
@@ -23,6 +24,7 @@ func NewBurn(
 	title string,
 	reason uint16,
 	ttype uint16,
+	address vo.Address,
 	coordinates vo.Coordinate,
 	beginAt time.Time,
 ) (*Burn, error) {
@@ -38,6 +40,7 @@ func NewBurn(
 		Title:       title,
 		Reason:      reason,
 		Type:        ttype,
+		Address:     address,
 		Coordinates: coordinates,
 		BeginAt:     beginAt,
 	}, nil

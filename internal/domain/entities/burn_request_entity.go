@@ -5,6 +5,7 @@ import "github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 type BurnRequest struct {
 	Entity
 	AuthId         string           `gorm:"type:uuid;primaryKey;column:auth_key_id"`
+	AutarchyId     string           `gorm:"type:uuid;primaryKey;column:autarchy_id"`
 	BurnId         string           `gorm:"type:uuid;primaryKey;column:burn_id"`
 	InitialPropose string           `gorm:"column:initial_propose"`
 	Accepted       bool             `gorm:"column:accepted"`
@@ -12,9 +13,15 @@ type BurnRequest struct {
 	Burn           Burn             `gorm:"foreignKey:BurnId;references:ID"`
 }
 
-func NewBurnRequest(authId string, burnId string, initialPropose string) *BurnRequest {
+func NewBurnRequest(
+	authId string,
+	autarchyId string,
+	burnId string,
+	initialPropose string,
+) *BurnRequest {
 	return &BurnRequest{
 		AuthId:         authId,
+		AutarchyId:     autarchyId,
 		BurnId:         burnId,
 		InitialPropose: initialPropose,
 	}
@@ -23,6 +30,7 @@ func NewBurnRequest(authId string, burnId string, initialPropose string) *BurnRe
 func (br *BurnRequest) SetState(state vo.BurnRequestStates, obs string) *BurnRequestState {
 	br.State = *NewBurnRequestState(
 		br.AuthId,
+		br.AutarchyId,
 		br.BurnId,
 		state,
 		obs,

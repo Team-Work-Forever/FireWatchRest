@@ -9,6 +9,7 @@ import (
 type (
 	CreateBurnDao struct {
 		AuthId         string
+		AutarchyId     string
 		Burn           *entities.Burn
 		InitialPropose string
 	}

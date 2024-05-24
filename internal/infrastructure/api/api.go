@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -50,6 +51,7 @@ func (api *Api) getXml(path string, response interface{}) error {
 
 func (api *Api) get(path string) ([]byte, error) {
 	url := fmt.Sprintf("%s%s", api.baseUrl, path)
+	log.Printf("URL - %s", url)
 
 	resp, err := api.client.Get(url)
 	if err != nil {
