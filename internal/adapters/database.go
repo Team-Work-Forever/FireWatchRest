@@ -9,15 +9,9 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-type Database interface {
-	GetDatabase() *gorm.DB
-}
+var database *gorm.DB
 
-type DatabaseGorm struct {
-	database *gorm.DB
-}
-
-func NewDatabaseGorm() (*DatabaseGorm, error) {
+func newDatabaseGorm() (*gorm.DB, error) {
 	env := config.GetCofig()
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
@@ -38,11 +32,19 @@ func NewDatabaseGorm() (*DatabaseGorm, error) {
 		return nil, err
 	}
 
-	return &DatabaseGorm{
-		database: db,
-	}, nil
+	return db, nil
 }
 
-func (db *DatabaseGorm) GetDatabase() *gorm.DB {
-	return db.database
+func GetDatabase() *gorm.DB {
+	var err error
+
+	if database == nil {
+		database, err = newDatabaseGorm()
+
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	return database
 }

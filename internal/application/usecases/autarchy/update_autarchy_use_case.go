@@ -7,6 +7,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/geojson"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
@@ -106,6 +107,12 @@ func (uc *UpdateAutarchyUseCase) Handle(request contracts.UpdateAutarchyRequest)
 		}
 
 		foundAutarchy.Coordinates = *vo.NewCoordinate(lat, lon)
+	}
+
+	_, err = services.GetAutarchy(foundAutarchy.Address)
+
+	if err != nil {
+		return nil, err
 	}
 
 	if err := uc.autarchyRepo.Update(foundAutarchy); err != nil {

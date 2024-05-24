@@ -3,7 +3,6 @@ package repositories
 import (
 	"fmt"
 
-	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
@@ -14,9 +13,9 @@ type BurnRepository struct {
 	dbContext *gorm.DB
 }
 
-func NewBurnRepository(database adapters.Database) *BurnRepository {
+func NewBurnRepository(database *gorm.DB) *BurnRepository {
 	return &BurnRepository{
-		dbContext: database.GetDatabase(),
+		dbContext: database,
 	}
 }
 

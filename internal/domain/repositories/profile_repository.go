@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"gorm.io/gorm"
 )
@@ -10,9 +9,9 @@ type ProfileRepository struct {
 	dbContext *gorm.DB
 }
 
-func NewProfileRepository(database adapters.Database) *ProfileRepository {
+func NewProfileRepository(database *gorm.DB) *ProfileRepository {
 	return &ProfileRepository{
-		dbContext: database.GetDatabase(),
+		dbContext: database,
 	}
 }
 

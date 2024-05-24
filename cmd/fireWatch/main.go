@@ -31,11 +31,7 @@ func main() {
 	env := config.GetCofig()
 
 	// setup database
-	db, err := adapters.NewDatabaseGorm()
-
-	if err != nil {
-		panic(err)
-	}
+	db := adapters.GetDatabase()
 
 	// Setup Fiber
 	app := adapters.NewHttpServer(1)

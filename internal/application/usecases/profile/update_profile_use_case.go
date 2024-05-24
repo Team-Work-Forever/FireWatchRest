@@ -3,6 +3,7 @@ package usecases
 import (
 	repo "github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
@@ -86,6 +87,12 @@ func (uc *UpdateProfileUseCase) Handle(request contracts.UpdateProfileResponse) 
 
 	if request.City != "" {
 		foundProfile.Address.City = request.City
+	}
+
+	_, err = services.GetAutarchy(foundProfile.Address)
+
+	if err != nil {
+		return nil, err
 	}
 
 	if err := uc.profileRepo.Update(foundProfile); err != nil {

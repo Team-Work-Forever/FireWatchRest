@@ -3,7 +3,6 @@ package repositories
 import (
 	"errors"
 
-	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"gorm.io/gorm"
@@ -13,9 +12,9 @@ type AuthRepository struct {
 	dbContext *gorm.DB
 }
 
-func NewAuthRepository(database adapters.Database) *AuthRepository {
+func NewAuthRepository(database *gorm.DB) *AuthRepository {
 	return &AuthRepository{
-		dbContext: database.GetDatabase(),
+		dbContext: database,
 	}
 }
 

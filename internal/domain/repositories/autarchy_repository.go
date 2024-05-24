@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
@@ -15,9 +14,9 @@ type AutarchyRepository struct {
 	dbContext *gorm.DB
 }
 
-func NewAutarchyRepository(database adapters.Database) *AutarchyRepository {
+func NewAutarchyRepository(database *gorm.DB) *AutarchyRepository {
 	return &AutarchyRepository{
-		dbContext: database.GetDatabase(),
+		dbContext: database,
 	}
 }
 
