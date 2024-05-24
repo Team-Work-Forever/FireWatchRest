@@ -6,6 +6,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
 	usecases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/burn"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 	"github.com/gofiber/fiber/v2"
@@ -41,7 +42,7 @@ func (c *BurnController) Route(router fiber.Router) {
 	burn.Get("types", c.GetBurnTypes)
 	burn.Get("reasons", c.GetBurnReasons)
 	burn.Get("states", c.GetBurnStates)
-	burn.Get("availability", c.GetAvailabilty)
+	burn.Get("availability/:lat,:lon,:hasIdTeam", c.GetAvailabilty)
 
 	burn.Post("", middlewares.ShouldAcceptMultiPart, c.CreateBurn)
 
@@ -308,5 +309,29 @@ func (c *BurnController) GetBurnStates(ctx *fiber.Ctx) error {
 //
 //	@Router		/burns/availability [get]
 func (c *BurnController) GetAvailabilty(ctx *fiber.Ctx) error {
-	return ctx.Status(fiber.StatusAccepted).JSON(vo.GetAllBurnStates())
+	lat := ctx.Params("lat", "0")
+	lon := ctx.Params("lon", "0")
+	hasAidTeam := ctx.Params("lat", "false")
+
+	latValue, err := strconv.ParseFloat(lat, 64)
+
+	if err != nil {
+		return err
+	}
+
+	lonValue, err := strconv.ParseFloat(lon, 64)
+
+	if err != nil {
+		return err
+	}
+
+	hasAidTeamValue, err := strconv.ParseBool(hasAidTeam)
+
+	if err != nil {
+		return err
+	}
+
+	result := services.CheckICFNIndex(latValue, lonValue, hasAidTeamValue)
+
+	return ctx.Status(fiber.StatusAccepted).JSON(result)
 }
