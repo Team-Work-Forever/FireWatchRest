@@ -5,6 +5,7 @@ import (
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
 	usescases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/autarchy"
+	butnUsescases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/burn"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 	"github.com/gofiber/fiber/v2"
@@ -16,6 +17,7 @@ type AutarchyController struct {
 	autarchyGetAllUc  *usescases.GetAllAutarchies
 	updateAutarchyUc  *usescases.UpdateAutarchyUseCase
 	deleteAutarchyUc  *usescases.DeleteAutarchyUseCase
+	burnGetAll        *butnUsescases.GetAllBurnsUseCase
 }
 
 func NewAutarchyController(
@@ -24,6 +26,7 @@ func NewAutarchyController(
 	autarchyGetAllUc *usescases.GetAllAutarchies,
 	updateAutarchyUc *usescases.UpdateAutarchyUseCase,
 	deleteAutarchyUc *usescases.DeleteAutarchyUseCase,
+	burnGetalluc *butnUsescases.GetAllBurnsUseCase,
 ) *AutarchyController {
 	return &AutarchyController{
 		autarchyCreateUc:  autarchyCreateUc,
@@ -31,6 +34,7 @@ func NewAutarchyController(
 		autarchyGetAllUc:  autarchyGetAllUc,
 		updateAutarchyUc:  updateAutarchyUc,
 		deleteAutarchyUc:  deleteAutarchyUc,
+		burnGetAll:        burnGetalluc,
 	}
 }
 

@@ -5,6 +5,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/jwt"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
@@ -63,6 +64,12 @@ func (uc *SignUpUseCase) Handle(request contracts.SignUpRequest) (*contracts.Aut
 	}
 
 	address, err := vo.NewAddress(request.Street, request.StreetPort, *zipCode, request.City)
+
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = services.GetAutarchy(*address)
 
 	if err != nil {
 		return nil, err
