@@ -62,7 +62,7 @@ func main() {
 
 	createBurnUseCase := ucb.NewCreateBurnUseCase(burnRepository, autarchyRepository)
 	getBurnbyIdUseCase := ucb.NewGetBurnByIdUseCase(burnRepository)
-	getAllBurnsUseCase := ucb.NewGetAllBurnsUseCase(burnRepository)
+	getAllBurnsUseCase := ucb.NewGetAllBurnsUseCase(burnRepository, autarchyRepository)
 	updateBurnUseCase := ucb.NewUpdateBurnUseCase(burnRepository)
 	deleteBurnUseCase := ucb.NewDeleteBurnUseCase(burnRepository)
 

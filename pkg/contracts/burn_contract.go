@@ -2,6 +2,8 @@ package contracts
 
 import (
 	"time"
+
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
 )
 
 type (
@@ -40,13 +42,13 @@ type (
 	}
 
 	GetAllBurnsRequest struct {
-		AuthId    string
-		Search    string
-		State     string
-		StartDate string
-		EndDate   string
-		PageSize  uint64
-		Page      uint64
+		AutarchyId string
+		AuthId     string
+		Search     string
+		State      string
+		StartDate  string
+		EndDate    string
+		Pagination *pagination.Pagination
 	}
 
 	BurnResponse struct {

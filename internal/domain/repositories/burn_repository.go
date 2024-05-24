@@ -110,6 +110,10 @@ func (repo *BurnRepository) GetAllBurns(authId string, params map[string]interfa
 		expr.Where("title like ?", fmt.Sprintf("%%%s%%", search))
 	}
 
+	if autarchyId, ok := params["autarchyId"]; ok {
+		expr.Where("autarchy_id = ?", autarchyId)
+	}
+
 	if state, ok := params["state"]; ok {
 		expr.Where("state = ?", state)
 	}

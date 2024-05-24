@@ -6,6 +6,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
 	usecases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/burn"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
@@ -215,26 +216,19 @@ func (c *BurnController) GetAllBurns(ctx *fiber.Ctx) error {
 	pageString := ctx.Query("page", "1")
 	pageSizeString := ctx.Query("page_size", "10")
 
-	page, err := strconv.ParseUint(pageString, 10, 64)
-
-	if err != nil {
-		return err
-	}
-
-	pageSize, err := strconv.ParseUint(pageSizeString, 10, 64)
+	page, err := pagination.New(pageString, pageSizeString)
 
 	if err != nil {
 		return err
 	}
 
 	result, err := c.getAllBurnsUc.Handle(contracts.GetAllBurnsRequest{
-		AuthId:    userId,
-		Search:    search,
-		State:     state,
-		StartDate: startDate,
-		EndDate:   endDate,
-		Page:      page,
-		PageSize:  pageSize,
+		AuthId:     userId,
+		Search:     search,
+		State:      state,
+		StartDate:  startDate,
+		EndDate:    endDate,
+		Pagination: page,
 	})
 
 	if err != nil {

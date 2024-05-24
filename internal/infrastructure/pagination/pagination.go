@@ -1,11 +1,33 @@
 package pagination
 
-import "math"
+import (
+	"math"
+	"strconv"
+)
 
 type Pagination struct {
 	PageSize   uint64 `json:"page_size,omitempty"`
 	Page       uint64 `json:"page,omitempty"`
 	TotalPages uint64 `json:"total_pages,omitempty"`
+}
+
+func New(pageString, pageSizeString string) (*Pagination, error) {
+	page, err := strconv.ParseUint(pageString, 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	pageSize, err := strconv.ParseUint(pageSizeString, 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &Pagination{
+		Page:     page,
+		PageSize: pageSize,
+	}, nil
 }
 
 func (p *Pagination) GetOffset() int {

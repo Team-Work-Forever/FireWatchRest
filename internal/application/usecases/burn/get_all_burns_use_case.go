@@ -2,22 +2,27 @@ package usecases
 
 import (
 	"errors"
+	"log"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/date"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/geojson"
-	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 )
 
 type GetAllBurnsUseCase struct {
 	burnRepository *repositories.BurnRepository
+	autarchyRepo   *repositories.AutarchyRepository
 }
 
-func NewGetAllBurnsUseCase(burnRepository *repositories.BurnRepository) *GetAllBurnsUseCase {
+func NewGetAllBurnsUseCase(
+	burnRepository *repositories.BurnRepository,
+	autarchyRepo *repositories.AutarchyRepository,
+) *GetAllBurnsUseCase {
 	return &GetAllBurnsUseCase{
 		burnRepository: burnRepository,
+		autarchyRepo:   autarchyRepo,
 	}
 }
 
@@ -26,6 +31,15 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 
 	params := map[string]interface{}{
 		"search": request.Search,
+	}
+
+	if request.AutarchyId != "" {
+		log.Printf("Id . %s", request.AutarchyId)
+		if _, err := uc.autarchyRepo.GetAutarchyById(request.AutarchyId); err != nil {
+			return nil, errors.New("autarchy not found")
+		}
+
+		params["autarchyId"] = request.AutarchyId
 	}
 
 	if request.State != "" {
@@ -58,12 +72,7 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 		params["end_date"] = endDate
 	}
 
-	pag := pagination.Pagination{
-		PageSize: request.PageSize,
-		Page:     request.Page,
-	}
-
-	result, err := uc.burnRepository.GetAllBurns(request.AuthId, params, &pag)
+	result, err := uc.burnRepository.GetAllBurns(request.AuthId, params, request.Pagination)
 
 	for _, v := range result {
 		features = append(features, *geojson.NewFeature(
@@ -89,6 +98,6 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 
 	return geojson.NewCollection(
 		features,
-		pag,
+		*request.Pagination,
 	), nil
 }

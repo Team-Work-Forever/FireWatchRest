@@ -6,6 +6,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
 	usescases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/autarchy"
 	butnUsescases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/burn"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 	"github.com/gofiber/fiber/v2"
@@ -46,6 +47,7 @@ func (c *AutarchyController) Route(router fiber.Router) {
 
 	autarchies.Get("", c.GetAllAutarchies)
 	autarchies.Get(":id", c.GetAutarchyById)
+	autarchies.Get(":id/burns", c.GetAutarchyBurns)
 
 	autarchies.Delete(":id", c.DeleteBurn)
 }
@@ -134,6 +136,59 @@ func (c *AutarchyController) GetAutarchyById(ctx *fiber.Ctx) error {
 
 	result, err := c.autarchyGetByIdUc.Handle(contracts.GetAutarchyRequest{
 		AutarchyId: autarchyId,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(result)
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Get Burns of Autarchy
+//	@Tags		Autarchy
+//	@Produce	json
+//
+//	@Param		accept-language	header		string	false	"some description"
+//	@Param		id				path		string	true	"Fetch the autarchy by id"
+//
+//	@Param		search			query		string	false	"search burn title"
+//	@Param		state			query		string	false	"search by burn state"
+//	@Param		start_date		query		string	false	"search by an inital date"
+//	@Param		end_date		query		string	false	"search by an end date"
+//	@Param		page			query		int		false	"view page"						default(1)
+//	@Param		page_size		query		int		false	"number of returned elements"	default(10)
+//
+//	@Success	200				{object}	geojson.GeoJsonFeature
+//	@security	Bearer
+//
+//	@Router		/autarchies/{id}^/burns [get]
+func (c *AutarchyController) GetAutarchyBurns(ctx *fiber.Ctx) error {
+	autarchyId := ctx.Params("id", "")
+	userId := shared.GetUserId(ctx)
+	search := ctx.Query("search", "")
+	state := ctx.Query("state", "")
+	startDate := ctx.Query("start_date", "")
+	endDate := ctx.Query("end_date", "")
+	pageString := ctx.Query("page", "1")
+	pageSizeString := ctx.Query("page_size", "10")
+
+	page, err := pagination.New(pageString, pageSizeString)
+
+	if err != nil {
+		return err
+	}
+
+	result, err := c.burnGetAll.Handle(contracts.GetAllBurnsRequest{
+		AutarchyId: autarchyId,
+		AuthId:     userId,
+		Search:     search,
+		State:      state,
+		StartDate:  startDate,
+		EndDate:    endDate,
+		Pagination: page,
 	})
 
 	if err != nil {

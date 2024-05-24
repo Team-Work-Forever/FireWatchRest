@@ -1,6 +1,7 @@
 -- Create or replace the burn_details_view
 CREATE OR REPLACE VIEW burn_details_view AS
 SELECT
+    br.autarchy_id,
     br.auth_key_id AS author,
     b.id,
     b.title,
