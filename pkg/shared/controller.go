@@ -17,3 +17,10 @@ func GetUserId(ctx *fiber.Ctx) string {
 
 	return claims.Subject
 }
+
+func GetRole(ctx *fiber.Ctx) string {
+	user := ctx.Locals("user").(*jwt.Token)
+	claims, _ := user.Claims.(*jwtService.AuthClaims)
+
+	return claims.Role
+}

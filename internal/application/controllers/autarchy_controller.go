@@ -42,14 +42,14 @@ func NewAutarchyController(
 func (c *AutarchyController) Route(router fiber.Router) {
 	autarchies := router.Group("autarchies", middlewares.AuthorizationMiddleware)
 
-	autarchies.Post("", middlewares.ShouldAcceptMultiPart, c.CreateAutarchy)
-	autarchies.Put(":id", middlewares.ShouldAcceptMultiPart, c.UpdateAutarchy)
+	autarchies.Post("", middlewares.AdminMiddleware, middlewares.ShouldAcceptMultiPart, c.CreateAutarchy)
+	autarchies.Put(":id", middlewares.AdminMiddleware, middlewares.ShouldAcceptMultiPart, c.UpdateAutarchy)
 
 	autarchies.Get("", c.GetAllAutarchies)
 	autarchies.Get(":id", c.GetAutarchyById)
 	autarchies.Get(":id/burns", c.GetAutarchyBurns)
 
-	autarchies.Delete(":id", c.DeleteBurn)
+	autarchies.Delete(":id", middlewares.AdminMiddleware, c.DeleteAutarchy)
 }
 
 // // ShowAccount godoc
@@ -260,7 +260,7 @@ func (c *AutarchyController) GetAllAutarchies(ctx *fiber.Ctx) error {
 //	@security	Bearer
 //
 //	@Router		/autarchies/{id} [delete]
-func (c *AutarchyController) DeleteBurn(ctx *fiber.Ctx) error {
+func (c *AutarchyController) DeleteAutarchy(ctx *fiber.Ctx) error {
 	userId := shared.GetUserId(ctx)
 	autarchyId := ctx.Params("id", "")
 
