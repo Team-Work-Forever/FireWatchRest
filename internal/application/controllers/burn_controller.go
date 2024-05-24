@@ -63,7 +63,6 @@ func (c *BurnController) Route(router fiber.Router) {
 //	@Param		data			formData	contracts.CreateBurnRequest	true	"Form data"
 //
 //	@Success	201				{object}	contracts.BurnActionResponse
-//
 //	@security	Bearer
 //
 //	@Router		/burns [post]

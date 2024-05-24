@@ -11,6 +11,11 @@ definitions:
       zip_code:
         $ref: '#/definitions/contracts.ZipCodeResponse'
     type: object
+  contracts.AutarchyActionResponse:
+    properties:
+      autarchy_id:
+        type: string
+    type: object
   contracts.AuthResponse:
     properties:
       access_token:
@@ -100,6 +105,104 @@ info:
   title: FireWatch API
   version: "1.0"
 paths:
+  /autarchies:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
+      - in: formData
+        name: city
+        required: true
+        type: string
+      - in: formData
+        name: email
+        required: true
+        type: string
+      - in: formData
+        name: lat
+        required: true
+        type: number
+      - in: formData
+        name: lon
+        required: true
+        type: number
+      - in: formData
+        name: nif
+        required: true
+        type: string
+      - in: formData
+        name: password
+        required: true
+        type: string
+      - in: formData
+        name: phone_code
+        required: true
+        type: string
+      - in: formData
+        name: phone_number
+        required: true
+        type: string
+      - in: formData
+        name: street
+        required: true
+        type: string
+      - in: formData
+        name: street_port
+        required: true
+        type: integer
+      - in: formData
+        name: title
+        required: true
+        type: string
+      - in: formData
+        name: zip_code
+        required: true
+        type: string
+      - description: User avatar
+        in: formData
+        name: avatar
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/contracts.AutarchyActionResponse'
+      security:
+      - Bearer: []
+      summary: Create an Account for an Autarchy
+      tags:
+      - Autarchy
+  /autarchies/{id}:
+    get:
+      parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
+      - description: Fetch the autarchy by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contracts.AutarchyActionResponse'
+      security:
+      - Bearer: []
+      summary: Get Autarchy By Id
+      tags:
+      - Autarchy
   /auth/forgot_password:
     get:
       parameters:

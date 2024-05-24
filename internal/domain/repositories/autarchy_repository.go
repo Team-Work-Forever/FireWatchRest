@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"gorm.io/gorm"
 )
@@ -22,4 +23,14 @@ func (repo *AutarchyRepository) ExistsAutarchyWithTitle(title string) bool {
 	}
 
 	return true
+}
+
+func (repo *AutarchyRepository) GetAutarchtDetailById(autarchyId string) (*daos.AutarchyDetailsView, error) {
+	var result *daos.AutarchyDetailsView
+
+	if err := repo.dbContext.Where("id = ?", autarchyId).Where("deleted_at is null").First(&result).Error; err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
