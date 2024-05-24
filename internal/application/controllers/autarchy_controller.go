@@ -164,7 +164,7 @@ func (c *AutarchyController) GetAutarchyById(ctx *fiber.Ctx) error {
 //	@Success	200				{object}	geojson.GeoJsonFeature
 //	@security	Bearer
 //
-//	@Router		/autarchies/{id}^/burns [get]
+//	@Router		/autarchies/{id}/burns [get]
 func (c *AutarchyController) GetAutarchyBurns(ctx *fiber.Ctx) error {
 	autarchyId := ctx.Params("id", "")
 	userId := shared.GetUserId(ctx)
