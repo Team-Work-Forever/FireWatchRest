@@ -29,7 +29,7 @@ type (
 		Lon           string `form:"lon" binding:"required"`
 	}
 
-	DeleteRequest struct {
+	DeleteBurnRequest struct {
 		UserId string
 		BurnId string
 	}

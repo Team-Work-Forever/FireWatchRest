@@ -70,3 +70,7 @@ func (repo *AutarchyRepository) GetAll(params map[string]interface{}, pagination
 func (repo *AutarchyRepository) Update(burn *entities.Autarchy) error {
 	return repo.dbContext.Save(burn).Error
 }
+
+func (repo *AutarchyRepository) Delete(autarchy *entities.Autarchy) error {
+	return repo.dbContext.Delete(autarchy).Error
+}

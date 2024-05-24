@@ -42,6 +42,11 @@ type (
 		Page     uint64
 	}
 
+	DeleteAutarchyRequest struct {
+		UserId     string
+		AutarchyId string
+	}
+
 	UpdateAutarchyRequest struct {
 		UserId      string `swaggerignore:"true"`
 		AutarchyId  string `swaggerignore:"true"`

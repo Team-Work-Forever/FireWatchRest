@@ -18,7 +18,7 @@ func NewDeleteBurnUseCase(burnRepository *repositories.BurnRepository) *DeleteBu
 	}
 }
 
-func (uc *DeleteBurnUseCase) Handle(request contracts.DeleteRequest) (*contracts.BurnActionResponse, error) {
+func (uc *DeleteBurnUseCase) Handle(request contracts.DeleteBurnRequest) (*contracts.BurnActionResponse, error) {
 	// get burn
 	foundBurn, err := uc.burnRepository.GetBurnById(request.BurnId)
 

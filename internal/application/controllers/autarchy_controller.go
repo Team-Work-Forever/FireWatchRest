@@ -6,6 +6,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
 	usescases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/autarchy"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
+	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -14,6 +15,7 @@ type AutarchyController struct {
 	autarchyGetByIdUc *usescases.GetAutarchyByIdUseCase
 	autarchyGetAllUc  *usescases.GetAllAutarchies
 	updateAutarchyUc  *usescases.UpdateAutarchyUseCase
+	deleteAutarchyUc  *usescases.DeleteAutarchyUseCase
 }
 
 func NewAutarchyController(
@@ -21,12 +23,14 @@ func NewAutarchyController(
 	autarchyGetByIdUc *usescases.GetAutarchyByIdUseCase,
 	autarchyGetAllUc *usescases.GetAllAutarchies,
 	updateAutarchyUc *usescases.UpdateAutarchyUseCase,
+	deleteAutarchyUc *usescases.DeleteAutarchyUseCase,
 ) *AutarchyController {
 	return &AutarchyController{
 		autarchyCreateUc:  autarchyCreateUc,
 		autarchyGetByIdUc: autarchyGetByIdUc,
 		autarchyGetAllUc:  autarchyGetAllUc,
 		updateAutarchyUc:  updateAutarchyUc,
+		deleteAutarchyUc:  deleteAutarchyUc,
 	}
 }
 
@@ -34,10 +38,12 @@ func (c *AutarchyController) Route(router fiber.Router) {
 	autarchies := router.Group("autarchies", middlewares.AuthorizationMiddleware)
 
 	autarchies.Post("", middlewares.ShouldAcceptMultiPart, c.CreateAutarchy)
-	autarchies.Get("", c.GetAllAutarchies)
+	autarchies.Put(":id", middlewares.ShouldAcceptMultiPart, c.UpdateAutarchy)
 
-	autarchies.Put(":id", middlewares.AuthorizationMiddleware, c.UpdateAutarchy)
+	autarchies.Get("", c.GetAllAutarchies)
 	autarchies.Get(":id", c.GetAutarchyById)
+
+	autarchies.Delete(":id", c.DeleteBurn)
 }
 
 // // ShowAccount godoc
@@ -178,4 +184,35 @@ func (c *AutarchyController) GetAllAutarchies(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(result)
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Delete an Autarchy
+//	@Tags		Autarchy
+//	@Produce	json
+//
+//	@Param		accept-language	header		string	false	"some description"
+//
+//	@Param		id				path		string	true	"Delete the autarchy by id"
+//
+//	@Success	202				{object}	contracts.AutarchyActionResponse
+//
+//	@security	Bearer
+//
+//	@Router		/autarchies/{id} [delete]
+func (c *AutarchyController) DeleteBurn(ctx *fiber.Ctx) error {
+	userId := shared.GetUserId(ctx)
+	autarchyId := ctx.Params("id", "")
+
+	result, err := c.deleteAutarchyUc.Handle(contracts.DeleteAutarchyRequest{
+		UserId:     userId,
+		AutarchyId: autarchyId,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusAccepted).JSON(result)
 }

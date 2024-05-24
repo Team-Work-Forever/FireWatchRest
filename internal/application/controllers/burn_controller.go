@@ -104,7 +104,7 @@ func (c *BurnController) DeleteBurn(ctx *fiber.Ctx) error {
 	userId := shared.GetUserId(ctx)
 	burnId := ctx.Params("id", "")
 
-	result, err := c.deleteBurnUc.Handle(contracts.DeleteRequest{
+	result, err := c.deleteBurnUc.Handle(contracts.DeleteBurnRequest{
 		UserId: userId,
 		BurnId: burnId,
 	})

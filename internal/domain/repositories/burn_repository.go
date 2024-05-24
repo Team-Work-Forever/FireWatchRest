@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
@@ -70,19 +69,15 @@ func (repo *BurnRepository) GetBurnById(burnId string) (*entities.Burn, error) {
 }
 
 func (repo *BurnRepository) Delete(burn *entities.Burn) error {
-	deletedAt := time.Now()
-
-	burn.DeletedAt = deletedAt
-
-	if err := repo.dbContext.Model(&entities.BurnRequest{}).Where("burn_id = ?", burn.ID).Update("deleted_at", deletedAt).Error; err != nil {
+	if err := repo.dbContext.Where("burn_id = ?", burn.ID).Delete(&entities.BurnRequest{}).Error; err != nil {
 		return err
 	}
 
-	if err := repo.dbContext.Model(&entities.BurnRequestState{}).Where("burn_id = ?", burn.ID).Update("deleted_at", deletedAt).Error; err != nil {
+	if err := repo.dbContext.Where("burn_id = ?", burn.ID).Delete(&entities.BurnRequestState{}).Error; err != nil {
 		return err
 	}
 
-	return repo.dbContext.Save(burn).Error
+	return repo.dbContext.Delete(burn).Error
 }
 
 func (repo *BurnRepository) GetBurnStatus(authId string, burnId string) (*uint16, error) {
