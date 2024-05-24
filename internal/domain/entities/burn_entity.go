@@ -32,7 +32,7 @@ func NewBurn(
 		return nil, errors.New("title is not provided")
 	}
 
-	if beginAt.Before(time.Now()) {
+	if beginAt.Before(time.Now().Truncate(24 * time.Hour)) {
 		return nil, errors.New("provide an valid start date")
 	}
 

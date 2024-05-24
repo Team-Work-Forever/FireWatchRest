@@ -6,7 +6,6 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
-	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
 	"gorm.io/gorm"
 )
@@ -41,7 +40,7 @@ func (repo *BurnRepository) CreateBurn(request daos.CreateBurnDao) (*entities.Bu
 		return nil, err
 	}
 
-	state := burnRequest.SetState(vo.Scheduled, request.InitialPropose)
+	state := burnRequest.SetState(request.State, request.InitialPropose)
 
 	if err := tx.Create(&state).Error; err != nil {
 		tx.Rollback()

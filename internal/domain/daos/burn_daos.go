@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 )
 
 type (
@@ -12,6 +13,7 @@ type (
 		AutarchyId     string
 		Burn           *entities.Burn
 		InitialPropose string
+		State          vo.BurnRequestStates
 	}
 
 	BurnDetailsView struct {

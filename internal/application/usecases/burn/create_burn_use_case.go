@@ -28,11 +28,28 @@ func NewCreateBurnUseCase(
 }
 
 func (uc *CreateBurnUseCase) Handler(request contracts.CreateBurnRequest) (*contracts.BurnActionResponse, error) {
-	// validate
+	var state vo.BurnRequestStates = vo.Scheduled
+
+	address, err := services.GetAddress(request.Lat, request.Lon)
+
+	if err != nil {
+		return nil, err
+	}
+
 	initDate, err := date.ParseString(request.InitDate)
 
 	if err != nil {
 		return nil, err
+	}
+
+	dateNow, err := date.Now()
+
+	if err != nil {
+		return nil, err
+	}
+
+	if *initDate == *dateNow {
+		state = vo.Active
 	}
 
 	reason, ok := vo.GetBurnReasonKey(request.Reason)
@@ -47,21 +64,14 @@ func (uc *CreateBurnUseCase) Handler(request contracts.CreateBurnRequest) (*cont
 		return nil, errors.New("burn type does not exists")
 	}
 
-	address, err := services.GetAddress(request.Lat, request.Lon)
-
-	if err != nil {
-		return nil, err
-	}
-
 	foundAutarchy, err := uc.autarchyRepo.GetAutarchyByCity(address.City)
 
 	if err != nil {
 		return nil, err
 	}
 
-	// call api to check if possible to create an burn
 	if ok := services.CheckICFNIndex(request.Lat, request.Lon, request.HasBackUpTeam); !ok {
-		return nil, services.ErrCannotDoBurn
+		state = vo.Rejected
 	}
 
 	burn, err := entities.NewBurn(
@@ -82,6 +92,7 @@ func (uc *CreateBurnUseCase) Handler(request contracts.CreateBurnRequest) (*cont
 		AutarchyId:     foundAutarchy.ID,
 		Burn:           burn,
 		InitialPropose: request.InitialProprose,
+		State:          state,
 	})
 
 	if err != nil {
