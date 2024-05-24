@@ -37,6 +37,12 @@ type (
 		AutarchyId string
 	}
 
+	GetAllAutarchiesRequest struct {
+		Search   string
+		PageSize uint64
+		Page     uint64
+	}
+
 	AutarchyActionResponse struct {
 		AutarchyId string `json:"autarchy_id"`
 	}

@@ -68,12 +68,13 @@ func main() {
 
 	createAutarchyUseCase := ucy.NewCreateAutarchyUseCase(autarchyRepository, authRepository)
 	getAutarchyById := ucy.NewGetAutarchyByIdUseCase(autarchyRepository)
+	getAllAutarchiesUseCase := ucy.NewGetAllAutarchies(autarchyRepository)
 
 	// controllers
 	authController := controllers.NewAuthController(loginUseCase, signUpUseCase, forgotPasswordUseCase, resetPasswordUseCase, refreshTokensUseCase)
 	profileController := controllers.NewProfileController(whoamiUseCase, updateProfileUseCase)
 	burnController := controllers.NewBurnController(createBurnUseCase, getBurnbyIdUseCase, getAllBurnsUseCase, updateBurnUseCase, deleteBurnUseCase)
-	autarchyController := controllers.NewAutarchyController(createAutarchyUseCase, getAutarchyById)
+	autarchyController := controllers.NewAutarchyController(createAutarchyUseCase, getAutarchyById, getAllAutarchiesUseCase)
 
 	// Serve application
 	app.AddControllers([]shared.Controller{

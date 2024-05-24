@@ -1,9 +1,12 @@
 package repositories
 
 import (
+	"fmt"
+
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
 	"gorm.io/gorm"
 )
 
@@ -32,5 +35,24 @@ func (repo *AutarchyRepository) GetAutarchtDetailById(autarchyId string) (*daos.
 		return nil, err
 	}
 
+	return result, nil
+}
+
+func (repo *AutarchyRepository) GetAll(params map[string]interface{}, pagination *pagination.Pagination) ([]daos.AutarchyDetailsView, error) {
+	var result []daos.AutarchyDetailsView
+
+	expr := repo.dbContext.Where("deleted_at is null")
+
+	if search, ok := params["search"]; ok {
+		expr.Where("title like ?", fmt.Sprintf("%%%s%%", search))
+	}
+
+	expr = expr.Offset(pagination.GetOffset()).Limit(pagination.GetLimit())
+
+	if err := expr.Find(&result).Error; err != nil {
+		return nil, err
+	}
+
+	pagination.SetTotalPages(len(result))
 	return result, nil
 }

@@ -106,6 +106,38 @@ info:
   version: "1.0"
 paths:
   /autarchies:
+    get:
+      parameters:
+      - description: some description
+        in: header
+        name: accept-language
+        type: string
+      - description: search burn title
+        in: query
+        name: search
+        type: string
+      - default: 1
+        description: view page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: number of returned elements
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/geojson.GeoJsonFeature'
+      security:
+      - Bearer: []
+      summary: Fetch Autarchies
+      tags:
+      - Autarchy
     post:
       consumes:
       - multipart/form-data

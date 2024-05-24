@@ -91,9 +91,9 @@ func (c *BurnController) CreateBurn(ctx *fiber.Ctx) error {
 //	@Tags		Burn
 //	@Produce	json
 //
-//	@Param		accept-language	header		string						false	"some description"
+//	@Param		accept-language	header		string	false	"some description"
 //
-//	@Param		id			path		string	true	"Delete the burn by id"
+//	@Param		id				path		string	true	"Delete the burn by id"
 //
 //	@Success	202				{object}	contracts.BurnActionResponse
 //
@@ -125,7 +125,7 @@ func (c *BurnController) DeleteBurn(ctx *fiber.Ctx) error {
 //
 //	@Param		accept-language	header		string						false	"some description"
 //
-//	@Param		id			path		string	true	"Fetch the burn by id"
+//	@Param		id				path		string						true	"Fetch the burn by id"
 //	@Param		data			formData	contracts.CreateBurnRequest	true	"Form data"
 //
 //	@Success	202				{object}	contracts.BurnActionResponse
@@ -161,7 +161,7 @@ func (c *BurnController) UpdateBurn(ctx *fiber.Ctx) error {
 //
 //	@Param		accept-language	header		string	false	"some description"
 //
-//	@Param		id			path		string	true	"Fetch the burn by id"
+//	@Param		id				path		string	true	"Fetch the burn by id"
 //
 //	@Success	200				{object}	geojson.GeoJsonFeature
 //
@@ -196,8 +196,8 @@ func (c *BurnController) GetBurnById(ctx *fiber.Ctx) error {
 //	@Param		state			query		string	false	"search by burn state"
 //	@Param		start_date		query		string	false	"search by an inital date"
 //	@Param		end_date		query		string	false	"search by an end date"
-//	@Param		page			query		int	false	"view page"  default(1)
-//	@Param		page_size		query		int	false	"number of returned elements" default(10)
+//	@Param		page			query		int		false	"view page"						default(1)
+//	@Param		page_size		query		int		false	"number of returned elements"	default(10)
 //
 //	@Success	200				{object}	geojson.GeoJsonFeature
 //
