@@ -5,8 +5,8 @@ import (
 	"log"
 
 	"github.com/Team-Work-Forever/FireWatchRest/config"
-	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/locales"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -20,7 +20,7 @@ type HttpServer struct {
 
 func NewHttpServer(version int) *HttpServer {
 	app := fiber.New(fiber.Config{
-		ErrorHandler: middlewares.ErrorHandler,
+		ErrorHandler: errorHandler,
 	})
 
 	app.Use(logger.New())
@@ -47,4 +47,29 @@ func (hs *HttpServer) Serve() {
 	env := config.GetCofig()
 
 	log.Fatal(hs.Instance.Listen(fmt.Sprintf(":%s", env.FIRE_WATCH_API_PORT)))
+}
+
+func errorHandler(ctx *fiber.Ctx, err error) error {
+	switch e := err.(type) {
+	case *exec.Error:
+		return shared.WriteProblemDetails(ctx, *e)
+	case *fiber.Error:
+		return shared.WriteProblemDetails(
+			ctx,
+			exec.Error{
+				Title:  "Bad Input",
+				Status: e.Code,
+				Detail: e.Message,
+			},
+		)
+	default:
+		return shared.WriteProblemDetails(
+			ctx,
+			exec.Error{
+				Title:  "Internal Server Error",
+				Status: fiber.StatusInternalServerError,
+				Detail: err.Error(),
+			},
+		)
+	}
 }

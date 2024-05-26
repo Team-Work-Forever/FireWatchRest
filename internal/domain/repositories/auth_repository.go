@@ -38,6 +38,13 @@ func (repo *AuthRepository) GetAuthByEmail(email *vo.Email) (*entities.Auth, err
 	return auth, nil
 }
 
+func (repo *AuthRepository) ExistsAuthById(id string) bool {
+	if err := repo.dbContext.Where("id = ?", id).First(&entities.Auth{}).Error; err != nil {
+		return false
+	}
+
+	return true
+}
 func (repo *AuthRepository) ExistsUserWithEmail(email *vo.Email) bool {
 	if err := repo.dbContext.Where("email = ?", email.GetValue()).First(&entities.Auth{}).Error; err != nil {
 		return false
