@@ -9,6 +9,7 @@ import (
 	ucb "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/burn"
 	ucp "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/profile"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/key"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/upload"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 )
@@ -33,6 +34,10 @@ func main() {
 
 	// Setup Aux
 	db := adapters.GetDatabase()
+
+	kvService := key.NewKeyValueService()
+	defer kvService.Close()
+
 	fileService := upload.NewBlobService()
 
 	// Setup Fiber
@@ -43,7 +48,7 @@ func main() {
 
 	// repositories
 	authRepository := repositories.NewAuthRepository(db)
-	tokenRepository := repositories.NewTokenRepository(db)
+	tokenRepository := repositories.NewTokenRepository(kvService)
 	profileRepository := repositories.NewProfileRepository(db)
 	burnRepository := repositories.NewBurnRepository(db)
 	autarchyRepository := repositories.NewAutarchyRepository(db)

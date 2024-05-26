@@ -30,6 +30,12 @@ type Config struct {
 	BLOB_PUBLIC_URL  string
 	BLOB_S3_URL      string
 	BLOB_REGION      string
+
+	REDIS_USER   string
+	REDIS_PASSWD string
+	REDIS_HOST   string
+	REDIS_PORT   string
+	REDIS_DB     int
 }
 
 func LoadEnv(path string) {
@@ -68,6 +74,12 @@ func LoadEnv(path string) {
 		BLOB_PUBLIC_URL:  viper.GetString("BLOB_PUBLIC_URL"),
 		BLOB_S3_URL:      viper.GetString("BLOB_S3_URL"),
 		BLOB_REGION:      viper.GetString("BLOB_REGION"),
+
+		REDIS_USER:   viper.GetString("REDIS_USER"),
+		REDIS_PASSWD: viper.GetString("REDIS_PASSWD"),
+		REDIS_HOST:   viper.GetString("REDIS_HOST"),
+		REDIS_PORT:   viper.GetString("REDIS_PORT"),
+		REDIS_DB:     viper.GetInt("REDIS_DB"),
 	}
 }
 

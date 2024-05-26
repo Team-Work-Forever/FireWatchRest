@@ -43,12 +43,11 @@ func (f *ForgotPasswordUseCase) Handle(request contracts.ForgotPasswordRequest) 
 		return exec.USER_NOT_FOUND
 	}
 
-	// generate an token to safe guard the request
-	expire_at := time.Now().Add(time.Duration(5) * 24 * time.Minute)
+	expire_at := time.Now().Add(entities.ForgotToken.Exp)
 	forgotToken, err := jwt.CreateJwtToken(jwt.TokenPayload{
 		UserId:   foundAuth.ID,
 		Email:    foundAuth.Email.GetValue(),
-		Role:     "admin",
+		Role:     foundAuth.GetRole(),
 		Duration: expire_at,
 	})
 
@@ -59,8 +58,7 @@ func (f *ForgotPasswordUseCase) Handle(request contracts.ForgotPasswordRequest) 
 	// store token
 	if err := f.tokenRepository.Create(entities.NewToken(
 		forgotToken,
-		"forgot_token",
-		expire_at,
+		entities.ForgotToken,
 	)); err != nil {
 		return err
 	}

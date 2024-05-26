@@ -1,6 +1,7 @@
 package usecases
 
 import (
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/jwt"
@@ -24,7 +25,7 @@ func NewResetPasswordUseCase(
 }
 
 func (r *ResetPasswordUseCase) Handle(request contracts.ResetPasswordRequest) error {
-	token, err := r.tokenRepository.GetByToken(request.ForgotToken)
+	token, err := r.tokenRepository.GetByToken(request.ForgotToken, entities.ForgotToken)
 
 	if err != nil {
 		return exec.TOKEN_NOT_FOUND
