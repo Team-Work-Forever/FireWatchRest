@@ -18,6 +18,7 @@ type Autarchy struct {
 
 func NewAutarchy(
 	title string,
+	picture string,
 	coordinates vo.Coordinate,
 	phone vo.Phone,
 	address vo.Address,
@@ -28,6 +29,7 @@ func NewAutarchy(
 
 	return &Autarchy{
 		Title:       title,
+		Picture:     picture,
 		Coordinates: coordinates,
 		PhoneNumber: phone,
 		Address:     address,

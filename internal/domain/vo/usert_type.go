@@ -20,10 +20,11 @@ func GetUserType(userType int) (string, bool) {
 }
 
 func GetUserTypeKey(value string) (uint16, bool) {
-	for k, v := range burnTypeLookup {
+	for k, v := range userTypeLookup {
 		if v == value {
 			return k, true
 		}
 	}
+
 	return 0, false
 }

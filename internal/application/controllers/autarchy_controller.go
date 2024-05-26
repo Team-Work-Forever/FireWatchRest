@@ -7,6 +7,7 @@ import (
 	usescases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/autarchy"
 	butnUsescases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/burn"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 	"github.com/gofiber/fiber/v2"
@@ -74,6 +75,13 @@ func (c *AutarchyController) CreateAutarchy(ctx *fiber.Ctx) error {
 		return err
 	}
 
+	fileHeader, err := services.GetFile(ctx, "avatar", false)
+
+	if err != nil {
+		return err
+	}
+
+	createRequest.Avatar = fileHeader
 	result, err := c.autarchyCreateUc.Handle(createRequest)
 
 	if err != nil {
@@ -104,6 +112,13 @@ func (c *AutarchyController) UpdateAutarchy(ctx *fiber.Ctx) error {
 	var updateAutarchyRequest contracts.UpdateAutarchyRequest
 	autarchyId := ctx.Params("id", "")
 
+	fileHeader, err := services.GetFile(ctx, "avatar", true)
+
+	if err != nil {
+		return err
+	}
+
+	updateAutarchyRequest.Avatar = fileHeader
 	updateAutarchyRequest.AutarchyId = autarchyId
 	if err := ctx.BodyParser(&updateAutarchyRequest); err != nil {
 		return err

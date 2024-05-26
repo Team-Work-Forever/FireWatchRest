@@ -24,6 +24,12 @@ type Config struct {
 	SMTP_PORT          string
 	SMTP_HOST_USER     string
 	SMTP_HOST_PASSWORD string
+
+	BLOB_ACCESS_KEY  string
+	BLOB_PROJECT_KEY string
+	BLOB_PUBLIC_URL  string
+	BLOB_S3_URL      string
+	BLOB_REGION      string
 }
 
 func LoadEnv(path string) {
@@ -56,6 +62,12 @@ func LoadEnv(path string) {
 		SMTP_PORT:          viper.GetString("SMTP_PORT"),
 		SMTP_HOST_USER:     viper.GetString("SMTP_HOST_USER"),
 		SMTP_HOST_PASSWORD: viper.GetString("SMTP_HOST_PASSWORD"),
+
+		BLOB_ACCESS_KEY:  viper.GetString("BLOB_ACCESS_KEY"),
+		BLOB_PROJECT_KEY: viper.GetString("BLOB_PROJECT_KEY"),
+		BLOB_PUBLIC_URL:  viper.GetString("BLOB_PUBLIC_URL"),
+		BLOB_S3_URL:      viper.GetString("BLOB_S3_URL"),
+		BLOB_REGION:      viper.GetString("BLOB_REGION"),
 	}
 }
 

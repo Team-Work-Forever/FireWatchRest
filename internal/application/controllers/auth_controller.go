@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
 	usecases "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/auth"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	"github.com/gofiber/fiber/v2"
 )
@@ -89,6 +90,13 @@ func (c *AuthController) SignUpRoute(ctx *fiber.Ctx) error {
 		return err
 	}
 
+	fileHeader, err := services.GetFile(ctx, "avatar", false)
+
+	if err != nil {
+		return err
+	}
+
+	signUpRequest.File = fileHeader
 	tokens, err := c.signUpUseCase.Handle(signUpRequest)
 
 	if err != nil {

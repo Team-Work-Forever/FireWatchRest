@@ -9,6 +9,7 @@ import (
 	ucb "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/burn"
 	ucp "github.com/Team-Work-Forever/FireWatchRest/internal/application/usecases/profile"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/upload"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 )
 
@@ -30,8 +31,9 @@ func main() {
 	config.LoadEnv(".env")
 	env := config.GetCofig()
 
-	// setup database
+	// Setup Aux
 	db := adapters.GetDatabase()
+	fileService := upload.NewBlobService()
 
 	// Setup Fiber
 	app := adapters.NewHttpServer(1)
@@ -48,13 +50,13 @@ func main() {
 
 	// use cases
 	loginUseCase := uca.NewLoginUseCase(authRepository)
-	signUpUseCase := uca.NewSignUpUseCase(authRepository)
+	signUpUseCase := uca.NewSignUpUseCase(authRepository, fileService)
 	forgotPasswordUseCase := uca.NewForgotPasswordUseCase(authRepository, tokenRepository)
 	resetPasswordUseCase := uca.NewResetPasswordUseCase(authRepository, tokenRepository)
 	refreshTokensUseCase := uca.NewRefreshTokesUseCase(authRepository)
 
 	whoamiUseCase := ucp.NewWhoamiUseCase(authRepository, profileRepository)
-	updateProfileUseCase := ucp.NewUpdateProfileUIseCase(authRepository, profileRepository)
+	updateProfileUseCase := ucp.NewUpdateProfileUIseCase(authRepository, profileRepository, fileService)
 
 	createBurnUseCase := ucb.NewCreateBurnUseCase(burnRepository, autarchyRepository)
 	getBurnbyIdUseCase := ucb.NewGetBurnByIdUseCase(burnRepository)
@@ -62,10 +64,10 @@ func main() {
 	updateBurnUseCase := ucb.NewUpdateBurnUseCase(burnRepository)
 	deleteBurnUseCase := ucb.NewDeleteBurnUseCase(burnRepository)
 
-	createAutarchyUseCase := ucy.NewCreateAutarchyUseCase(autarchyRepository, authRepository)
+	createAutarchyUseCase := ucy.NewCreateAutarchyUseCase(autarchyRepository, authRepository, fileService)
 	getAutarchyById := ucy.NewGetAutarchyByIdUseCase(autarchyRepository)
 	getAllAutarchiesUseCase := ucy.NewGetAllAutarchies(autarchyRepository)
-	updateAutarchyUseCase := ucy.NewUpdateAutarchyUseCase(autarchyRepository, authRepository)
+	updateAutarchyUseCase := ucy.NewUpdateAutarchyUseCase(autarchyRepository, authRepository, fileService)
 	deleteAutarchyUseCase := ucy.NewDeleteAutarchyUseCase(autarchyRepository)
 
 	// controllers

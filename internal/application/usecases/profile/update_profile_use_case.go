@@ -4,6 +4,7 @@ import (
 	repo "github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/upload"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
@@ -11,15 +12,18 @@ import (
 type UpdateProfileUseCase struct {
 	authRepo    *repo.AuthRepository
 	profileRepo *repo.ProfileRepository
+	fileService *upload.BlobService
 }
 
 func NewUpdateProfileUIseCase(
 	authRepo *repo.AuthRepository,
 	profileRepo *repo.ProfileRepository,
+	fileService *upload.BlobService,
 ) *UpdateProfileUseCase {
 	return &UpdateProfileUseCase{
 		authRepo:    authRepo,
 		profileRepo: profileRepo,
+		fileService: fileService,
 	}
 }
 
@@ -87,6 +91,29 @@ func (uc *UpdateProfileUseCase) Handle(request contracts.UpdateProfileResponse) 
 
 	if request.City != "" {
 		foundProfile.Address.City = request.City
+	}
+
+	if request.Avatar != nil {
+		file, err := request.Avatar.Open()
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer file.Close()
+
+		url, err := uc.fileService.UploadFile(&upload.UploadFile{
+			Bucket:   upload.ClientBucket,
+			FileName: request.Avatar.Filename,
+			FileId:   foundAuth.GetId(),
+			FileBody: file,
+		})
+
+		if err != nil {
+			return nil, err
+		}
+
+		foundProfile.ProfileAvatar = url
 	}
 
 	_, err = services.GetAutarchy(foundProfile.Address)

@@ -21,7 +21,12 @@ func (e *Auth) TableName() string {
 	return "auth_keys"
 }
 
-func NewAuth(email vo.Email, password vo.Password, nif vo.NIF, userType int) *Auth {
+func NewAuth(
+	email vo.Email,
+	password vo.Password,
+	nif vo.NIF,
+	userType int,
+) *Auth {
 	return &Auth{
 		Email:    email,
 		Password: password,

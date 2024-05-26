@@ -6,17 +6,23 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/jwt"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/upload"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type SignUpUseCase struct {
 	authRepository *repositories.AuthRepository
+	fileService    *upload.BlobService
 }
 
-func NewSignUpUseCase(authRepository *repositories.AuthRepository) *SignUpUseCase {
+func NewSignUpUseCase(
+	authRepository *repositories.AuthRepository,
+	fileService *upload.BlobService,
+) *SignUpUseCase {
 	return &SignUpUseCase{
 		authRepository: authRepository,
+		fileService:    fileService,
 	}
 }
 
@@ -90,8 +96,27 @@ func (uc *SignUpUseCase) Handle(request contracts.SignUpRequest) (*contracts.Aut
 		int(vo.User),
 	)
 
+	file, err := request.File.Open()
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer file.Close()
+
+	url, err := uc.fileService.UploadFile(&upload.UploadFile{
+		Bucket:   upload.ClientBucket,
+		FileName: request.File.Filename,
+		FileId:   auth.GetId(),
+		FileBody: file,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
 	user := entities.NewUser(
-		"adashdahhhad",
+		url,
 		request.UserName,
 		request.FirstName,
 		request.LastName,

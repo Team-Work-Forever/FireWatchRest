@@ -48,18 +48,19 @@ type (
 	}
 
 	UpdateAutarchyRequest struct {
-		UserId      string `swaggerignore:"true"`
-		AutarchyId  string `swaggerignore:"true"`
-		Title       string `form:"title" binding:"required"`
-		Lat         string `form:"lat" binding:"required"`
-		Lon         string `form:"lon" binding:"required"`
-		Email       string `form:"email" binding:"required"`
-		PhoneCode   string `form:"phone_code" binding:"required"`
-		PhoneNumber string `form:"phone_number" binding:"required"`
-		Street      string `form:"street" binding:"required"`
-		StreetPort  *int   `form:"street_port" binding:"required"`
-		ZipCode     string `form:"zip_code" binding:"required"`
-		City        string `form:"city" binding:"required"`
+		UserId      string                `swaggerignore:"true"`
+		AutarchyId  string                `swaggerignore:"true"`
+		Title       string                `form:"title" binding:"required"`
+		Lat         string                `form:"lat" binding:"required"`
+		Lon         string                `form:"lon" binding:"required"`
+		Email       string                `form:"email" binding:"required"`
+		PhoneCode   string                `form:"phone_code" binding:"required"`
+		PhoneNumber string                `form:"phone_number" binding:"required"`
+		Street      string                `form:"street" binding:"required"`
+		StreetPort  *int                  `form:"street_port" binding:"required"`
+		ZipCode     string                `form:"zip_code" binding:"required"`
+		City        string                `form:"city" binding:"required"`
+		Avatar      *multipart.FileHeader `form:"avatar" binding:"required" swaggerignore:"true"`
 	}
 
 	AutarchyActionResponse struct {

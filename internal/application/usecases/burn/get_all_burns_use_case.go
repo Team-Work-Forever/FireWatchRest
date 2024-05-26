@@ -2,7 +2,6 @@ package usecases
 
 import (
 	"errors"
-	"log"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
@@ -34,7 +33,6 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 	}
 
 	if request.AutarchyId != "" {
-		log.Printf("Id . %s", request.AutarchyId)
 		if _, err := uc.autarchyRepo.GetAutarchyById(request.AutarchyId); err != nil {
 			return nil, errors.New("autarchy not found")
 		}

@@ -18,8 +18,17 @@ type EntityBase struct {
 	ID string `gorm:"type:uuid;primaryKey;column:id"`
 }
 
+func (e *EntityBase) GetId() string {
+	if e.ID == "" {
+		e.ID = uuid.New().String()
+	}
+
+	return e.ID
+}
+
 func (u *EntityBase) BeforeCreate(tx *gorm.DB) error {
-	u.ID = uuid.New().String()
+	u.GetId()
+
 	u.DeletedAt = nil
 	return nil
 }

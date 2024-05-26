@@ -34,5 +34,5 @@ func AdminMiddleware(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return nil
+	return ctx.Next()
 }

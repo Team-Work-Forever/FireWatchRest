@@ -8,6 +8,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/geojson"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/upload"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
@@ -15,15 +16,18 @@ import (
 type UpdateAutarchyUseCase struct {
 	autarchyRepo *repositories.AutarchyRepository
 	authRepo     *repositories.AuthRepository
+	fileService  *upload.BlobService
 }
 
 func NewUpdateAutarchyUseCase(
 	autarchyRepo *repositories.AutarchyRepository,
 	authRepo *repositories.AuthRepository,
+	fileService *upload.BlobService,
 ) *UpdateAutarchyUseCase {
 	return &UpdateAutarchyUseCase{
 		autarchyRepo: autarchyRepo,
 		authRepo:     authRepo,
+		fileService:  fileService,
 	}
 }
 
@@ -107,6 +111,29 @@ func (uc *UpdateAutarchyUseCase) Handle(request contracts.UpdateAutarchyRequest)
 		}
 
 		foundAutarchy.Coordinates = *vo.NewCoordinate(lat, lon)
+	}
+
+	if request.Avatar != nil {
+		file, err := request.Avatar.Open()
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer file.Close()
+
+		url, err := uc.fileService.UploadFile(&upload.UploadFile{
+			Bucket:   upload.ClientBucket,
+			FileName: request.Avatar.Filename,
+			FileId:   foundAuth.GetId(),
+			FileBody: file,
+		})
+
+		if err != nil {
+			return nil, err
+		}
+
+		foundAutarchy.Picture = url
 	}
 
 	_, err = services.GetAutarchy(foundAutarchy.Address)

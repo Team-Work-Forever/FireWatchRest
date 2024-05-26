@@ -88,6 +88,13 @@ func (c *ProfileController) UpdateProfile(ctx *fiber.Ctx) error {
 		return err
 	}
 
+	fileHeader, err := services.GetFile(ctx, "avatar", true)
+
+	if err != nil {
+		return err
+	}
+
+	updateRequest.Avatar = fileHeader
 	updateRequest.UserId = userId
 	result, err := c.updateProfileUseCase.Handle(updateRequest)
 
