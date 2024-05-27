@@ -23,8 +23,8 @@ type (
 		Title       string    `gorm:"column:title"`
 		MapPicture  string    `gorm:"column:map_picture"`
 		HasAidTeam  bool      `gorm:"column:has_aid_team"`
-		Lat         float32   `gorm:"column:lat"`
-		Lon         float32   `gorm:"column:lon"`
+		Lat         float64   `gorm:"column:lat"`
+		Lon         float64   `gorm:"column:lon"`
 		Reason      int       `gorm:"column:reason"`
 		Type        int       `gorm:"column:type"`
 		BeginAt     time.Time `gorm:"column:begin_at"`

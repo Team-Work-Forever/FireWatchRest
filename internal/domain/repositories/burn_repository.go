@@ -5,6 +5,7 @@ import (
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
 	"gorm.io/gorm"
 )
@@ -64,7 +65,27 @@ func (repo *BurnRepository) GetBurnById(burnId string) (*entities.Burn, error) {
 		return nil, err
 	}
 
+	coordinates, err := repo.GetCoordinates(burnId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	result.Coordinates = *coordinates
 	return result, nil
+}
+
+func (repo *BurnRepository) GetCoordinates(burnId string) (*vo.Coordinate, error) {
+	var result *daos.BurnDetailsView
+
+	if err := repo.dbContext.Select([]string{
+		"lat",
+		"lon",
+	}).Where("id = ?", burnId).Where("deleted_at is null").First(&result).Error; err != nil {
+		return nil, err
+	}
+
+	return vo.NewCoordinate(result.Lat, result.Lon), nil
 }
 
 func (repo *BurnRepository) Delete(burn *entities.Burn) error {

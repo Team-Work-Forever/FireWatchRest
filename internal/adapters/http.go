@@ -18,7 +18,7 @@ type HttpServer struct {
 	Version  string
 }
 
-func NewHttpServer(version int) *HttpServer {
+func NewHttpServer(version int, middlewares ...fiber.Handler) *HttpServer {
 	app := fiber.New(fiber.Config{
 		ErrorHandler: errorHandler,
 	})
@@ -26,6 +26,10 @@ func NewHttpServer(version int) *HttpServer {
 	app.Use(logger.New())
 	app.Use(locales.New())
 	app.Use(cors.New())
+
+	for _, m := range middlewares {
+		app.Use(m)
+	}
 
 	return &HttpServer{
 		Instance: app,

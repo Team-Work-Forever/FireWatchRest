@@ -5,7 +5,7 @@ import "github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagin
 type (
 	Geometry struct {
 		Type        string    `json:"type"`
-		Coordinates []float32 `json:"coordinates"`
+		Coordinates []float64 `json:"coordinates"`
 	}
 
 	GeoJsonFeature struct {
@@ -21,12 +21,12 @@ type (
 	}
 )
 
-func NewFeature(x float32, y float32, properties interface{}) *GeoJsonFeature {
+func NewFeature(x float64, y float64, properties interface{}) *GeoJsonFeature {
 	return &GeoJsonFeature{
 		Type: "Feature",
 		Geometry: Geometry{
 			Type:        "Point",
-			Coordinates: []float32{x, y},
+			Coordinates: []float64{x, y},
 		},
 		Properties: properties,
 	}

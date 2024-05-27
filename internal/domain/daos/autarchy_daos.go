@@ -12,8 +12,8 @@ type (
 		Id             string     `gorm:"column:id"`
 		Title          string     `gorm:"column:title"`
 		AutarchyAvatar string     `gorm:"column:autarchy_avatar"`
-		Lat            float32    `gorm:"column:lat"`
-		Lon            float32    `gorm:"column:lon"`
+		Lat            float64    `gorm:"column:lat"`
+		Lon            float64    `gorm:"column:lon"`
 		PhoneNumber    vo.Phone   `gorm:"embedded"`
 		Address        vo.Address `gorm:"embedded"`
 	}
