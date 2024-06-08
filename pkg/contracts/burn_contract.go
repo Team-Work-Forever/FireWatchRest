@@ -60,7 +60,7 @@ type (
 		Type        string          `json:"type"`
 		Address     AddressResponse `json:"address"`
 		BeginAt     time.Time       `json:"begin_at"`
-		CompletedAt time.Time       `json:"completed_at"`
+		CompletedAt *time.Time      `json:"completed_at"`
 		Picture     string          `json:"map_picture"`
 		State       string          `json:"state"`
 	}

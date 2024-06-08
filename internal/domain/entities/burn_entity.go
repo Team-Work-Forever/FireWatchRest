@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
+	"gorm.io/gorm"
 )
 
 type Burn struct {
@@ -16,7 +17,7 @@ type Burn struct {
 	Address     vo.Address    `gorm:"embedded"`
 	Coordinates vo.Coordinate `gorm:"column:geo_location;type:geometry"`
 	BeginAt     time.Time     `gorm:"column:begin_at"`
-	CompletedAt time.Time     `gorm:"column:completed_at"`
+	CompletedAt *time.Time    `gorm:"column:completed_at"`
 	Picture     string        `gorm:"column:map_picture"`
 }
 
@@ -48,4 +49,11 @@ func NewBurn(
 
 func (b *Burn) TableName() string {
 	return "burn"
+}
+
+func (a *Burn) BeforeCreate(tx *gorm.DB) error {
+	a.EntityBase.BeforeCreate(tx)
+
+	a.CompletedAt = nil
+	return nil
 }
