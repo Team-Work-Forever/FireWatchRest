@@ -196,6 +196,7 @@ func (c *BurnController) GetBurnById(ctx *fiber.Ctx) error {
 //	@Param		accept-language	header		string	false	"some description"
 //
 //	@Param		search			query		string	false	"search burn title"
+//	@Param		sort			query		string	false	"sort asc | desc"
 //	@Param		state			query		string	false	"search by burn state"
 //	@Param		start_date		query		string	false	"search by an inital date"
 //	@Param		end_date		query		string	false	"search by an end date"
@@ -211,6 +212,7 @@ func (c *BurnController) GetAllBurns(ctx *fiber.Ctx) error {
 	userId := shared.GetUserId(ctx)
 	search := ctx.Query("search", "")
 	state := ctx.Query("state", "")
+	sort := ctx.Query("sort", "asc")
 	startDate := ctx.Query("start_date", "")
 	endDate := ctx.Query("end_date", "")
 	pageString := ctx.Query("page", "1")
@@ -226,6 +228,7 @@ func (c *BurnController) GetAllBurns(ctx *fiber.Ctx) error {
 		AuthId:     userId,
 		Search:     search,
 		State:      state,
+		Sort:       sort,
 		StartDate:  startDate,
 		EndDate:    endDate,
 		Pagination: page,

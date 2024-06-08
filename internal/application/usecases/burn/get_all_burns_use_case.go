@@ -30,6 +30,13 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 
 	params := map[string]interface{}{
 		"search": request.Search,
+		"sort":   request.Sort,
+	}
+
+	if request.Sort != "" {
+		if request.Sort != "asc" && request.Sort != "desc" {
+			return nil, errors.New("that is not an valid sort query parameter")
+		}
 	}
 
 	if request.AutarchyId != "" {

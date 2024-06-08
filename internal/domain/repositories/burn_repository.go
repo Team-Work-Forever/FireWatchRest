@@ -8,6 +8,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type BurnRepository struct {
@@ -143,6 +144,15 @@ func (repo *BurnRepository) GetAllBurns(authId string, params map[string]interfa
 
 	if endDate, ok := params["end_date"]; ok {
 		expr.Where("begin_at < ?", endDate)
+	}
+
+	if sort, ok := params["sort"]; ok {
+		var sortInput = sort == "desc"
+
+		expr.Order(clause.OrderByColumn{
+			Column: clause.Column{Name: "begin_at"},
+			Desc:   sortInput,
+		})
 	}
 
 	expr = expr.Offset(pagination.GetOffset()).Limit(pagination.GetLimit())

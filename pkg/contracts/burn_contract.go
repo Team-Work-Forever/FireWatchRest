@@ -45,6 +45,7 @@ type (
 		AutarchyId string
 		AuthId     string
 		Search     string
+		Sort       string
 		State      string
 		StartDate  string
 		EndDate    string
