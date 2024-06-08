@@ -15,8 +15,18 @@ type (
 		UserType  string          `json:"user_type"`
 	}
 
+	PublicProfileResponse struct {
+		Email    string `json:"email"`
+		UserName string `json:"user_name"`
+		Avatar   string `json:"avatar"`
+	}
+
 	WhoamiRequest struct {
 		UserId string
+	}
+
+	PublicProfileRequest struct {
+		Email string
 	}
 
 	UpdateProfileResponse struct {

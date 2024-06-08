@@ -731,6 +731,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "sort asc | desc",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "search by burn state",
                         "name": "state",
                         "in": "query"
@@ -1158,6 +1164,46 @@ const docTemplate = `{
             }
         },
         "/profile": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Fetch Public Profile Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "some description",
+                        "name": "accept-language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "User's email",
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contracts.PublicProfileResponse"
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {
@@ -1368,6 +1414,9 @@ const docTemplate = `{
                 "first_name": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "string"
+                },
                 "last_name": {
                     "type": "string"
                 },
@@ -1378,6 +1427,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "contracts.PublicProfileResponse": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "user_name": {
                     "type": "string"
                 }
             }

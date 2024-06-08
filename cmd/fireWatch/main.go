@@ -81,6 +81,7 @@ func main() {
 
 	whoamiUseCase := ucp.NewWhoamiUseCase(authRepository, profileRepository)
 	updateProfileUseCase := ucp.NewUpdateProfileUIseCase(authRepository, profileRepository, fileService)
+	fetchPublicProfileUseCase := ucp.NewFetchPublicProfileUseCase(authRepository, profileRepository)
 
 	createBurnUseCase := ucb.NewCreateBurnUseCase(burnRepository, autarchyRepository)
 	getBurnbyIdUseCase := ucb.NewGetBurnByIdUseCase(burnRepository)
@@ -96,7 +97,7 @@ func main() {
 
 	// controllers
 	authController := controllers.NewAuthController(loginUseCase, signUpUseCase, forgotPasswordUseCase, resetPasswordUseCase, refreshTokensUseCase)
-	profileController := controllers.NewProfileController(whoamiUseCase, updateProfileUseCase)
+	profileController := controllers.NewProfileController(whoamiUseCase, updateProfileUseCase, fetchPublicProfileUseCase)
 	burnController := controllers.NewBurnController(createBurnUseCase, getBurnbyIdUseCase, getAllBurnsUseCase, updateBurnUseCase, deleteBurnUseCase)
 	autarchyController := controllers.NewAutarchyController(createAutarchyUseCase, getAutarchyById, getAllAutarchiesUseCase, updateAutarchyUseCase, deleteAutarchyUseCase, getAllBurnsUseCase)
 

@@ -10,17 +10,20 @@ import (
 )
 
 type ProfileController struct {
-	whoamiUseCase        *usecases.WhoamiUseCase
-	updateProfileUseCase *usecases.UpdateProfileUseCase
+	whoamiUseCase             *usecases.WhoamiUseCase
+	updateProfileUseCase      *usecases.UpdateProfileUseCase
+	fetchPublicProfileUseCase *usecases.FetchPublicProfileUseCase
 }
 
 func NewProfileController(
 	whoamiUseCase *usecases.WhoamiUseCase,
 	updateProfileUseCase *usecases.UpdateProfileUseCase,
+	fetchPublicProfileUseCase *usecases.FetchPublicProfileUseCase,
 ) *ProfileController {
 	return &ProfileController{
-		whoamiUseCase:        whoamiUseCase,
-		updateProfileUseCase: updateProfileUseCase,
+		whoamiUseCase:             whoamiUseCase,
+		updateProfileUseCase:      updateProfileUseCase,
+		fetchPublicProfileUseCase: fetchPublicProfileUseCase,
 	}
 }
 
@@ -29,6 +32,8 @@ func (c *ProfileController) Route(router fiber.Router) {
 	auth.Get("whoami", c.WhoamiRoute)
 
 	profile := auth.Group("profile")
+
+	profile.Get("", c.GetPublicProfile)
 	profile.Put("", middlewares.ShouldAcceptMultiPart, c.UpdateProfile)
 
 	profile.Get("locale", c.Locale)
@@ -108,6 +113,35 @@ func (c *ProfileController) UpdateProfile(ctx *fiber.Ctx) error {
 type Response struct {
 	Lat float32
 	Lon float32
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Fetch Public Profile Information
+//	@Tags		Profile
+//	@Accept		multipart/form-data
+//	@Produce	json
+//
+//	@Param		accept-language	header		string	false	"some description"
+//	@Param		email				query		string	true	"User's email"
+//
+//	@Success	200				{object}	contracts.PublicProfileResponse
+//
+//	@security	Bearer
+//
+//	@Router		/profile [get]
+func (c *ProfileController) GetPublicProfile(ctx *fiber.Ctx) error {
+	email := ctx.Query("email", "")
+
+	profileResult, err := c.fetchPublicProfileUseCase.Handle(contracts.PublicProfileRequest{
+		Email: email,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusAccepted).JSON(profileResult)
 }
 
 func (c *ProfileController) Locale(ctx *fiber.Ctx) error {

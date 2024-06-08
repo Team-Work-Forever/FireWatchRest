@@ -1,7 +1,9 @@
 package repositories
 
 import (
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"gorm.io/gorm"
 )
 
@@ -27,4 +29,20 @@ func (repo *ProfileRepository) GetUserByAuthId(authId string) (*entities.User, e
 
 func (repo *ProfileRepository) Update(profile *entities.User) error {
 	return repo.dbContext.Save(profile).Error
+}
+
+func (repo *ProfileRepository) GetPublicProfile(email *vo.Email) (*daos.ProfileDao, error) {
+	var user *daos.ProfileDao
+
+	err := repo.dbContext.Table("users u").
+		Select("u.user_name, u.profile_avatar, ak.email").
+		Joins("inner join auth_keys ak on ak.id = u.auth_key_id").
+		Where("ak.email = ?", email.Value).
+		Scan(&user).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
