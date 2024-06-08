@@ -21,7 +21,7 @@ func NewAutarchyRepository(database *gorm.DB) *AutarchyRepository {
 }
 
 func (repo *AutarchyRepository) ExistsAutarchyWithTitle(title string) bool {
-	if err := repo.dbContext.Where("title = ?", title).First(&entities.Autarchy{}).Error; err != nil {
+	if err := repo.dbContext.Where("lower(title) = lower(?)", title).First(&entities.Autarchy{}).Error; err != nil {
 		return false
 	}
 
@@ -64,7 +64,7 @@ func (repo *AutarchyRepository) GetAll(params map[string]interface{}, pagination
 	expr := repo.dbContext.Where("deleted_at is null")
 
 	if search, ok := params["search"]; ok {
-		expr.Where("title like ?", fmt.Sprintf("%%%s%%", search))
+		expr.Where("lower(title) like lower(?)", fmt.Sprintf("%%%s%%", search))
 	}
 
 	expr = expr.Offset(pagination.GetOffset()).Limit(pagination.GetLimit())

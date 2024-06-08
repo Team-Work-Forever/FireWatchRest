@@ -126,7 +126,7 @@ func (repo *BurnRepository) GetAllBurns(authId string, params map[string]interfa
 	expr := repo.dbContext.Where("author = ?", authId).Where("deleted_at is null")
 
 	if search, ok := params["search"]; ok {
-		expr.Where("title like ?", fmt.Sprintf("%%%s%%", search))
+		expr.Where("lower(title) like LOWER(?)", fmt.Sprintf("%%%s%%", search))
 	}
 
 	if autarchyId, ok := params["autarchyId"]; ok {
