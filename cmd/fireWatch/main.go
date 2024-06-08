@@ -12,7 +12,22 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/key"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/upload"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
+	"github.com/golang-migrate/migrate/v4"
+	"gorm.io/gorm"
 )
+
+func Migrations(db *gorm.DB) error {
+	migration, err := migrate.New(
+		"file://./docker/migrations",
+		adapters.GetConnectionString(),
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return migration.Up()
+}
 
 //	@title						FireWatch API
 //	@version					1.0
@@ -34,6 +49,10 @@ func main() {
 
 	// Setup Aux
 	db := adapters.GetDatabase()
+
+	// if err := Migrations(db); err != nil {
+	// 	panic(err)
+	// }
 
 	kvService := key.NewKeyValueService()
 	defer kvService.Close()

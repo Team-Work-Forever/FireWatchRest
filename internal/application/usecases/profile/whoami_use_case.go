@@ -37,6 +37,7 @@ func (w *WhoamiUseCase) Handle(request contracts.WhoamiRequest) (*contracts.Prof
 	}
 
 	return &contracts.ProfileResponse{
+		Id:        foundAuth.ID,
 		Email:     foundAuth.Email.GetValue(),
 		Avatar:    profileFound.ProfileAvatar,
 		UserName:  profileFound.UserName,

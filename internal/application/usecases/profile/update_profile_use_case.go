@@ -127,6 +127,7 @@ func (uc *UpdateProfileUseCase) Handle(request contracts.UpdateProfileResponse) 
 	}
 
 	return &contracts.ProfileResponse{
+		Id:        foundAuth.ID,
 		Email:     foundAuth.Email.GetValue(),
 		UserName:  foundProfile.UserName,
 		FirstName: foundProfile.FirstName,

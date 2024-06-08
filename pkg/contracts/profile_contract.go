@@ -4,6 +4,7 @@ import "mime/multipart"
 
 type (
 	ProfileResponse struct {
+		Id        string          `json:"id"`
 		Email     string          `json:"email"`
 		Avatar    string          `json:"avatar"`
 		UserName  string          `json:"user_name"`

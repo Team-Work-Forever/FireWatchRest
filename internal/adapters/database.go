@@ -12,18 +12,8 @@ import (
 var database *gorm.DB
 
 func newDatabaseGorm() (*gorm.DB, error) {
-	env := config.GetCofig()
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
-		env.POSTGRES_HOST,
-		env.POSTGRES_USER,
-		env.POSTGRES_PASSWORD,
-		env.POSTGRES_DB,
-		env.POSTGRES_PORT,
-	)
-
 	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN: dsn,
+		DSN: GetConnectionString(),
 	}), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
@@ -33,6 +23,19 @@ func newDatabaseGorm() (*gorm.DB, error) {
 	}
 
 	return db, nil
+}
+
+func GetConnectionString() string {
+	env := config.GetCofig()
+
+	return fmt.Sprintf(
+		"postgres://%s:%s@%s:%s/%s?sslmode=disable&timezone=Asia/Shanghai",
+		env.POSTGRES_USER,
+		env.POSTGRES_PASSWORD,
+		env.POSTGRES_HOST,
+		env.POSTGRES_PORT,
+		env.POSTGRES_DB,
+	)
 }
 
 func GetDatabase() *gorm.DB {

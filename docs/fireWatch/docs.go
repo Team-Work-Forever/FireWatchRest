@@ -1359,6 +1359,9 @@ const docTemplate = `{
                 "address": {
                     "$ref": "#/definitions/contracts.AddressResponse"
                 },
+                "avatar": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },

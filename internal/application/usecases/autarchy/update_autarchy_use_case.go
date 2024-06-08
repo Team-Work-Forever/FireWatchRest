@@ -156,16 +156,22 @@ func (uc *UpdateAutarchyUseCase) Handle(request contracts.UpdateAutarchyRequest)
 		result.Lat,
 		result.Lon,
 		contracts.AutarchyResponse{
-			Id:          request.AutarchyId,
-			Title:       result.Title,
-			Email:       result.Email,
-			PhoneCode:   result.PhoneNumber.CountryCode,
-			PhoneNumber: result.PhoneNumber.Number,
-			Street:      result.Address.Street,
-			StreetPort:  result.Address.Number,
-			ZipCode:     result.Address.ZipCode,
-			City:        result.Address.City,
-			Avatar:      result.AutarchyAvatar,
+			Id:    request.AutarchyId,
+			Title: result.Title,
+			Email: result.Email,
+			Phone: contracts.PhoneResponse{
+				CountryCode: result.PhoneNumber.CountryCode,
+				Number:      result.PhoneNumber.Number,
+			},
+			Address: contracts.AddressResponse{
+				Street: result.Address.Street,
+				Number: result.Address.Number,
+				ZipCode: contracts.ZipCodeResponse{
+					Value: result.Address.ZipCode,
+				},
+				City: result.Address.City,
+			},
+			Avatar: result.AutarchyAvatar,
 		},
 	), nil
 }

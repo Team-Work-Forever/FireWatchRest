@@ -301,7 +301,7 @@ func (c *BurnController) GetBurnStates(ctx *fiber.Ctx) error {
 //
 //	@security	Bearer
 //
-//	@Router		/burns/availability [get]
+// @Router /burns/availability [get]
 func (c *BurnController) GetAvailabilty(ctx *fiber.Ctx) error {
 	lat := ctx.Params("lat", "0")
 	lon := ctx.Params("lon", "0")
@@ -327,5 +327,7 @@ func (c *BurnController) GetAvailabilty(ctx *fiber.Ctx) error {
 
 	result := services.CheckICFNIndex(latValue, lonValue, hasAidTeamValue)
 
-	return ctx.Status(fiber.StatusAccepted).JSON(result)
+	return ctx.Status(fiber.StatusAccepted).JSON(contracts.AvailabilityResponse{
+		Result: result,
+	})
 }

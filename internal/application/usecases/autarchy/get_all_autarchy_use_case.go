@@ -36,16 +36,22 @@ func (uc *GetAllAutarchies) Handle(request contracts.GetAllAutarchiesRequest) (*
 			v.Lat,
 			v.Lon,
 			contracts.AutarchyResponse{
-				Id:          v.Id,
-				Title:       v.Title,
-				Email:       v.Email,
-				PhoneCode:   v.PhoneNumber.CountryCode,
-				PhoneNumber: v.PhoneNumber.Number,
-				Street:      v.Address.Street,
-				StreetPort:  v.Address.Number,
-				ZipCode:     v.Address.ZipCode,
-				City:        v.Address.City,
-				Avatar:      v.AutarchyAvatar,
+				Id:    v.Id,
+				Title: v.Title,
+				Email: v.Email,
+				Phone: contracts.PhoneResponse{
+					CountryCode: v.PhoneNumber.CountryCode,
+					Number:      v.PhoneNumber.Number,
+				},
+				Address: contracts.AddressResponse{
+					Street: v.Address.Street,
+					Number: v.Address.Number,
+					ZipCode: contracts.ZipCodeResponse{
+						Value: v.Address.ZipCode,
+					},
+					City: v.Address.City,
+				},
+				Avatar: v.AutarchyAvatar,
 			},
 		))
 	}

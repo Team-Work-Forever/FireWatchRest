@@ -128,7 +128,9 @@ func (c *AuthController) ForgotPasswordRoute(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.Status(fiber.StatusOK).SendString(`an email with password recovery instructions has been sent to your email address. If you have not received the email, please try again.`)
+	return ctx.Status(fiber.StatusOK).JSON(&contracts.DefaultResponse{
+		Message: "an email with password recovery instructions has been sent to your email address. If you have not received the email, please try again",
+	})
 }
 
 // // ShowAccount godoc
@@ -159,7 +161,9 @@ func (c *AuthController) ResetPasswordRoute(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.Status(fiber.StatusOK).SendString("the password was resetted")
+	return ctx.Status(fiber.StatusOK).JSON(&contracts.DefaultResponse{
+		Message: "Password was reseted",
+	})
 }
 
 // // ShowAccount godoc

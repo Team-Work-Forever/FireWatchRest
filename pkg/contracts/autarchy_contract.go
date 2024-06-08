@@ -20,16 +20,12 @@ type (
 	}
 
 	AutarchyResponse struct {
-		Id          string `json:"id"`
-		Title       string `json:"title"`
-		Email       string `json:"email"`
-		PhoneCode   string `json:"phone_code"`
-		PhoneNumber string `json:"phone_number"`
-		Street      string `json:"street"`
-		StreetPort  int    `json:"street_port"`
-		ZipCode     string `json:"zip_code"`
-		City        string `json:"city"`
-		Avatar      string `json:"avatar"`
+		Id      string          `json:"id"`
+		Title   string          `json:"title"`
+		Email   string          `json:"email"`
+		Phone   PhoneResponse   `json:"phone"`
+		Address AddressResponse `json:"address"`
+		Avatar  string          `json:"avatar"`
 	}
 
 	GetAutarchyRequest struct {

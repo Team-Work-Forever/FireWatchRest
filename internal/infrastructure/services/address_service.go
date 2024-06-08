@@ -45,7 +45,7 @@ func GetAutarchy(address vo.Address) (string, error) {
 		return "", ErrNotValidAddress
 	}
 
-	if address.City != housing.Localidade {
+	if address.City != housing.Concelho {
 		return "", ErrNotValidAddress
 	}
 
@@ -59,17 +59,6 @@ func GetAutarchy(address vo.Address) (string, error) {
 	if !okStreet && len(housing.Partes) != 0 {
 		return "", ErrNotValidAddress
 	}
-
-	// for _, value := range housing.Pontos {
-	// 	if value.Casa == strconv.Itoa(address.Number) {
-	// 		okNumber = true
-	// 		break
-	// 	}
-	// }
-
-	// if !okNumber && len(housing.Pontos) != 0 {
-	// 	return "", ErrNotValidAddress
-	// }
 
 	return housing.Municipio, nil
 }

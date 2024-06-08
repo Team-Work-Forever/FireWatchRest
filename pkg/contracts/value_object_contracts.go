@@ -1,6 +1,14 @@
 package contracts
 
 type (
+	AvailabilityResponse struct {
+		Result bool `json:"result"`
+	}
+
+	DefaultResponse struct {
+		Message string `json:"message"`
+	}
+
 	PhoneResponse struct {
 		CountryCode string `json:"country_code"`
 		Number      string `json:"number"`
