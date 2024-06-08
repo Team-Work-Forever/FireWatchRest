@@ -14,6 +14,7 @@ type (
 
 	Token struct {
 		Token    string
+		Value    string
 		Type     string
 		ExpireAt time.Duration
 	}
@@ -28,10 +29,12 @@ var (
 
 func NewToken(
 	token string,
+	value string,
 	tt TokenType,
 ) *Token {
 	return &Token{
 		Token:    token,
+		Value:    value,
 		Type:     tt.GetType(),
 		ExpireAt: tt.Exp,
 	}
@@ -47,13 +50,14 @@ func (t *Token) GetKV() key.KeyValue {
 			Tag:   t.Type,
 			Value: t.Token,
 		},
-		Value: t.Token,
+		Value: t.Value,
 		Exp:   t.ExpireAt,
 	}
 }
 
 func (t *Token) Scan(key key.Key, value string) error {
-	t.Token = value
+	t.Token = key.Value
+	t.Value = value
 	t.Type = key.Tag
 
 	return nil

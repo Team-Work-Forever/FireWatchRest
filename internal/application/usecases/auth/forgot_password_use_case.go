@@ -1,17 +1,22 @@
 package usecases
 
 import (
+	"errors"
 	"fmt"
 	"log"
-	"time"
+	"math/rand"
+	"strconv"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
-	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/jwt"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/smtp"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
+)
+
+const (
+	MAX_TRIES = 5
 )
 
 type ForgotPasswordUseCase struct {
@@ -29,6 +34,10 @@ func NewForgotPasswordUseCase(
 	}
 }
 
+func generateCode(low, hi int) int {
+	return low + rand.Intn(hi-low)
+}
+
 func (f *ForgotPasswordUseCase) Handle(request contracts.ForgotPasswordRequest) error {
 	email, err := vo.NewEmail(request.Email)
 
@@ -37,27 +46,30 @@ func (f *ForgotPasswordUseCase) Handle(request contracts.ForgotPasswordRequest) 
 	}
 
 	// find user by email
-	foundAuth, err := f.authRepository.GetAuthByEmail(email)
-
-	if err != nil {
+	if !f.authRepository.ExistsUserWithEmail(email) {
 		return exec.USER_NOT_FOUND
 	}
 
-	expire_at := time.Now().Add(entities.ForgotToken.Exp)
-	forgotToken, err := jwt.CreateJwtToken(jwt.TokenPayload{
-		UserId:   foundAuth.ID,
-		Email:    foundAuth.Email.GetValue(),
-		Role:     foundAuth.GetRole(),
-		Duration: expire_at,
-	})
+	var code string
 
-	if err != nil {
-		return err
+	for i := 0; i < MAX_TRIES; i++ {
+		if i == MAX_TRIES-1 {
+			return errors.New("try again later")
+		}
+
+		code = strconv.Itoa(generateCode(1000, 9000))
+
+		foundToken, err := f.tokenRepository.GetByToken(code, entities.ForgotToken)
+
+		if foundToken == nil && err != nil {
+			break
+		}
 	}
 
 	// store token
 	if err := f.tokenRepository.Create(entities.NewToken(
-		forgotToken,
+		code,
+		email.Value,
 		entities.ForgotToken,
 	)); err != nil {
 		return err
@@ -67,7 +79,7 @@ func (f *ForgotPasswordUseCase) Handle(request contracts.ForgotPasswordRequest) 
 	mail := smtp.New(
 		email.GetValue(),
 		"Forgot Password Request",
-		fmt.Sprintf("token: %s", forgotToken),
+		fmt.Sprintf("token: %s", code),
 	)
 
 	sendMail := func() {
