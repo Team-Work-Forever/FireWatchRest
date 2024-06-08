@@ -52,15 +52,16 @@ type (
 	}
 
 	BurnResponse struct {
-		Id          string    `json:"id"`
-		Title       string    `json:"title"`
-		HasAidTeam  bool      `json:"has_aid_team"`
-		Reason      string    `json:"reason"`
-		Type        string    `json:"type"`
-		BeginAt     time.Time `json:"begin_at"`
-		CompletedAt time.Time `json:"completed_at"`
-		Picture     string    `json:"map_picture"`
-		State       string    `json:"state"`
+		Id          string          `json:"id"`
+		Title       string          `json:"title"`
+		HasAidTeam  bool            `json:"has_aid_team"`
+		Reason      string          `json:"reason"`
+		Type        string          `json:"type"`
+		Address     AddressResponse `json:"address"`
+		BeginAt     time.Time       `json:"begin_at"`
+		CompletedAt time.Time       `json:"completed_at"`
+		Picture     string          `json:"map_picture"`
+		State       string          `json:"state"`
 	}
 
 	BurnActionResponse struct {

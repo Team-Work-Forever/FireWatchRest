@@ -25,6 +25,10 @@ type (
 		HasAidTeam  bool      `gorm:"column:has_aid_team"`
 		Lat         float64   `gorm:"column:lat"`
 		Lon         float64   `gorm:"column:lon"`
+		Street      string    `gorm:"column:address_street"`
+		Number      int       `gorm:"column:address_number;type:int"`
+		ZipCode     string    `gorm:"column:address_zip_code"`
+		City        string    `gorm:"column:address_city"`
 		Reason      int       `gorm:"column:reason"`
 		Type        int       `gorm:"column:type"`
 		BeginAt     time.Time `gorm:"column:begin_at"`
