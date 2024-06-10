@@ -4,10 +4,10 @@ import "mime/multipart"
 
 type (
 	CreateAutarchyRequest struct {
-		Title       string                `form:"title" binding:"required"`
-		Email       string                `form:"email" binding:"required"`
-		NIF         string                `form:"nif" binding:"required"`
-		Password    string                `form:"password" binding:"required"`
+		Title string `form:"title" binding:"required"`
+		Email string `form:"email" binding:"required"`
+		NIF   string `form:"nif" binding:"required"`
+		// Password    string                `form:"password" binding:"required"`
 		PhoneCode   string                `form:"phone_code" binding:"required"`
 		PhoneNumber string                `form:"phone_number" binding:"required"`
 		Street      string                `form:"street" binding:"required"`

@@ -2,11 +2,15 @@ package usescases
 
 import (
 	"errors"
+	"fmt"
+	"log"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pwd"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/smtp"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/upload"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
@@ -41,7 +45,7 @@ func (uc *CreateAutarchyUseCase) Handle(request contracts.CreateAutarchyRequest)
 		return nil, errors.New("provide an name for the autarchy")
 	}
 
-	password, err := vo.NewPassword(request.Password)
+	password, err := pwd.GeneratePasswordFixed()
 
 	if err != nil {
 		return nil, err
@@ -131,6 +135,20 @@ func (uc *CreateAutarchyUseCase) Handle(request contracts.CreateAutarchyRequest)
 	if err := uc.authRepo.CreateAccount(auth, autarchy); err != nil {
 		return nil, err
 	}
+
+	mail := smtp.New(
+		email.GetValue(),
+		"System Autarchy Password",
+		fmt.Sprintf("Secret: %s", password.GetValue()),
+	)
+
+	sendMail := func() {
+		if err := mail.Send(); err != nil {
+			log.Print(err)
+		}
+	}
+
+	go sendMail()
 
 	return &contracts.AutarchyActionResponse{
 		AutarchyId: autarchy.ID,

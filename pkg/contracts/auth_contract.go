@@ -42,4 +42,13 @@ type (
 	RefreshTokensRequest struct {
 		RefreshToken string
 	}
+
+	CreateAdminRequest struct {
+		AvatarFilePath string
+		SendItByEmail  bool
+	}
+
+	CreateAdminResponse struct {
+		GeneratedPassword string
+	}
 )

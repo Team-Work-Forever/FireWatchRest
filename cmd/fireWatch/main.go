@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/Team-Work-Forever/FireWatchRest/config"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/adapters"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/controllers"
@@ -11,6 +13,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/key"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/upload"
+	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
 	"github.com/golang-migrate/migrate/v4"
 	"gorm.io/gorm"
@@ -78,6 +81,7 @@ func main() {
 	forgotPasswordUseCase := uca.NewForgotPasswordUseCase(authRepository, tokenRepository)
 	resetPasswordUseCase := uca.NewResetPasswordUseCase(authRepository, tokenRepository)
 	refreshTokensUseCase := uca.NewRefreshTokesUseCase(authRepository)
+	createAdminUseCase := uca.NewCreateAdminUseCase(authRepository, fileService)
 
 	whoamiUseCase := ucp.NewWhoamiUseCase(authRepository, profileRepository)
 	updateProfileUseCase := ucp.NewUpdateProfileUIseCase(authRepository, profileRepository, fileService)
@@ -101,6 +105,9 @@ func main() {
 	burnController := controllers.NewBurnController(createBurnUseCase, getBurnbyIdUseCase, getAllBurnsUseCase, updateBurnUseCase, deleteBurnUseCase)
 	autarchyController := controllers.NewAutarchyController(createAutarchyUseCase, getAutarchyById, getAllAutarchiesUseCase, updateAutarchyUseCase, deleteAutarchyUseCase, getAllBurnsUseCase)
 
+	// RUN AUX Services
+	go createAdminIfNotExists(createAdminUseCase)
+
 	// Serve application
 	app.AddControllers([]shared.Controller{
 		authController,
@@ -110,4 +117,19 @@ func main() {
 	})
 
 	app.Serve()
+}
+
+func createAdminIfNotExists(uc *uca.CreateAdminUseCase) {
+	result, err := uc.Handle(contracts.CreateAdminRequest{
+		AvatarFilePath: "assets/admin.png",
+		SendItByEmail:  true,
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	if result != nil {
+		log.Printf("SECRET GENERATED: %s", result.GeneratedPassword)
+	}
 }

@@ -34,7 +34,7 @@ SELECT
     ak.email,
     a.id,
     a.title,
-    a.autarchy_avatar,
+    a.profile_avatar,
     ST_X(geo_location)::float AS lat,
     ST_Y(geo_location)::float AS lon,
     a.phone_code,

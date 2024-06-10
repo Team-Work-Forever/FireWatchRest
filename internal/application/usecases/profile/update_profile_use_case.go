@@ -27,7 +27,7 @@ func NewUpdateProfileUIseCase(
 	}
 }
 
-func (uc *UpdateProfileUseCase) Handle(request contracts.UpdateProfileResponse) (*contracts.ProfileResponse, error) {
+func (uc *UpdateProfileUseCase) Handle(request contracts.UpdateProfileResponse) (interface{}, error) {
 	foundProfile, err := uc.profileRepo.GetUserByAuthId(request.UserId)
 
 	if err != nil {
@@ -113,7 +113,7 @@ func (uc *UpdateProfileUseCase) Handle(request contracts.UpdateProfileResponse) 
 			return nil, err
 		}
 
-		foundProfile.ProfileAvatar = url
+		foundProfile.Picture = url
 	}
 
 	_, err = services.GetAutarchy(foundProfile.Address)
@@ -126,24 +126,5 @@ func (uc *UpdateProfileUseCase) Handle(request contracts.UpdateProfileResponse) 
 		return nil, err
 	}
 
-	return &contracts.ProfileResponse{
-		Id:        foundAuth.ID,
-		Email:     foundAuth.Email.GetValue(),
-		UserName:  foundProfile.UserName,
-		FirstName: foundProfile.FirstName,
-		LastName:  foundProfile.LastName,
-		Phone: contracts.PhoneResponse{
-			CountryCode: foundProfile.PhoneNumber.CountryCode,
-			Number:      foundProfile.PhoneNumber.Number,
-		},
-		Address: contracts.AddressResponse{
-			Street: foundProfile.Address.Street,
-			Number: foundProfile.Address.Number,
-			ZipCode: contracts.ZipCodeResponse{
-				Value: foundProfile.Address.ZipCode,
-			},
-			City: foundProfile.Address.City,
-		},
-		UserType: foundAuth.GetRole(),
-	}, nil
+	return contracts.GetProfileResponse(foundAuth, foundProfile)
 }

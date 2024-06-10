@@ -1,7 +1,9 @@
 package usecases
 
 import (
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
@@ -21,40 +23,39 @@ func NewWhoamiUseCase(
 	}
 }
 
-func (w *WhoamiUseCase) Handle(request contracts.WhoamiRequest) (*contracts.ProfileResponse, error) {
-	// fetch auth
+func (w *WhoamiUseCase) fetchUser(auth *entities.Auth) (interface{}, error) {
+	profileFound, err := w.profileRepository.GetUserByAuthId(auth.ID)
+
+	if err != nil {
+		return nil, exec.USER_NOT_FOUND
+	}
+
+	return contracts.GetProfileResponse(auth, profileFound)
+}
+
+func (w *WhoamiUseCase) fetchAutarchyResponse(auth *entities.Auth) (interface{}, error) {
+	profileFound, err := w.profileRepository.GetAutarchyByAuthId(auth.ID)
+
+	if err != nil {
+		return nil, exec.USER_NOT_FOUND
+	}
+
+	return contracts.GetProfileResponse(auth, profileFound)
+}
+
+func (w *WhoamiUseCase) Handle(request contracts.WhoamiRequest) (interface{}, error) {
 	foundAuth, err := w.authRepository.GetAuthById(request.UserId)
 
 	if err != nil {
 		return nil, exec.USER_NOT_FOUND
 	}
 
-	// fetch user
-	profileFound, err := w.profileRepository.GetUserByAuthId(foundAuth.ID)
-
-	if err != nil {
-		return nil, exec.USER_NOT_FOUND
+	switch foundAuth.UserType {
+	case int(vo.User), int(vo.Admin):
+		return w.fetchUser(foundAuth)
+	case int(vo.Autarchy):
+		return w.fetchAutarchyResponse(foundAuth)
 	}
 
-	return &contracts.ProfileResponse{
-		Id:        foundAuth.ID,
-		Email:     foundAuth.Email.GetValue(),
-		Avatar:    profileFound.ProfileAvatar,
-		UserName:  profileFound.UserName,
-		FirstName: profileFound.FirstName,
-		LastName:  profileFound.LastName,
-		Phone: contracts.PhoneResponse{
-			CountryCode: profileFound.PhoneNumber.CountryCode,
-			Number:      profileFound.PhoneNumber.Number,
-		},
-		Address: contracts.AddressResponse{
-			Street: profileFound.Address.Street,
-			Number: profileFound.Address.Number,
-			ZipCode: contracts.ZipCodeResponse{
-				Value: profileFound.Address.ZipCode,
-			},
-			City: profileFound.Address.City,
-		},
-		UserType: foundAuth.GetRole(),
-	}, nil
+	return nil, exec.USER_NOT_FOUND
 }

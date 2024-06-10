@@ -68,7 +68,7 @@ create table autarchy (
   auth_key_id uuid not null,
   -- manager_id uuid not null,
   title varchar(50) not null,
-  autarchy_avatar text not null,
+  profile_avatar text not null,
   geo_location GEOMETRY(Point, 4326) DEFAULT NULL,
   phone_code varchar(4) not null,
   phone_number varchar(9) not null,

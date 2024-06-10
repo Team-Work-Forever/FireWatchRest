@@ -7,13 +7,9 @@ import (
 )
 
 type Autarchy struct {
-	EntityBase
-	AuthKeyId   string        `gorm:"column:auth_key_id"`
+	IdentityUser
 	Title       string        `gorm:"column:title"`
 	Coordinates vo.Coordinate `gorm:"column:geo_location;type:geometry"`
-	PhoneNumber vo.Phone      `gorm:"embedded"`
-	Address     vo.Address    `gorm:"embedded"`
-	Picture     string        `gorm:"column:autarchy_avatar"`
 }
 
 func NewAutarchy(
@@ -29,10 +25,12 @@ func NewAutarchy(
 
 	return &Autarchy{
 		Title:       title,
-		Picture:     picture,
 		Coordinates: coordinates,
-		PhoneNumber: phone,
-		Address:     address,
+		IdentityUser: IdentityUser{
+			Picture:     picture,
+			PhoneNumber: phone,
+			Address:     address,
+		},
 	}, nil
 }
 

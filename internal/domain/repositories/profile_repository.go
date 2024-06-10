@@ -27,6 +27,16 @@ func (repo *ProfileRepository) GetUserByAuthId(authId string) (*entities.User, e
 	return user, nil
 }
 
+func (repo *ProfileRepository) GetAutarchyByAuthId(authId string) (*entities.Autarchy, error) {
+	var autarchy *entities.Autarchy
+
+	if err := repo.dbContext.Where("auth_key_id = ?", authId).First(&autarchy).Error; err != nil {
+		return nil, err
+	}
+
+	return autarchy, nil
+}
+
 func (repo *ProfileRepository) Update(profile *entities.User) error {
 	return repo.dbContext.Save(profile).Error
 }
