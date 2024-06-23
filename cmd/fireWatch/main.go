@@ -93,6 +93,7 @@ func main() {
 	updateBurnUseCase := ucb.NewUpdateBurnUseCase(burnRepository)
 	deleteBurnUseCase := ucb.NewDeleteBurnUseCase(burnRepository)
 	terminateUseCase := ucb.NewTerminateBurnUseCase(burnRepository)
+	startUseCase := ucb.NewStartBurnUserCase(burnRepository)
 
 	createAutarchyUseCase := ucy.NewCreateAutarchyUseCase(autarchyRepository, authRepository, fileService)
 	getAutarchyById := ucy.NewGetAutarchyByIdUseCase(autarchyRepository)
@@ -103,7 +104,7 @@ func main() {
 	// controllers
 	authController := controllers.NewAuthController(loginUseCase, signUpUseCase, forgotPasswordUseCase, resetPasswordUseCase, refreshTokensUseCase)
 	profileController := controllers.NewProfileController(whoamiUseCase, updateProfileUseCase, fetchPublicProfileUseCase)
-	burnController := controllers.NewBurnController(createBurnUseCase, getBurnbyIdUseCase, getAllBurnsUseCase, updateBurnUseCase, deleteBurnUseCase, terminateUseCase)
+	burnController := controllers.NewBurnController(createBurnUseCase, getBurnbyIdUseCase, getAllBurnsUseCase, updateBurnUseCase, deleteBurnUseCase, terminateUseCase, startUseCase)
 	autarchyController := controllers.NewAutarchyController(createAutarchyUseCase, getAutarchyById, getAllAutarchiesUseCase, updateAutarchyUseCase, deleteAutarchyUseCase, getAllBurnsUseCase)
 
 	// RUN AUX Services

@@ -20,6 +20,7 @@ type BurnController struct {
 	updateBurnUc  *usecases.UpdateBurnUseCase
 	deleteBurnUc  *usecases.DeleteBurnUseCase
 	terminateUc   *usecases.TerminateBurnUseCase
+	startUc       *usecases.StartBurnUseCase
 }
 
 func NewBurnController(
@@ -29,6 +30,7 @@ func NewBurnController(
 	updateBurnUc *usecases.UpdateBurnUseCase,
 	deleteBurnUc *usecases.DeleteBurnUseCase,
 	terminateUc *usecases.TerminateBurnUseCase,
+	startUc *usecases.StartBurnUseCase,
 ) *BurnController {
 	return &BurnController{
 		createBurnUc:  createBurnUc,
@@ -37,6 +39,7 @@ func NewBurnController(
 		updateBurnUc:  updateBurnUc,
 		deleteBurnUc:  deleteBurnUc,
 		terminateUc:   terminateUc,
+		startUc:       startUc,
 	}
 }
 
@@ -55,6 +58,7 @@ func (c *BurnController) Route(router fiber.Router) {
 
 	burn.Put(":id", middlewares.ShouldAcceptMultiPart, c.UpdateBurn)
 	burn.Put(":id/terminate", c.TerminateBurn)
+	burn.Put(":id/start", c.StartBurn)
 	burn.Delete(":id", c.DeleteBurn)
 }
 
@@ -164,7 +168,7 @@ func (c *BurnController) UpdateBurn(ctx *fiber.Ctx) error {
 //
 //	@Summary	Terminate Burn
 //	@Tags		Burn
-//	@Accept		multipart/form-data
+//	@Accept		application/json
 //	@Produce	json
 //
 //	@Param		accept-language	header		string						false	"some description"
@@ -172,7 +176,7 @@ func (c *BurnController) UpdateBurn(ctx *fiber.Ctx) error {
 //	@Param		id				path		string						true	"Fetch the burn by id"
 //	@Param		data			formData	contracts.CreateBurnRequest	true	"Form data"
 //
-//	@Success	202				{object}	contracts.BurnActionResponse
+//	@Success	200				{object}	contracts.BurnActionResponse
 //
 //	@security	Bearer
 //
@@ -182,6 +186,39 @@ func (c *BurnController) TerminateBurn(ctx *fiber.Ctx) error {
 	userId := shared.GetUserId(ctx)
 
 	result, err := c.terminateUc.Handle(contracts.TerminateBurnRequest{
+		BurnId: burnId,
+		UserId: userId,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusAccepted).JSON(result)
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Start Burn
+//	@Tags		Burn
+//	@Accept		application/json
+//	@Produce	json
+//
+//	@Param		accept-language	header		string						false	"some description"
+//
+//	@Param		id				path		string						true	"Fetch the burn by id"
+//	@Param		data			formData	contracts.CreateBurnRequest	true	"Form data"
+//
+//	@Success	200				{object}	contracts.BurnActionResponse
+//
+//	@security	Bearer
+//
+//	@Router		/burns/{id} [put]
+func (c *BurnController) StartBurn(ctx *fiber.Ctx) error {
+	burnId := ctx.Params("id", "")
+	userId := shared.GetUserId(ctx)
+
+	result, err := c.startUc.Handle(contracts.StartBurnRequest{
 		BurnId: burnId,
 		UserId: userId,
 	})

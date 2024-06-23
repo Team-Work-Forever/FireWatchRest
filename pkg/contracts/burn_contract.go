@@ -37,6 +37,11 @@ type (
 		BurnId string
 	}
 
+	StartBurnRequest struct {
+		UserId string
+		BurnId string
+	}
+
 	DeleteBurnRequest struct {
 		UserId string
 		BurnId string
