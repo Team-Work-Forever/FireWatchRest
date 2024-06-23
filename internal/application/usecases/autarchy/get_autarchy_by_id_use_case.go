@@ -25,6 +25,12 @@ func (uc *GetAutarchyByIdUseCase) Handle(request contracts.GetAutarchyRequest) (
 		return nil, errors.New("autarchy not found")
 	}
 
+	totalofBurns, err := uc.autarchyRepo.GetAutarchyBurnCount(result.Id)
+
+	if err != nil {
+		return nil, errors.New("could not fetch autarchy details")
+	}
+
 	return geojson.NewFeature(
 		result.Lat,
 		result.Lon,
@@ -45,7 +51,8 @@ func (uc *GetAutarchyByIdUseCase) Handle(request contracts.GetAutarchyRequest) (
 				},
 				City: result.Address.City,
 			},
-			Avatar: result.AutarchyAvatar,
+			Avatar:       result.AutarchyAvatar,
+			TotalOfBurns: totalofBurns,
 		},
 	), nil
 }

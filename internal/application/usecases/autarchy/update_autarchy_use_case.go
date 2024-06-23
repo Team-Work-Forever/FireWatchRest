@@ -152,6 +152,12 @@ func (uc *UpdateAutarchyUseCase) Handle(request contracts.UpdateAutarchyRequest)
 		return nil, errors.New("autarchy could not be updated")
 	}
 
+	totalofBurns, err := uc.autarchyRepo.GetAutarchyBurnCount(result.Id)
+
+	if err != nil {
+		return nil, errors.New("could not fetch autarchy details")
+	}
+
 	return geojson.NewFeature(
 		result.Lat,
 		result.Lon,
@@ -172,7 +178,8 @@ func (uc *UpdateAutarchyUseCase) Handle(request contracts.UpdateAutarchyRequest)
 				},
 				City: result.Address.City,
 			},
-			Avatar: result.AutarchyAvatar,
+			Avatar:       result.AutarchyAvatar,
+			TotalOfBurns: totalofBurns,
 		},
 	), nil
 }

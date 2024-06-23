@@ -58,6 +58,18 @@ func (repo *AutarchyRepository) GetAutarchyByCity(city string) (*entities.Autarc
 	return result, nil
 }
 
+func (repo *AutarchyRepository) GetAutarchyBurnCount(autarchyId string) (int, error) {
+	var burnRequests []entities.BurnRequest
+
+	expr := repo.dbContext.Where("autarchy_id = ?", autarchyId)
+
+	if err := expr.Find(&burnRequests).Error; err != nil {
+		return 0, err
+	}
+
+	return len(burnRequests), nil
+}
+
 func (repo *AutarchyRepository) GetAll(params map[string]interface{}, pagination *pagination.Pagination) ([]daos.AutarchyDetailsView, error) {
 	var result []daos.AutarchyDetailsView
 

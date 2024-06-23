@@ -19,13 +19,14 @@ type (
 	}
 
 	AutarchyResponse struct {
-		Id      string          `json:"id"`
-		Title   string          `json:"title"`
-		Email   string          `json:"email"`
-		NIF     string          `json:"nif"`
-		Phone   PhoneResponse   `json:"phone"`
-		Address AddressResponse `json:"address"`
-		Avatar  string          `json:"avatar"`
+		Id           string          `json:"id"`
+		Title        string          `json:"title"`
+		Email        string          `json:"email"`
+		NIF          string          `json:"nif"`
+		Phone        PhoneResponse   `json:"phone"`
+		Address      AddressResponse `json:"address"`
+		Avatar       string          `json:"avatar"`
+		TotalOfBurns int             `json:"total_of_burns"`
 	}
 
 	GetAutarchyRequest struct {

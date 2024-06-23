@@ -1,6 +1,8 @@
 package usescases
 
 import (
+	"errors"
+
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/geojson"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
@@ -32,6 +34,12 @@ func (uc *GetAllAutarchies) Handle(request contracts.GetAllAutarchiesRequest) (*
 	result, err := uc.autarchyRepo.GetAll(params, &pag)
 
 	for _, v := range result {
+		totalofBurns, err := uc.autarchyRepo.GetAutarchyBurnCount(v.Id)
+
+		if err != nil {
+			return nil, errors.New("could not fetch autarchy details")
+		}
+
 		features = append(features, *geojson.NewFeature(
 			v.Lat,
 			v.Lon,
@@ -52,7 +60,8 @@ func (uc *GetAllAutarchies) Handle(request contracts.GetAllAutarchiesRequest) (*
 					},
 					City: v.Address.City,
 				},
-				Avatar: v.AutarchyAvatar,
+				Avatar:       v.AutarchyAvatar,
+				TotalOfBurns: totalofBurns,
 			},
 		))
 	}
