@@ -50,7 +50,7 @@ func GetICNFIndex(x, y float64, has_aid_team bool) (*ICNF, error) {
 	}
 
 	aid := url.QueryEscape(aidString)
-	url := fmt.Sprintf("webservicequeimadas2019.asp?Operacao=Queima&data=2024-05-25&lat=%.16g&lon=%.16g&apoio=%s&tecnicoFC=DEFAULT", x, y, aid)
+	url := fmt.Sprintf("webservicequeimadas2019.asp?Operacao=Queima&data=2024-06-19&lat=%.16g&lon=%.16g&apoio=%s&tecnicoFC=DEFAULT", x, y, aid)
 
 	if err := icfnApi.getXml(url, &index); err != nil {
 		return nil, err

@@ -14,9 +14,11 @@ type Api struct {
 }
 
 func New(url string) *Api {
+	client := &http.Client{}
+
 	return &Api{
 		baseUrl: url,
-		client:  &http.Client{},
+		client:  client,
 	}
 }
 
@@ -51,7 +53,16 @@ func (api *Api) getXml(path string, response interface{}) error {
 func (api *Api) get(path string) ([]byte, error) {
 	url := fmt.Sprintf("%s%s", api.baseUrl, path)
 
-	resp, err := api.client.Get(url)
+	req, err := http.NewRequest("GET", url, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("User-Agent", "HTTPie")
+
+	resp, err := api.client.Do(req)
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to make GET request: %v", err)
 	}

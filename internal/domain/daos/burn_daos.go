@@ -19,6 +19,8 @@ type (
 	BurnDetailsView struct {
 		entities.Entity
 		Author      string     `gorm:"column:author"`
+		Autarchy    string     `gorm:"column:autarchy_id"`
+		Profile     ProfileDao `gorm:"embedded"`
 		Id          string     `gorm:"column:id"`
 		Title       string     `gorm:"column:title"`
 		MapPicture  string     `gorm:"column:map_picture"`

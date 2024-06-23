@@ -111,6 +111,26 @@ func (repo *BurnRepository) GetBurnStatus(authId string, burnId string) (*uint16
 	return &burnRequest.State, nil
 }
 
+func (repo *BurnRepository) SetBurnStatus(authId, autarchyId, burnId string, state vo.BurnRequestStates) (*entities.BurnRequestState, error) {
+	tx := repo.dbContext.Begin()
+
+	burnRequest := entities.NewBurnRequestState(
+		authId,
+		autarchyId,
+		burnId,
+		state,
+		"Finish Burn",
+	)
+
+	if err := tx.Create(&burnRequest).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	tx.Commit()
+	return burnRequest, nil
+}
+
 func (repo *BurnRepository) GetBurnDetailById(authId string, burnId string) (*daos.BurnDetailsView, error) {
 	var result *daos.BurnDetailsView
 

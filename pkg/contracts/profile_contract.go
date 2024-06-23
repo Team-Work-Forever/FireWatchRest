@@ -6,7 +6,6 @@ import (
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
-	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/geojson"
 )
 
 var (
@@ -17,6 +16,7 @@ type (
 	ProfileResponse struct {
 		Id       string          `json:"id"`
 		Email    string          `json:"email"`
+		NIF      string          `json:"nif"`
 		Avatar   string          `json:"avatar"`
 		Phone    PhoneResponse   `json:"phone"`
 		Address  AddressResponse `json:"address"`
@@ -40,9 +40,11 @@ type (
 	}
 
 	PublicProfileResponse struct {
-		Email    string `json:"email"`
-		UserName string `json:"user_name"`
-		Avatar   string `json:"avatar"`
+		Email    string        `json:"email"`
+		UserName string        `json:"user_name"`
+		Avatar   string        `json:"avatar"`
+		NIF      string        `json:"nif"`
+		Phone    PhoneResponse `json:"phone"`
 	}
 
 	WhoamiRequest struct {
@@ -90,14 +92,10 @@ func GetProfileResponse(auth *entities.Auth, user interface{}) (interface{}, err
 			return nil, ErrCannotConvert
 		}
 
-		return geojson.NewFeature(
-			autarchyProfile.Coordinates.GetX(),
-			autarchyProfile.Coordinates.GetY(),
-			AutarchyProfileResponse{
-				ProfileResponse: createProfileResponse(auth, &autarchyProfile.IdentityUser),
-				Title:           autarchyProfile.Title,
-			},
-		), nil
+		return AutarchyProfileResponse{
+			ProfileResponse: createProfileResponse(auth, &autarchyProfile.IdentityUser),
+			Title:           autarchyProfile.Title,
+		}, nil
 	}
 
 	return nil, ErrCannotConvert
@@ -107,6 +105,7 @@ func createProfileResponse(auth *entities.Auth, identity *entities.IdentityUser)
 	return ProfileResponse{
 		Id:     auth.ID,
 		Email:  auth.Email.GetValue(),
+		NIF:    auth.NIF.GetValue(),
 		Avatar: identity.Picture,
 		Phone: PhoneResponse{
 			CountryCode: identity.PhoneNumber.CountryCode,

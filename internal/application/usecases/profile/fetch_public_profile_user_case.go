@@ -43,5 +43,10 @@ func (uc *FetchPublicProfileUseCase) Handle(request contracts.PublicProfileReque
 		Email:    email.Value,
 		UserName: profileFound.UserName,
 		Avatar:   profileFound.ProfileAvatar,
+		NIF:      profileFound.NIF,
+		Phone: contracts.PhoneResponse{
+			CountryCode: profileFound.Phone.CountryCode,
+			Number:      profileFound.Phone.Number,
+		},
 	}, nil
 }

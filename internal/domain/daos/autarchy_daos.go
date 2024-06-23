@@ -9,9 +9,10 @@ type (
 	AutarchyDetailsView struct {
 		entities.Entity
 		Email          string     `gorm:"column:email"`
+		NIF            string     `gorm:"column:nif"`
 		Id             string     `gorm:"column:id"`
 		Title          string     `gorm:"column:title"`
-		AutarchyAvatar string     `gorm:"column:autarchy_avatar"`
+		AutarchyAvatar string     `gorm:"column:profile_avatar"`
 		Lat            float64    `gorm:"column:lat"`
 		Lon            float64    `gorm:"column:lon"`
 		PhoneNumber    vo.Phone   `gorm:"embedded"`

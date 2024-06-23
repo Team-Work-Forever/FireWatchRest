@@ -1,9 +1,16 @@
 -- Create or replace the burn_details_view
 CREATE OR REPLACE VIEW burn_details_view AS
-SELECT
-    br.autarchy_id,
+select
+	distinct on (b.id) 
+	b.id,
     br.auth_key_id AS author,
-    b.id,
+    ak.email,
+    ak.nif,
+    u.user_name,
+    u.profile_avatar,
+    u.phone_code,
+    u.phone_number,
+    br.autarchy_id,
     b.title,
     b.map_picture,
     ST_X(geo_location)::float AS lat,
@@ -21,17 +28,22 @@ SELECT
     b.created_at,
     b.updated_at,
     b.deleted_at
-FROM
+from
     burn b
 INNER JOIN burn_requests br 
     ON br.burn_id = b.id
 INNER JOIN burn_requests_states brs
-    ON brs.burn_id = b.id AND brs.auth_key_id = br.auth_key_id;
-
+    ON brs.burn_id = b.id AND brs.auth_key_id = br.auth_key_id
+inner join auth_keys ak 
+	on ak.id = br.auth_key_id 
+inner join users u 
+	on u.auth_key_id = ak.id 
+;
 -- Create or replace the autarchy_details_view
 CREATE OR REPLACE VIEW autarchy_details_view AS
 SELECT
     ak.email,
+    ak.nif,
     a.id,
     a.title,
     a.profile_avatar,

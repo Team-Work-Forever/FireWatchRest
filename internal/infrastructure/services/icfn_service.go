@@ -10,7 +10,11 @@ var (
 	ErrCannotDoBurn error = errors.New("is not possible to do burn is dangerous")
 )
 
-func CheckICFNIndex(lat, lon float64, hasAidTeam bool) bool {
+func CheckICFNIndex(lat, lon float64, hasAidTeam, ignore bool) bool {
+	if ignore {
+		return true
+	}
+
 	index, err := api.GetICNFIndex(lat, lon, hasAidTeam)
 
 	if err != nil {

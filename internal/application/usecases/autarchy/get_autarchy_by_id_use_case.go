@@ -32,6 +32,7 @@ func (uc *GetAutarchyByIdUseCase) Handle(request contracts.GetAutarchyRequest) (
 			Id:    result.Id,
 			Title: result.Title,
 			Email: result.Email,
+			NIF:   result.NIF,
 			Phone: contracts.PhoneResponse{
 				CountryCode: result.PhoneNumber.CountryCode,
 				Number:      result.PhoneNumber.Number,

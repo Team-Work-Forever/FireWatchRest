@@ -118,8 +118,7 @@ create table burn_requests_states (
   created_at timestamp default now(),
   updated_at timestamp default now(),
   deleted_at timestamp default null,
-  primary key (auth_key_id, autarchy_id, burn_id),
-  -- primary key (auth_key_id, burn_id),
+  primary key (auth_key_id, autarchy_id, burn_id, state),
   constraint autarchy_fk foreign key (autarchy_id) references autarchy(id),
   FOREIGN KEY (auth_key_id, burn_id, autarchy_id) REFERENCES burn_requests(auth_key_id, burn_id, autarchy_id)
 );

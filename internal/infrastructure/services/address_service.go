@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"log"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/api"
@@ -18,6 +19,7 @@ func GetAddress(lat, lon float64) (*vo.Address, error) {
 		return nil, err
 	}
 
+	log.Printf("Ola %s", location.CP)
 	zipCode, err := vo.NewZipCode(location.CP)
 
 	if err != nil {

@@ -70,7 +70,7 @@ func (uc *CreateBurnUseCase) Handler(request contracts.CreateBurnRequest) (*cont
 		return nil, err
 	}
 
-	if ok := services.CheckICFNIndex(request.Lat, request.Lon, request.HasBackUpTeam); !ok {
+	if ok := services.CheckICFNIndex(request.Lat, request.Lon, request.HasBackUpTeam, request.Ignore); !ok {
 		state = vo.Rejected
 	}
 

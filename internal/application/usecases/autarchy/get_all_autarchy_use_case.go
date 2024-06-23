@@ -39,6 +39,7 @@ func (uc *GetAllAutarchies) Handle(request contracts.GetAllAutarchiesRequest) (*
 				Id:    v.Id,
 				Title: v.Title,
 				Email: v.Email,
+				NIF:   v.NIF,
 				Phone: contracts.PhoneResponse{
 					CountryCode: v.PhoneNumber.CountryCode,
 					Number:      v.PhoneNumber.Number,

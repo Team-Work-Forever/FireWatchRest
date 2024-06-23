@@ -19,6 +19,7 @@ type BurnController struct {
 	getAllBurnsUc *usecases.GetAllBurnsUseCase
 	updateBurnUc  *usecases.UpdateBurnUseCase
 	deleteBurnUc  *usecases.DeleteBurnUseCase
+	terminateUc   *usecases.TerminateBurnUseCase
 }
 
 func NewBurnController(
@@ -27,6 +28,7 @@ func NewBurnController(
 	getAllBurnsUc *usecases.GetAllBurnsUseCase,
 	updateBurnUc *usecases.UpdateBurnUseCase,
 	deleteBurnUc *usecases.DeleteBurnUseCase,
+	terminateUc *usecases.TerminateBurnUseCase,
 ) *BurnController {
 	return &BurnController{
 		createBurnUc:  createBurnUc,
@@ -34,6 +36,7 @@ func NewBurnController(
 		getAllBurnsUc: getAllBurnsUc,
 		updateBurnUc:  updateBurnUc,
 		deleteBurnUc:  deleteBurnUc,
+		terminateUc:   terminateUc,
 	}
 }
 
@@ -43,7 +46,7 @@ func (c *BurnController) Route(router fiber.Router) {
 	burn.Get("types", c.GetBurnTypes)
 	burn.Get("reasons", c.GetBurnReasons)
 	burn.Get("states", c.GetBurnStates)
-	burn.Get("availability/:lat,:lon,:hasIdTeam", c.GetAvailabilty)
+	burn.Get("availability/:lat/:lon", c.GetAvailabilty)
 
 	burn.Post("", middlewares.ShouldAcceptMultiPart, c.CreateBurn)
 
@@ -51,6 +54,7 @@ func (c *BurnController) Route(router fiber.Router) {
 	burn.Get(":id", c.GetBurnById)
 
 	burn.Put(":id", middlewares.ShouldAcceptMultiPart, c.UpdateBurn)
+	burn.Put(":id/terminate", c.TerminateBurn)
 	burn.Delete(":id", c.DeleteBurn)
 }
 
@@ -148,6 +152,39 @@ func (c *BurnController) UpdateBurn(ctx *fiber.Ctx) error {
 	}
 
 	result, err := c.updateBurnUc.Handle(updateBurnRequest)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusAccepted).JSON(result)
+}
+
+// // ShowAccount godoc
+//
+//	@Summary	Terminate Burn
+//	@Tags		Burn
+//	@Accept		multipart/form-data
+//	@Produce	json
+//
+//	@Param		accept-language	header		string						false	"some description"
+//
+//	@Param		id				path		string						true	"Fetch the burn by id"
+//	@Param		data			formData	contracts.CreateBurnRequest	true	"Form data"
+//
+//	@Success	202				{object}	contracts.BurnActionResponse
+//
+//	@security	Bearer
+//
+//	@Router		/burns/{id} [put]
+func (c *BurnController) TerminateBurn(ctx *fiber.Ctx) error {
+	burnId := ctx.Params("id", "")
+	userId := shared.GetUserId(ctx)
+
+	result, err := c.terminateUc.Handle(contracts.TerminateBurnRequest{
+		BurnId: burnId,
+		UserId: userId,
+	})
 
 	if err != nil {
 		return err
@@ -308,7 +345,14 @@ func (c *BurnController) GetBurnStates(ctx *fiber.Ctx) error {
 func (c *BurnController) GetAvailabilty(ctx *fiber.Ctx) error {
 	lat := ctx.Params("lat", "0")
 	lon := ctx.Params("lon", "0")
-	hasAidTeam := ctx.Params("lat", "false")
+	hasAidTeam := ctx.Params("hasIdTeam", "false")
+	ignore := ctx.Query("ignore", "false")
+
+	ignoreValue, err := strconv.ParseBool(ignore)
+
+	if err != nil {
+		return err
+	}
 
 	latValue, err := strconv.ParseFloat(lat, 64)
 
@@ -328,7 +372,7 @@ func (c *BurnController) GetAvailabilty(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	result := services.CheckICFNIndex(latValue, lonValue, hasAidTeamValue)
+	result := services.CheckICFNIndex(latValue, lonValue, hasAidTeamValue, ignoreValue)
 
 	return ctx.Status(fiber.StatusAccepted).JSON(contracts.AvailabilityResponse{
 		Result: result,

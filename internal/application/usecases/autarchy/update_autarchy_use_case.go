@@ -159,6 +159,7 @@ func (uc *UpdateAutarchyUseCase) Handle(request contracts.UpdateAutarchyRequest)
 			Id:    request.AutarchyId,
 			Title: result.Title,
 			Email: result.Email,
+			NIF:   result.NIF,
 			Phone: contracts.PhoneResponse{
 				CountryCode: result.PhoneNumber.CountryCode,
 				Number:      result.PhoneNumber.Number,

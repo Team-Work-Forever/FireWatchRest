@@ -84,8 +84,18 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 			v.Lat,
 			v.Lon,
 			contracts.BurnResponse{
-				Id:         v.Id,
-				Title:      v.Title,
+				Id:    v.Id,
+				Title: v.Title,
+				Author: contracts.PublicProfileResponse{
+					Email:    v.Profile.Email,
+					UserName: v.Profile.UserName,
+					Avatar:   v.Profile.ProfileAvatar,
+					NIF:      v.Profile.NIF,
+					Phone: contracts.PhoneResponse{
+						CountryCode: v.Profile.Phone.CountryCode,
+						Number:      v.Profile.Phone.Number,
+					},
+				},
 				HasAidTeam: v.HasAidTeam,
 				Reason:     vo.MustGetBurnReason(v.Reason),
 				Type:       vo.MustGetBurnType(v.Type),
