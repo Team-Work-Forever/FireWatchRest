@@ -8,7 +8,8 @@ var (
 	USER_ALREADY_EXISTS     = NewError("user-ae", fiber.StatusNotFound, "User Already Exists", "There is already an user with that email")
 	USER_ALREADY_EXISTS_NIF = NewError("user-an", fiber.StatusConflict, "User Already Exists", "There is already an user with that NIF")
 
-	USER_NOT_FOUND = NewError("user-nf", fiber.StatusNotFound, "User Not Found", "User not found")
+	USER_NOT_FOUND              = NewError("user-nf", fiber.StatusNotFound, "User Not Found", "User not found")
+	ACCOUNT_USER_TYPE_UNDEFINED = NewError("account-user-type-undefined", fiber.StatusNotFound, "User Type Undefined", "Failed to create account user type undefined")
 
 	PASSWORD_WRONG       = NewError("password-wrg", fiber.StatusConflict, "Authentication", "The email or password is wrong")
 	PASSWORDS_DONT_MATCH = NewError("password-d-mtch", fiber.StatusConflict, "Authentication", "The password don't match")

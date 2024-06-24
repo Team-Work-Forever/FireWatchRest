@@ -1,3 +1,7 @@
+user-nf-header: Utilizador não encontrado
+user-nf: Utilizador não encontrado
+account-user-type-undefined-header: Tipo de Utilizador Não Definido
+account-user-type-undefined: Falha a criar conta com tipo não definido
 user-ae-header: O utilizador já existe
 user-ae: Já existe um utilizador com esse e-mail
 user-an-header: O utilizador já existe
@@ -62,3 +66,75 @@ email-pv: Fornecer campo de correio eletrónico
 email-pv-header: Validação do correio eletrónico
 email-pv-v: Fornecer um campo de correio eletrónico válido
 email-pv-v-header: Validação de correio eletrónico
+boolean-pv-header: Validação de booleano
+boolean-pv: Fornecer um booleano válido
+date-pv-header: Validação da data
+date-pv: Fornecer uma data válida yyyy-mm-dd
+start-date-pv-header: Validação data de início
+start-date-pv: Fornecer uma data de início válida
+title-pv-header: Validação do título
+title-pv: Fornecer um campo de título válido
+coordinates-n-notfound-header: Local não encontrado com coordenadas
+coordinates-n-notfound: Não existe nenhum local com essas coordenadas
+coordinates-i-header: Validação do Local
+coordinates-i: Coordenadas inválidas
+address-i-header: Validação da morada
+address-i: Validação da morada
+zip-code-n-notfound-header: Código Postal não encontrado
+zip-code-n-notfound: Não existe nenhum local com esse código postal
+doa-header: Acesso negado
+doa: Não tem acesso a esta ação
+ta-header: Tente novamente
+ta: Por favor, tente novamente
+snv-header: Estado não válido
+snv: O estado não é válido
+n-ableconvert-header: Conversão não possível
+n-ableconvert: Não dá para converter
+query-sort-n-valid-header: Parâmetro de pesquisa inválido
+query-sort-n-valid: Não é um parâmetro de pesquisa válida
+autarchy-pv-name-header: Validação município
+autarchy-pv-name: Fornecer um campo nome do município válido
+autarchy-pv-lat-header: Validação município
+autarchy-pv-lat: Fornecer um campo lat válido
+autarchy-pv-lon-header: Validação município
+autarchy-pv-lon: Fornecer um campo lon válido
+autarchy-fail-registered-header: Município já registado
+autarchy-fail-registered: Esse município já se encontra registado
+autarchy-fail-removal-header: Falha ao remover município
+autarchy-fail-removal: Falha na remoção do município
+autarchy-fail-fetchdetais-header: Falha ao recolher detalhes de município
+autarchy-fail-fetchdetais: Não consegue recolher detalhes do município
+autarchy-n-notfound-header: Município não encontrado
+autarchy-n-notfound: Município não encontrado
+autarchy-n-ableupdate-header: Município não pode ser atualizado
+autarchy-n-ableupdate: Município não consegue ser atualizado
+burn-pv-ne-reason-header: Validação da queimada
+burn-pv-ne-reason: Fornecer um tipo de razão válida
+burn-pv-ne-type-header: Validação da queimada
+burn-pv-ne-type: Fornecer um tipo de queimada válida
+burn-doa-header: Acesso negado
+burn-doa: Não tem acesso a esta queimada
+burn-fail-schedualaction-header: Falha na ação
+burn-fail-schedualaction: Queimada não está agendada, não consegue realizar a ação
+burn-fail-removal-header: Falha a remover queimada
+burn-fail-removal: Falha ao remover queimada
+burn-fail_fetch-header: Falha ao recolher detalhes da queimada
+burn-fail_fetch: Não consegue recolher detalhes da queimada
+burn-n-notfound-header: Queimada não encontrada
+burn-n-notfound: Queimada não encontrada
+burn-n-ableremoval-header: Queimada não disponível para remoção
+burn-n-ableremoval: Não é possível remover queimada, enquanto está ativa
+burn-n-ableupdate-header: Queimada não disponível para atualização
+burn-n-ableupdate: Não é possível atualizar a queimada
+burn-n-ablestart-header: Não é possível iniciar queimada
+burn-n-ablestart: Não é possível iniciar queimada
+burn-n-complete-header: Não é possível completar queimada
+burn-n-complete: Não é possível completar queimada
+burn-n-active-header: Queimada não ativa
+burn-n-active: Queimada não ativa, não consegue realizar ação
+file-pv-header: Validação do ficheiro
+file-pv: Fornecer ficheiro
+file-pv-ne-type-header: Validação do ficheiro
+file-pv-ne-type: Fornecer um tipo de ficheiro válido
+file-n-ableupload-header: Ficheiro não disponível para carregamento
+file-n-ableupload: Erro ao carregar ficheiro

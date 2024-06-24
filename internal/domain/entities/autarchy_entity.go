@@ -1,9 +1,8 @@
 package entities
 
 import (
-	"errors"
-
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type Autarchy struct {
@@ -20,7 +19,7 @@ func NewAutarchy(
 	address vo.Address,
 ) (*Autarchy, error) {
 	if title == "" {
-		return nil, errors.New("title is not provided")
+		return nil, exec.TITLE_PROVIDE
 	}
 
 	return &Autarchy{

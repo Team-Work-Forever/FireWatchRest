@@ -1,8 +1,6 @@
 package usecases
 
 import (
-	"errors"
-
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
@@ -10,6 +8,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/date"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type CreateBurnUseCase struct {
@@ -55,13 +54,13 @@ func (uc *CreateBurnUseCase) Handler(request contracts.CreateBurnRequest) (*cont
 	reason, ok := vo.GetBurnReasonKey(request.Reason)
 
 	if !ok {
-		return nil, errors.New("reason type does not exists")
+		return nil, exec.BURN_PROVIDE_NOT_EXISTING_REASON
 	}
 
 	burnType, ok := vo.GetBurnTypeKey(request.Type)
 
 	if !ok {
-		return nil, errors.New("burn type does not exists")
+		return nil, exec.BURN_PROVIDE_NOT_EXISTING_TYPE
 	}
 
 	foundAutarchy, err := uc.autarchyRepo.GetAutarchyByCity(address.City)

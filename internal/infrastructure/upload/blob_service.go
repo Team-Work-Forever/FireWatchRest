@@ -1,13 +1,13 @@
 package upload
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"path/filepath"
 
 	"github.com/Team-Work-Forever/FireWatchRest/config"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -15,8 +15,6 @@ import (
 )
 
 var (
-	ErrUploadingFile error = errors.New("error uploading file")
-
 	ClientBucket UploadBucket = "client-bucket"
 )
 
@@ -63,7 +61,7 @@ func (uf *UploadFile) GetContentType() (*string, error) {
 	seeker, ok := uf.FileBody.(io.Seeker)
 
 	if !ok {
-		return nil, ErrUploadingFile
+		return nil, exec.FILE_NOT_ABLE_UPLOAD
 	}
 
 	n, err := uf.FileBody.Read(buffer)
@@ -82,7 +80,7 @@ func (blob *BlobService) UploadFile(input *UploadFile) (string, error) {
 	contentType, err := input.GetContentType()
 
 	if err != nil {
-		return "", ErrUploadingFile
+		return "", exec.FILE_NOT_ABLE_UPLOAD
 	}
 
 	_, err = blob.svc.PutObject(&s3.PutObjectInput{

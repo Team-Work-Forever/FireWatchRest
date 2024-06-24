@@ -1,7 +1,6 @@
 package usescases
 
 import (
-	"errors"
 	"fmt"
 	"log"
 
@@ -42,7 +41,7 @@ func (uc *CreateAutarchyUseCase) Handle(request contracts.CreateAutarchyRequest)
 	}
 
 	if request.Title == "" {
-		return nil, errors.New("provide an name for the autarchy")
+		return nil, exec.AUTARCHY_PROVIDE_NAME
 	}
 
 	password, err := pwd.GeneratePasswordFixed()
@@ -91,7 +90,7 @@ func (uc *CreateAutarchyUseCase) Handle(request contracts.CreateAutarchyRequest)
 	}
 
 	if ok := uc.autarchyRepo.ExistsAutarchyWithTitle(request.Title); ok {
-		return nil, errors.New("that autarchy is already registered")
+		return nil, exec.AUTARCHY_ALREADY_REGISTERED
 	}
 
 	auth := entities.NewAuth(

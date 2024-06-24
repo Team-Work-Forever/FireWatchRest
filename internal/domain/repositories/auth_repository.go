@@ -1,10 +1,9 @@
 package repositories
 
 import (
-	"errors"
-
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 	"gorm.io/gorm"
 )
 
@@ -83,7 +82,7 @@ func (repo *AuthRepository) CreateAccount(auth *entities.Auth, user interface{})
 			return err
 		}
 	default:
-		return errors.New("failed to create account user type undefined")
+		return exec.ACCOUNT_USER_TYPE_UNDEFINED
 	}
 
 	return tx.Commit().Error

@@ -1,13 +1,10 @@
 package services
 
 import (
-	"errors"
 	"strconv"
 	"strings"
-)
 
-var (
-	ErroInvalidCoordinate error = errors.New("invalid coordinate")
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 func convertDMStoDD(degrees, minutes, seconds float64) float64 {
@@ -20,14 +17,14 @@ func parseCoordinate(coordinate string) (float32, error) {
 	values := strings.Split(coordinate, ":")
 
 	if len(values) > 3 {
-		return 0, ErroInvalidCoordinate
+		return 0, exec.COORDINATES_INVALID
 	}
 
 	for index := range values {
 		value, err := strconv.ParseFloat(values[index], 64)
 
 		if err != nil {
-			return 0, ErroInvalidCoordinate
+			return 0, exec.COORDINATES_INVALID
 		}
 
 		fields = append(fields, value)

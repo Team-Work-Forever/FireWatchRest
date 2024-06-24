@@ -1,10 +1,10 @@
 package entities
 
 import (
-	"errors"
 	"time"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 	"gorm.io/gorm"
 )
 
@@ -30,11 +30,11 @@ func NewBurn(
 	beginAt time.Time,
 ) (*Burn, error) {
 	if title == "" {
-		return nil, errors.New("title is not provided")
+		return nil, exec.TITLE_PROVIDE
 	}
 
 	if beginAt.Before(time.Now().Truncate(24 * time.Hour)) {
-		return nil, errors.New("provide an valid start date")
+		return nil, exec.START_DATE_PROVIDE_AN_VALID
 	}
 
 	return &Burn{

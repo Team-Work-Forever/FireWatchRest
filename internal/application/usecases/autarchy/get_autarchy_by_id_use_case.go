@@ -1,11 +1,10 @@
 package usescases
 
 import (
-	"errors"
-
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/geojson"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type GetAutarchyByIdUseCase struct {
@@ -22,13 +21,13 @@ func (uc *GetAutarchyByIdUseCase) Handle(request contracts.GetAutarchyRequest) (
 	result, err := uc.autarchyRepo.GetAutarchtDetailById(request.AutarchyId)
 
 	if err != nil {
-		return nil, errors.New("autarchy not found")
+		return nil, exec.AUTARCHY_NOT_FOUND
 	}
 
 	totalofBurns, err := uc.autarchyRepo.GetAutarchyBurnCount(result.Id)
 
 	if err != nil {
-		return nil, errors.New("could not fetch autarchy details")
+		return nil, exec.AUTARCHY_FAILED_DETAILS_FETCH
 	}
 
 	return geojson.NewFeature(

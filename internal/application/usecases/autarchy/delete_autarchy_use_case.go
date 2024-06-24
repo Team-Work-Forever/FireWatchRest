@@ -1,10 +1,9 @@
 package usescases
 
 import (
-	"errors"
-
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type DeleteAutarchyUseCase struct {
@@ -21,12 +20,12 @@ func (uc *DeleteAutarchyUseCase) Handle(request contracts.DeleteAutarchyRequest)
 	foundAutarchy, err := uc.autarchyRepo.GetAutarchyById(request.AutarchyId)
 
 	if err != nil {
-		return nil, errors.New("autarchy not found")
+		return nil, exec.AUTARCHY_NOT_FOUND
 	}
 
 	// remove it
 	if err := uc.autarchyRepo.Delete(foundAutarchy); err != nil {
-		return nil, errors.New("the autarchy failed to be removed")
+		return nil, exec.AUTARCHY_FAILED_REMOVAL
 	}
 
 	return &contracts.AutarchyActionResponse{

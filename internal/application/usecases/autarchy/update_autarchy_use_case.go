@@ -1,7 +1,6 @@
 package usescases
 
 import (
-	"errors"
 	"strconv"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
@@ -35,7 +34,7 @@ func (uc *UpdateAutarchyUseCase) Handle(request contracts.UpdateAutarchyRequest)
 	foundAutarchy, err := uc.autarchyRepo.GetAutarchyById(request.AutarchyId)
 
 	if err != nil {
-		return nil, errors.New("autarchy not found")
+		return nil, exec.AUTARCHY_NOT_FOUND
 	}
 
 	foundAuth, err := uc.authRepo.GetAuthById(foundAutarchy.AuthKeyId)
@@ -101,13 +100,13 @@ func (uc *UpdateAutarchyUseCase) Handle(request contracts.UpdateAutarchyRequest)
 		lat, err := strconv.ParseFloat(request.Lat, 64)
 
 		if err != nil {
-			return nil, errors.New("provide an valid lat")
+			return nil, exec.AUTARCHY_PROVIDE_LAT
 		}
 
 		lon, err := strconv.ParseFloat(request.Lon, 64)
 
 		if err != nil {
-			return nil, errors.New("provide an valid lon")
+			return nil, exec.AUTARCHY_PROVIDE_LON
 		}
 
 		foundAutarchy.Coordinates = *vo.NewCoordinate(lat, lon)
@@ -149,13 +148,13 @@ func (uc *UpdateAutarchyUseCase) Handle(request contracts.UpdateAutarchyRequest)
 	result, err := uc.autarchyRepo.GetAutarchtDetailById(request.AutarchyId)
 
 	if err != nil {
-		return nil, errors.New("autarchy could not be updated")
+		return nil, exec.AUTARCHY_NOT_ABLE_UPDATE
 	}
 
 	totalofBurns, err := uc.autarchyRepo.GetAutarchyBurnCount(result.Id)
 
 	if err != nil {
-		return nil, errors.New("could not fetch autarchy details")
+		return nil, exec.AUTARCHY_FAILED_DETAILS_FETCH
 	}
 
 	return geojson.NewFeature(

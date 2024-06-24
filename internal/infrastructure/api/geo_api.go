@@ -1,17 +1,13 @@
 package api
 
 import (
-	"errors"
 	"fmt"
+
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 const (
 	GEO_API_URL = "https://json.geoapi.pt/"
-)
-
-var (
-	ErrLocalNotFound   = errors.New("there ins't any local with those coordinates")
-	ErrZipCodeNotFound = errors.New("there ins't any local with that zip code")
 )
 
 var geoApi *Api = New(GEO_API_URL)
@@ -73,7 +69,7 @@ func GetLocation(x, y float64) (*Location, error) {
 	var location Location
 
 	if err := geoApi.getJson(fmt.Sprintf("gps/%f,%f", x, y), &location); err != nil {
-		return nil, ErrLocalNotFound
+		return nil, exec.COORDINATES_NOT_FOUND
 	}
 
 	return &location, nil
@@ -83,7 +79,7 @@ func GetCPHousing(zipCode string) (*CPHousing, error) {
 	var cp CPHousing
 
 	if err := geoApi.getJson(fmt.Sprintf("cp/%s", zipCode), &cp); err != nil {
-		return nil, ErrZipCodeNotFound
+		return nil, exec.ZIP_CODE_NOT_FOUND
 	}
 
 	return &cp, nil

@@ -1,12 +1,12 @@
 package repositories
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 	"gorm.io/gorm"
 )
 
@@ -52,7 +52,7 @@ func (repo *AutarchyRepository) GetAutarchyByCity(city string) (*entities.Autarc
 	var result *entities.Autarchy
 
 	if err := repo.dbContext.Where("address_city = ?", city).Where("deleted_at is null").First(&result).Error; err != nil {
-		return nil, errors.New("could not find autarchy")
+		return nil, exec.AUTARCHY_NOT_FOUND
 	}
 
 	return result, nil
