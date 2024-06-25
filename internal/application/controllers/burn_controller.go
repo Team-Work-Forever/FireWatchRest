@@ -87,6 +87,13 @@ func (c *BurnController) CreateBurn(ctx *fiber.Ctx) error {
 		return err
 	}
 
+	fileHeader, err := services.GetFile(ctx, "avatar", true)
+
+	if err != nil {
+		return err
+	}
+
+	createBurnRequest.MapPicture = fileHeader
 	result, err := c.createBurnUc.Handler(createBurnRequest)
 
 	if err != nil {

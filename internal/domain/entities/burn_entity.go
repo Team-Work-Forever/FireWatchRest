@@ -51,6 +51,10 @@ func (b *Burn) TableName() string {
 	return "burn"
 }
 
+func (b *Burn) SetMapPicture(url string) {
+	b.Picture = url
+}
+
 func (a *Burn) BeforeCreate(tx *gorm.DB) error {
 	a.EntityBase.BeforeCreate(tx)
 

@@ -38,7 +38,7 @@ func (repo *ProfileRepository) GetAutarchyByAuthId(authId string) (*entities.Aut
 	return autarchy, nil
 }
 
-func (repo *ProfileRepository) Update(profile *entities.User) error {
+func (repo *ProfileRepository) Update(profile interface{}) error {
 	return repo.dbContext.Save(profile).Error
 }
 

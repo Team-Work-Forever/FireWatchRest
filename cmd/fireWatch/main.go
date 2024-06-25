@@ -87,7 +87,7 @@ func main() {
 	updateProfileUseCase := ucp.NewUpdateProfileUIseCase(authRepository, profileRepository, fileService)
 	fetchPublicProfileUseCase := ucp.NewFetchPublicProfileUseCase(authRepository, profileRepository)
 
-	createBurnUseCase := ucb.NewCreateBurnUseCase(burnRepository, autarchyRepository)
+	createBurnUseCase := ucb.NewCreateBurnUseCase(burnRepository, autarchyRepository, fileService)
 	getBurnbyIdUseCase := ucb.NewGetBurnByIdUseCase(burnRepository)
 	getAllBurnsUseCase := ucb.NewGetAllBurnsUseCase(burnRepository, autarchyRepository)
 	updateBurnUseCase := ucb.NewUpdateBurnUseCase(burnRepository)
