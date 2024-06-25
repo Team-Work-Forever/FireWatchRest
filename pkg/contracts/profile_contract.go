@@ -44,11 +44,11 @@ type (
 	}
 
 	PublicProfileResponse struct {
-		Email    string        `json:"email"`
-		UserName string        `json:"user_name"`
-		Avatar   string        `json:"avatar"`
-		NIF      string        `json:"nif"`
-		Phone    PhoneResponse `json:"phone"`
+		Email    string        `json:"email,omitempty"`
+		UserName string        `json:"user_name,omitempty"`
+		Avatar   string        `json:"avatar,omitempty"`
+		NIF      string        `json:"nif,omitempty"`
+		Phone    PhoneResponse `json:"phone,omitempty"`
 	}
 
 	WhoamiRequest struct {

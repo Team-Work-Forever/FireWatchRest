@@ -68,7 +68,7 @@ type (
 	BurnResponse struct {
 		Id          string                `json:"id"`
 		Title       string                `json:"title"`
-		Author      PublicProfileResponse `json:"author"`
+		Author      PublicProfileResponse `json:"author,omitempty"`
 		HasAidTeam  bool                  `json:"has_aid_team"`
 		Reason      string                `json:"reason"`
 		Type        string                `json:"type"`

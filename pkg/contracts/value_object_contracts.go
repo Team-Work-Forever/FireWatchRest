@@ -10,8 +10,8 @@ type (
 	}
 
 	PhoneResponse struct {
-		CountryCode string `json:"country_code"`
-		Number      string `json:"number"`
+		CountryCode string `json:"country_code,omitempty"`
+		Number      string `json:"number,omitempty"`
 	}
 
 	ZipCodeResponse struct {
