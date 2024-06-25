@@ -62,7 +62,10 @@ type (
 	UpdateProfileResponse struct {
 		UserId      string                `swaggerignore:"true"`
 		Email       string                `form:"email" binding:"required"`
-		UserName    string                `form:"user_name" binding:"required"`
+		UserName    string                `form:"user_name"`
+		Title       string                `form:"title"`
+		Lat         string                `form:"lat"`
+		Lon         string                `form:"lon"`
 		PhoneCode   string                `form:"phone_code" binding:"required"`
 		PhoneNumber string                `form:"phone_number" binding:"required"`
 		Street      string                `form:"street" binding:"required"`

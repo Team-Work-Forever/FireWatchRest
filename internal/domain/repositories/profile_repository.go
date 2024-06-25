@@ -18,6 +18,14 @@ func NewProfileRepository(database *gorm.DB) *ProfileRepository {
 	}
 }
 
+func (repo *ProfileRepository) GetIdentityUserByAuthId(authId string, identityUser interface{}) error {
+	if err := repo.dbContext.Where("auth_key_id = ?", authId).First(&identityUser).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (repo *ProfileRepository) GetUserByAuthId(authId string) (*entities.User, error) {
 	var user *entities.User
 

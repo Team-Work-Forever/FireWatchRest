@@ -103,8 +103,8 @@ func (repo *AutarchyRepository) GetAll(params map[string]interface{}, pagination
 	return result, nil
 }
 
-func (repo *AutarchyRepository) Update(burn *entities.Autarchy) error {
-	return repo.dbContext.Save(burn).Error
+func (repo *AutarchyRepository) Update(autarchy interface{}) error {
+	return repo.dbContext.Save(autarchy).Error
 }
 
 func (repo *AutarchyRepository) Delete(autarchy *entities.Autarchy) error {
