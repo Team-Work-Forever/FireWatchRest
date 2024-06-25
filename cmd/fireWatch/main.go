@@ -83,8 +83,8 @@ func main() {
 	refreshTokensUseCase := uca.NewRefreshTokesUseCase(authRepository)
 	createAdminUseCase := uca.NewCreateAdminUseCase(authRepository, fileService)
 
-	whoamiUseCase := ucp.NewWhoamiUseCase(authRepository, profileRepository)
-	updateProfileUseCase := ucp.NewUpdateProfileUIseCase(authRepository, profileRepository, fileService)
+	whoamiUseCase := ucp.NewWhoamiUseCase(authRepository, profileRepository, autarchyRepository)
+	updateProfileUseCase := ucp.NewUpdateProfileUIseCase(authRepository, profileRepository, fileService, autarchyRepository)
 	fetchPublicProfileUseCase := ucp.NewFetchPublicProfileUseCase(authRepository, profileRepository)
 
 	createBurnUseCase := ucb.NewCreateBurnUseCase(burnRepository, autarchyRepository, fileService)

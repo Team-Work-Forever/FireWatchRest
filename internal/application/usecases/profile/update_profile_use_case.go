@@ -10,20 +10,23 @@ import (
 )
 
 type UpdateProfileUseCase struct {
-	authRepo    *repo.AuthRepository
-	profileRepo *repo.ProfileRepository
-	fileService *upload.BlobService
+	authRepo           *repo.AuthRepository
+	profileRepo        *repo.ProfileRepository
+	fileService        *upload.BlobService
+	autarchyRepository *repo.AutarchyRepository
 }
 
 func NewUpdateProfileUIseCase(
 	authRepo *repo.AuthRepository,
 	profileRepo *repo.ProfileRepository,
 	fileService *upload.BlobService,
+	autarchyRepository *repo.AutarchyRepository,
 ) *UpdateProfileUseCase {
 	return &UpdateProfileUseCase{
-		authRepo:    authRepo,
-		profileRepo: profileRepo,
-		fileService: fileService,
+		authRepo:           authRepo,
+		profileRepo:        profileRepo,
+		fileService:        fileService,
+		autarchyRepository: autarchyRepository,
 	}
 }
 
@@ -126,5 +129,5 @@ func (uc *UpdateProfileUseCase) Handle(request contracts.UpdateProfileResponse) 
 		return nil, err
 	}
 
-	return contracts.GetProfileResponse(foundAuth, foundProfile)
+	return contracts.GetProfileResponse(foundAuth, foundProfile, uc.autarchyRepository)
 }

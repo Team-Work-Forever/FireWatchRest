@@ -5,6 +5,7 @@ import (
 	"mime/multipart"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 )
 
@@ -36,7 +37,10 @@ type (
 
 	AutarchyProfileResponse struct {
 		ProfileResponse
-		Title string `json:"title"`
+		Title      string  `json:"title"`
+		Lat        float64 `json:"lat,omitempty"`
+		Lon        float64 `json:"lon,omitempty"`
+		TotalBurns int     `json:"total_of_burns"`
 	}
 
 	PublicProfileResponse struct {
@@ -69,7 +73,7 @@ type (
 	}
 )
 
-func GetProfileResponse(auth *entities.Auth, user interface{}) (interface{}, error) {
+func GetProfileResponse(auth *entities.Auth, user interface{}, autarchyRepository *repositories.AutarchyRepository) (interface{}, error) {
 	switch auth.UserType {
 	case int(vo.User), int(vo.Admin):
 		userProfile, ok := user.(*entities.User)
@@ -92,9 +96,24 @@ func GetProfileResponse(auth *entities.Auth, user interface{}) (interface{}, err
 			return nil, ErrCannotConvert
 		}
 
+		sum, err := autarchyRepository.GetAutarchyBurnCount(autarchyProfile.ID)
+
+		if err != nil {
+			return nil, err
+		}
+
+		coordinates, err := autarchyRepository.GetCoordinates(autarchyProfile.ID)
+
+		if err != nil {
+			return nil, err
+		}
+
 		return AutarchyProfileResponse{
 			ProfileResponse: createProfileResponse(auth, &autarchyProfile.IdentityUser),
 			Title:           autarchyProfile.Title,
+			Lat:             coordinates.GetX(),
+			Lon:             coordinates.GetY(),
+			TotalBurns:      sum,
 		}, nil
 	}
 
