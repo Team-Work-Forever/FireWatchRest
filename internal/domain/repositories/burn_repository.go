@@ -144,14 +144,16 @@ func (repo *BurnRepository) GetBurnDetailById(authId string, burnId string) (*da
 func (repo *BurnRepository) GetAllBurns(authId string, params map[string]interface{}, pagination *pagination.Pagination) ([]daos.BurnDetailsView, error) {
 	var result []daos.BurnDetailsView
 
-	expr := repo.dbContext.Where("author = ?", authId).Where("deleted_at is null")
-
-	if search, ok := params["search"]; ok {
-		expr.Where("lower(title) like LOWER(?)", fmt.Sprintf("%%%s%%", search))
-	}
+	expr := repo.dbContext.Where("deleted_at is null")
 
 	if autarchyId, ok := params["autarchyId"]; ok {
 		expr.Where("autarchy_id = ?", autarchyId)
+	} else {
+		expr.Where("author = ?", authId)
+	}
+
+	if search, ok := params["search"]; ok {
+		expr.Where("lower(title) like LOWER(?)", fmt.Sprintf("%%%s%%", search))
 	}
 
 	if state, ok := params["state"]; ok {

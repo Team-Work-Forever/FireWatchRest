@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"errors"
+	"log"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
@@ -77,6 +78,7 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 		params["end_date"] = endDate
 	}
 
+	log.Printf("I'm here 2")
 	result, err := uc.burnRepository.GetAllBurns(request.AuthId, params, request.Pagination)
 
 	for _, v := range result {

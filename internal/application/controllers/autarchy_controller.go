@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"strconv"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/application/middlewares"
@@ -196,6 +197,7 @@ func (c *AutarchyController) GetAutarchyBurns(ctx *fiber.Ctx) error {
 		return err
 	}
 
+	log.Printf("I'm here 1")
 	result, err := c.burnGetAll.Handle(contracts.GetAllBurnsRequest{
 		AutarchyId: autarchyId,
 		AuthId:     userId,
