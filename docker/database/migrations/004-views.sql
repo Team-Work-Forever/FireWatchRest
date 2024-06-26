@@ -1,14 +1,5 @@
 -- Create or replace the burn_details_view
 CREATE OR REPLACE VIEW burn_details_view AS
-with fetchStates as (
-	select
-		b.id,
-		brs.state
-	from burn_requests_states brs
-	inner join burn b 
-		on b.id = brs.burn_id
-	order by brs.updated_at desc
-)
 select
 	distinct on (b.id) 
 	b.id,
@@ -33,7 +24,16 @@ select
     b.address_city,
     b.begin_at,
     b.completed_at,
-    fs.state,
+    (
+        SELECT
+            brs.state
+        FROM 
+            burn_requests_states brs
+        WHERE 
+            brs.burn_id = b.id
+        order by brs.updated_at desc
+        LIMIT 1
+    ) AS state,
     b.created_at,
     b.updated_at,
     b.deleted_at
@@ -41,10 +41,8 @@ from
     burn b
 INNER JOIN burn_requests br 
     ON br.burn_id = b.id
-INNER JOIN fetchStates fs
-	on fs.id = b.id
 inner join auth_keys ak 
-	on ak.id = br.auth_key_id 
+	on ak.id = br.auth_key_id
 inner join users u 
 	on u.auth_key_id = ak.id 
 ;

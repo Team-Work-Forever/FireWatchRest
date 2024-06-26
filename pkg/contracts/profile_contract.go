@@ -38,8 +38,8 @@ type (
 	AutarchyProfileResponse struct {
 		ProfileResponse
 		Title      string  `json:"title"`
-		Lat        float64 `json:"lat,omitempty"`
-		Lon        float64 `json:"lon,omitempty"`
+		Lat        float64 `json:"lat"`
+		Lon        float64 `json:"lon"`
 		TotalBurns int     `json:"total_of_burns"`
 	}
 
