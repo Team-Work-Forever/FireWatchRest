@@ -157,7 +157,7 @@ func (repo *BurnRepository) GetAllBurns(authId string, params map[string]interfa
 	}
 
 	if userType, ok := params["userType"]; ok {
-		if userType != int(vo.Admin) {
+		if userType == int(vo.User) {
 			expr.Where("author = ?", authId)
 		}
 	}

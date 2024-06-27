@@ -33,7 +33,7 @@ func (uc *GetBurnByIdUseCase) Handle(request contracts.GetBurnRequest) (*geojson
 		return nil, exec.USER_ALREADY_EXISTS
 	}
 
-	if foundAuth.UserType == int(vo.Admin) {
+	if foundAuth.UserType == int(vo.Admin) || foundAuth.UserType == int(vo.Autarchy) {
 		isAdmin = true
 	}
 

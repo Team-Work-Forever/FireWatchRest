@@ -15,17 +15,20 @@ type GetAllBurnsUseCase struct {
 	burnRepository *repositories.BurnRepository
 	autarchyRepo   *repositories.AutarchyRepository
 	authRepo       *repositories.AuthRepository
+	profileRepo    *repositories.ProfileRepository
 }
 
 func NewGetAllBurnsUseCase(
 	burnRepository *repositories.BurnRepository,
 	autarchyRepo *repositories.AutarchyRepository,
 	authRepo *repositories.AuthRepository,
+	profileRepo *repositories.ProfileRepository,
 ) *GetAllBurnsUseCase {
 	return &GetAllBurnsUseCase{
 		burnRepository: burnRepository,
 		autarchyRepo:   autarchyRepo,
 		authRepo:       authRepo,
+		profileRepo:    profileRepo,
 	}
 }
 
@@ -52,8 +55,18 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 	}
 
 	if request.AutarchyId != "" {
-		if _, err := uc.autarchyRepo.GetAutarchyById(request.AutarchyId); err != nil {
-			return nil, errors.New("autarchy not found")
+		if foundProfile.UserType == int(vo.Autarchy) {
+			foundAutarchy, err := uc.profileRepo.GetAutarchyByAuthId(request.AuthId)
+
+			if err != nil {
+				return nil, err
+			}
+
+			request.AutarchyId = foundAutarchy.ID
+		} else {
+			if _, err := uc.autarchyRepo.GetAutarchyById(request.AutarchyId); err != nil {
+				return nil, errors.New("autarchy not found")
+			}
 		}
 
 		params["autarchyId"] = request.AutarchyId
