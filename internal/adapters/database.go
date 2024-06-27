@@ -29,7 +29,7 @@ func GetConnectionString() string {
 	env := config.GetCofig()
 
 	return fmt.Sprintf(
-		"postgres://%s:%s@%s:%s/%s?sslmode=disable&timezone=Asia/Shanghai",
+		"postgres://%s:%s@%s:%s/%s?sslmode=require",
 		env.POSTGRES_USER,
 		env.POSTGRES_PASSWORD,
 		env.POSTGRES_HOST,

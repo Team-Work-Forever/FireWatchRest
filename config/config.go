@@ -46,6 +46,7 @@ func LoadEnv(path string) {
 
 	if err := viper.ReadInConfig(); err != nil {
 		viper.Reset()
+		viper.AutomaticEnv()
 	}
 
 	config = &Config{
