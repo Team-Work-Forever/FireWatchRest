@@ -148,8 +148,12 @@ func (repo *BurnRepository) GetAllBurns(authId string, params map[string]interfa
 
 	if autarchyId, ok := params["autarchyId"]; ok {
 		expr.Where("autarchy_id = ?", autarchyId)
-	} else {
-		expr.Where("author = ?", authId)
+	}
+
+	if userType, ok := params["userType"]; ok {
+		if userType != int(vo.Admin) {
+			expr.Where("author = ?", authId)
+		}
 	}
 
 	if search, ok := params["search"]; ok {

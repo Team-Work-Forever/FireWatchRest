@@ -2,27 +2,30 @@ package usecases
 
 import (
 	"errors"
-	"log"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/date"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/geojson"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type GetAllBurnsUseCase struct {
 	burnRepository *repositories.BurnRepository
 	autarchyRepo   *repositories.AutarchyRepository
+	authRepo       *repositories.AuthRepository
 }
 
 func NewGetAllBurnsUseCase(
 	burnRepository *repositories.BurnRepository,
 	autarchyRepo *repositories.AutarchyRepository,
+	authRepo *repositories.AuthRepository,
 ) *GetAllBurnsUseCase {
 	return &GetAllBurnsUseCase{
 		burnRepository: burnRepository,
 		autarchyRepo:   autarchyRepo,
+		authRepo:       authRepo,
 	}
 }
 
@@ -33,6 +36,14 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 		"search": request.Search,
 		"sort":   request.Sort,
 	}
+
+	foundProfile, err := uc.authRepo.GetAuthById(request.AuthId)
+
+	if err != nil {
+		return nil, exec.USER_NOT_FOUND
+	}
+
+	params["userType"] = foundProfile.UserType
 
 	if request.Sort != "" {
 		if request.Sort != "asc" && request.Sort != "desc" {
@@ -78,7 +89,6 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 		params["end_date"] = endDate
 	}
 
-	log.Printf("I'm here 2")
 	result, err := uc.burnRepository.GetAllBurns(request.AuthId, params, request.Pagination)
 
 	for _, v := range result {

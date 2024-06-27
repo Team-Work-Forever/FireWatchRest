@@ -89,7 +89,7 @@ func main() {
 
 	createBurnUseCase := ucb.NewCreateBurnUseCase(burnRepository, autarchyRepository, fileService)
 	getBurnbyIdUseCase := ucb.NewGetBurnByIdUseCase(burnRepository)
-	getAllBurnsUseCase := ucb.NewGetAllBurnsUseCase(burnRepository, autarchyRepository)
+	getAllBurnsUseCase := ucb.NewGetAllBurnsUseCase(burnRepository, autarchyRepository, authRepository)
 	updateBurnUseCase := ucb.NewUpdateBurnUseCase(burnRepository)
 	deleteBurnUseCase := ucb.NewDeleteBurnUseCase(burnRepository)
 	terminateUseCase := ucb.NewTerminateBurnUseCase(burnRepository)
