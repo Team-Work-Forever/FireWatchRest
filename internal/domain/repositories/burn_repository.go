@@ -131,10 +131,16 @@ func (repo *BurnRepository) SetBurnStatus(authId, autarchyId, burnId string, sta
 	return burnRequest, nil
 }
 
-func (repo *BurnRepository) GetBurnDetailById(authId string, burnId string) (*daos.BurnDetailsView, error) {
+func (repo *BurnRepository) GetBurnDetailById(authId string, burnId string, isAdmin bool) (*daos.BurnDetailsView, error) {
 	var result *daos.BurnDetailsView
 
-	if err := repo.dbContext.Where("id = ?", burnId).Where("author = ?", authId).Where("deleted_at is null").First(&result).Error; err != nil {
+	expr := repo.dbContext.Where("id = ?", burnId)
+
+	if !isAdmin {
+		expr.Where("author = ?", authId)
+	}
+
+	if err := expr.Where("deleted_at is null").First(&result).Error; err != nil {
 		return nil, err
 	}
 

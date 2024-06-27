@@ -21,7 +21,7 @@ func NewStartBurnUserCase(
 }
 
 func (uc *StartBurnUseCase) Handle(request contracts.StartBurnRequest) (*contracts.BurnActionResponse, error) {
-	foundBurn, err := uc.burnRepository.GetBurnDetailById(request.UserId, request.BurnId)
+	foundBurn, err := uc.burnRepository.GetBurnDetailById(request.UserId, request.BurnId, false)
 
 	if err != nil {
 		return nil, errors.New("burn not found")
