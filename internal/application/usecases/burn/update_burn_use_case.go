@@ -96,7 +96,7 @@ func (uc *UpdateBurnUseCase) Handle(request contracts.UpdateBurnRequest) (*geojs
 		return nil, err
 	}
 
-	result, err := uc.burnRepository.GetBurnDetailById(request.UserId, request.BurnId)
+	result, err := uc.burnRepository.GetBurnDetailById(request.UserId, request.BurnId, false)
 
 	if err != nil {
 		return nil, exec.BURN_NOT_ABLE_UPDATE

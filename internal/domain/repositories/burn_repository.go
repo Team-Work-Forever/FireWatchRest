@@ -131,10 +131,16 @@ func (repo *BurnRepository) SetBurnStatus(authId, autarchyId, burnId string, sta
 	return burnRequest, nil
 }
 
-func (repo *BurnRepository) GetBurnDetailById(authId string, burnId string) (*daos.BurnDetailsView, error) {
+func (repo *BurnRepository) GetBurnDetailById(authId string, burnId string, isAdmin bool) (*daos.BurnDetailsView, error) {
 	var result *daos.BurnDetailsView
 
-	if err := repo.dbContext.Where("id = ?", burnId).Where("author = ?", authId).Where("deleted_at is null").First(&result).Error; err != nil {
+	expr := repo.dbContext.Where("id = ?", burnId)
+
+	if !isAdmin {
+		expr.Where("author = ?", authId)
+	}
+
+	if err := expr.Where("deleted_at is null").First(&result).Error; err != nil {
 		return nil, err
 	}
 
@@ -144,14 +150,20 @@ func (repo *BurnRepository) GetBurnDetailById(authId string, burnId string) (*da
 func (repo *BurnRepository) GetAllBurns(authId string, params map[string]interface{}, pagination *pagination.Pagination) ([]daos.BurnDetailsView, error) {
 	var result []daos.BurnDetailsView
 
-	expr := repo.dbContext.Where("author = ?", authId).Where("deleted_at is null")
-
-	if search, ok := params["search"]; ok {
-		expr.Where("lower(title) like LOWER(?)", fmt.Sprintf("%%%s%%", search))
-	}
+	expr := repo.dbContext.Where("deleted_at is null")
 
 	if autarchyId, ok := params["autarchyId"]; ok {
 		expr.Where("autarchy_id = ?", autarchyId)
+	}
+
+	if userType, ok := params["userType"]; ok {
+		if userType == int(vo.User) {
+			expr.Where("author = ?", authId)
+		}
+	}
+
+	if search, ok := params["search"]; ok {
+		expr.Where("lower(title) like LOWER(?)", fmt.Sprintf("%%%s%%", search))
 	}
 
 	if state, ok := params["state"]; ok {

@@ -83,13 +83,13 @@ func main() {
 	refreshTokensUseCase := uca.NewRefreshTokesUseCase(authRepository)
 	createAdminUseCase := uca.NewCreateAdminUseCase(authRepository, fileService)
 
-	whoamiUseCase := ucp.NewWhoamiUseCase(authRepository, profileRepository)
-	updateProfileUseCase := ucp.NewUpdateProfileUIseCase(authRepository, profileRepository, fileService)
+	whoamiUseCase := ucp.NewWhoamiUseCase(authRepository, profileRepository, autarchyRepository)
+	updateProfileUseCase := ucp.NewUpdateProfileUIseCase(authRepository, profileRepository, fileService, autarchyRepository)
 	fetchPublicProfileUseCase := ucp.NewFetchPublicProfileUseCase(authRepository, profileRepository)
 
-	createBurnUseCase := ucb.NewCreateBurnUseCase(burnRepository, autarchyRepository)
-	getBurnbyIdUseCase := ucb.NewGetBurnByIdUseCase(burnRepository)
-	getAllBurnsUseCase := ucb.NewGetAllBurnsUseCase(burnRepository, autarchyRepository)
+	createBurnUseCase := ucb.NewCreateBurnUseCase(burnRepository, autarchyRepository, fileService)
+	getBurnbyIdUseCase := ucb.NewGetBurnByIdUseCase(burnRepository, authRepository)
+	getAllBurnsUseCase := ucb.NewGetAllBurnsUseCase(burnRepository, autarchyRepository, authRepository, profileRepository)
 	updateBurnUseCase := ucb.NewUpdateBurnUseCase(burnRepository)
 	deleteBurnUseCase := ucb.NewDeleteBurnUseCase(burnRepository)
 	terminateUseCase := ucb.NewTerminateBurnUseCase(burnRepository)

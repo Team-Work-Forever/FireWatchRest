@@ -7,6 +7,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/date"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/services"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/upload"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
@@ -14,15 +15,18 @@ import (
 type CreateBurnUseCase struct {
 	burnRepo     *repositories.BurnRepository
 	autarchyRepo *repositories.AutarchyRepository
+	fileService  *upload.BlobService
 }
 
 func NewCreateBurnUseCase(
 	burnRepo *repositories.BurnRepository,
 	autarchyRepo *repositories.AutarchyRepository,
+	fileService *upload.BlobService,
 ) *CreateBurnUseCase {
 	return &CreateBurnUseCase{
 		burnRepo:     burnRepo,
 		autarchyRepo: autarchyRepo,
+		fileService:  fileService,
 	}
 }
 
@@ -84,6 +88,28 @@ func (uc *CreateBurnUseCase) Handler(request contracts.CreateBurnRequest) (*cont
 
 	if err != nil {
 		return nil, err
+	}
+
+	if request.MapPicture != nil {
+		file, err := request.MapPicture.Open()
+
+		if err != nil {
+			return nil, err
+		}
+
+		defer file.Close()
+		url, err := uc.fileService.UploadFile(&upload.UploadFile{
+			Bucket:   upload.ClientBucket,
+			FileName: request.MapPicture.Filename,
+			FileId:   burn.GetId(),
+			FileBody: file,
+		})
+
+		if err != nil {
+			return nil, err
+		}
+
+		burn.SetMapPicture(url)
 	}
 
 	burnRequest, err := uc.burnRepo.CreateBurn(daos.CreateBurnDao{

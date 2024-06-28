@@ -5,6 +5,7 @@ import (
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/daos"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 	"gorm.io/gorm"
@@ -36,6 +37,19 @@ func (repo *AutarchyRepository) GetAutarchtDetailById(autarchyId string) (*daos.
 	}
 
 	return result, nil
+}
+
+func (repo *AutarchyRepository) GetCoordinates(autarchyId string) (*vo.Coordinate, error) {
+	var result *daos.AutarchyDetailsView
+
+	if err := repo.dbContext.Select([]string{"lat", "lon"}).Where("id = ?", autarchyId).First(&result).Error; err != nil {
+		return nil, err
+	}
+
+	return vo.NewCoordinate(
+		result.Lat,
+		result.Lon,
+	), nil
 }
 
 func (repo *AutarchyRepository) GetAutarchyById(autarchyId string) (*entities.Autarchy, error) {
@@ -89,8 +103,8 @@ func (repo *AutarchyRepository) GetAll(params map[string]interface{}, pagination
 	return result, nil
 }
 
-func (repo *AutarchyRepository) Update(burn *entities.Autarchy) error {
-	return repo.dbContext.Save(burn).Error
+func (repo *AutarchyRepository) Update(autarchy interface{}) error {
+	return repo.dbContext.Save(autarchy).Error
 }
 
 func (repo *AutarchyRepository) Delete(autarchy *entities.Autarchy) error {

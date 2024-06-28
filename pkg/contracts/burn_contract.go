@@ -1,6 +1,7 @@
 package contracts
 
 import (
+	"mime/multipart"
 	"time"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/pagination"
@@ -8,16 +9,17 @@ import (
 
 type (
 	CreateBurnRequest struct {
-		UserId          string  `swaggerignore:"true"`
-		Title           string  `form:"title" binding:"required"`
-		Type            string  `form:"type" binding:"required"`
-		HasBackUpTeam   bool    `form:"has_backup_team" binding:"required"`
-		Reason          string  `form:"reason" binding:"required"`
-		InitDate        string  `form:"init_date" binding:"required"`
-		Lon             float64 `form:"lon" binding:"required"`
-		Lat             float64 `form:"lat" binding:"required"`
-		InitialProprose string  `form:"initial_propose" binding:"required"`
-		Ignore          bool    `form:"ignore"`
+		UserId          string                `swaggerignore:"true"`
+		Title           string                `form:"title" binding:"required"`
+		Type            string                `form:"type" binding:"required"`
+		HasBackUpTeam   bool                  `form:"has_backup_team" binding:"required"`
+		Reason          string                `form:"reason" binding:"required"`
+		InitDate        string                `form:"init_date" binding:"required"`
+		Lon             float64               `form:"lon" binding:"required"`
+		Lat             float64               `form:"lat" binding:"required"`
+		InitialProprose string                `form:"initial_propose" binding:"required"`
+		Ignore          bool                  `form:"ignore"`
+		MapPicture      *multipart.FileHeader `form:"avatar" swaggerignore:"true"`
 	}
 
 	UpdateBurnRequest struct {
@@ -66,7 +68,7 @@ type (
 	BurnResponse struct {
 		Id          string                `json:"id"`
 		Title       string                `json:"title"`
-		Author      PublicProfileResponse `json:"author"`
+		Author      PublicProfileResponse `json:"author,omitempty"`
 		HasAidTeam  bool                  `json:"has_aid_team"`
 		Reason      string                `json:"reason"`
 		Type        string                `json:"type"`

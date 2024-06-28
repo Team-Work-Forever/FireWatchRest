@@ -28,12 +28,13 @@ func NewProfileController(
 }
 
 func (c *ProfileController) Route(router fiber.Router) {
+	router.Get("public/profile", c.GetPublicProfile)
+
 	auth := router.Group("", middlewares.AuthorizationMiddleware)
 	auth.Get("whoami", c.WhoamiRoute)
 
 	profile := auth.Group("profile")
 
-	profile.Get("", c.GetPublicProfile)
 	profile.Put("", middlewares.ShouldAcceptMultiPart, c.UpdateProfile)
 
 	profile.Get("locale", c.Locale)

@@ -24,7 +24,16 @@ select
     b.address_city,
     b.begin_at,
     b.completed_at,
-    brs.state,
+    (
+        SELECT
+            brs.state
+        FROM 
+            burn_requests_states brs
+        WHERE 
+            brs.burn_id = b.id
+        order by brs.updated_at desc
+        LIMIT 1
+    ) AS state,
     b.created_at,
     b.updated_at,
     b.deleted_at
@@ -32,10 +41,8 @@ from
     burn b
 INNER JOIN burn_requests br 
     ON br.burn_id = b.id
-INNER JOIN burn_requests_states brs
-    ON brs.burn_id = b.id AND brs.auth_key_id = br.auth_key_id
 inner join auth_keys ak 
-	on ak.id = br.auth_key_id 
+	on ak.id = br.auth_key_id
 inner join users u 
 	on u.auth_key_id = ak.id 
 ;

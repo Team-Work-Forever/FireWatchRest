@@ -9,17 +9,20 @@ import (
 )
 
 type WhoamiUseCase struct {
-	authRepository    *repositories.AuthRepository
-	profileRepository *repositories.ProfileRepository
+	authRepository     *repositories.AuthRepository
+	profileRepository  *repositories.ProfileRepository
+	autarchyRepository *repositories.AutarchyRepository
 }
 
 func NewWhoamiUseCase(
 	authRepository *repositories.AuthRepository,
 	profileRepository *repositories.ProfileRepository,
+	autarchyRepository *repositories.AutarchyRepository,
 ) *WhoamiUseCase {
 	return &WhoamiUseCase{
-		authRepository:    authRepository,
-		profileRepository: profileRepository,
+		authRepository:     authRepository,
+		profileRepository:  profileRepository,
+		autarchyRepository: autarchyRepository,
 	}
 }
 
@@ -30,7 +33,7 @@ func (w *WhoamiUseCase) fetchUser(auth *entities.Auth) (interface{}, error) {
 		return nil, exec.USER_NOT_FOUND
 	}
 
-	return contracts.GetProfileResponse(auth, profileFound)
+	return contracts.GetProfileResponse(auth, profileFound, w.autarchyRepository)
 }
 
 func (w *WhoamiUseCase) fetchAutarchyResponse(auth *entities.Auth) (interface{}, error) {
@@ -40,7 +43,7 @@ func (w *WhoamiUseCase) fetchAutarchyResponse(auth *entities.Auth) (interface{},
 		return nil, exec.USER_NOT_FOUND
 	}
 
-	return contracts.GetProfileResponse(auth, profileFound)
+	return contracts.GetProfileResponse(auth, profileFound, w.autarchyRepository)
 }
 
 func (w *WhoamiUseCase) Handle(request contracts.WhoamiRequest) (interface{}, error) {

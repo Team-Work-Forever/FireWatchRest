@@ -4,6 +4,7 @@ import (
 	"mime/multipart"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
+	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
@@ -32,15 +33,18 @@ type (
 
 	AutarchyProfileResponse struct {
 		ProfileResponse
-		Title string `json:"title"`
+		Title      string  `json:"title"`
+		Lat        float64 `json:"lat"`
+		Lon        float64 `json:"lon"`
+		TotalBurns int     `json:"total_of_burns"`
 	}
 
 	PublicProfileResponse struct {
-		Email    string        `json:"email"`
-		UserName string        `json:"user_name"`
-		Avatar   string        `json:"avatar"`
-		NIF      string        `json:"nif"`
-		Phone    PhoneResponse `json:"phone"`
+		Email    string        `json:"email,omitempty"`
+		UserName string        `json:"user_name,omitempty"`
+		Avatar   string        `json:"avatar,omitempty"`
+		NIF      string        `json:"nif,omitempty"`
+		Phone    PhoneResponse `json:"phone,omitempty"`
 	}
 
 	WhoamiRequest struct {
@@ -54,7 +58,10 @@ type (
 	UpdateProfileResponse struct {
 		UserId      string                `swaggerignore:"true"`
 		Email       string                `form:"email" binding:"required"`
-		UserName    string                `form:"user_name" binding:"required"`
+		UserName    string                `form:"user_name"`
+		Title       string                `form:"title"`
+		Lat         string                `form:"lat"`
+		Lon         string                `form:"lon"`
 		PhoneCode   string                `form:"phone_code" binding:"required"`
 		PhoneNumber string                `form:"phone_number" binding:"required"`
 		Street      string                `form:"street" binding:"required"`
@@ -65,7 +72,7 @@ type (
 	}
 )
 
-func GetProfileResponse(auth *entities.Auth, user interface{}) (interface{}, error) {
+func GetProfileResponse(auth *entities.Auth, user interface{}, autarchyRepository *repositories.AutarchyRepository) (interface{}, error) {
 	switch auth.UserType {
 	case int(vo.User), int(vo.Admin):
 		userProfile, ok := user.(*entities.User)
@@ -88,9 +95,24 @@ func GetProfileResponse(auth *entities.Auth, user interface{}) (interface{}, err
 			return nil, exec.NOT_ABLE_CONVERT
 		}
 
+		sum, err := autarchyRepository.GetAutarchyBurnCount(autarchyProfile.ID)
+
+		if err != nil {
+			return nil, err
+		}
+
+		coordinates, err := autarchyRepository.GetCoordinates(autarchyProfile.ID)
+
+		if err != nil {
+			return nil, err
+		}
+
 		return AutarchyProfileResponse{
 			ProfileResponse: createProfileResponse(auth, &autarchyProfile.IdentityUser),
 			Title:           autarchyProfile.Title,
+			Lat:             coordinates.GetX(),
+			Lon:             coordinates.GetY(),
+			TotalBurns:      sum,
 		}, nil
 	}
 

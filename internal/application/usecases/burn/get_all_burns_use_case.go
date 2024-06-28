@@ -12,15 +12,21 @@ import (
 type GetAllBurnsUseCase struct {
 	burnRepository *repositories.BurnRepository
 	autarchyRepo   *repositories.AutarchyRepository
+	authRepo       *repositories.AuthRepository
+	profileRepo    *repositories.ProfileRepository
 }
 
 func NewGetAllBurnsUseCase(
 	burnRepository *repositories.BurnRepository,
 	autarchyRepo *repositories.AutarchyRepository,
+	authRepo *repositories.AuthRepository,
+	profileRepo *repositories.ProfileRepository,
 ) *GetAllBurnsUseCase {
 	return &GetAllBurnsUseCase{
 		burnRepository: burnRepository,
 		autarchyRepo:   autarchyRepo,
+		authRepo:       authRepo,
+		profileRepo:    profileRepo,
 	}
 }
 
@@ -32,6 +38,14 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 		"sort":   request.Sort,
 	}
 
+	foundProfile, err := uc.authRepo.GetAuthById(request.AuthId)
+
+	if err != nil {
+		return nil, exec.USER_NOT_FOUND
+	}
+
+	params["userType"] = foundProfile.UserType
+
 	if request.Sort != "" {
 		if request.Sort != "asc" && request.Sort != "desc" {
 			return nil, exec.QUERY_PARAMETER_SORT_NOT_VALID
@@ -39,8 +53,18 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 	}
 
 	if request.AutarchyId != "" {
-		if _, err := uc.autarchyRepo.GetAutarchyById(request.AutarchyId); err != nil {
-			return nil, exec.AUTARCHY_NOT_FOUND
+		if foundProfile.UserType == int(vo.Autarchy) {
+			foundAutarchy, err := uc.profileRepo.GetAutarchyByAuthId(request.AuthId)
+
+			if err != nil {
+				return nil, err
+			}
+
+			request.AutarchyId = foundAutarchy.ID
+		} else {
+			if _, err := uc.autarchyRepo.GetAutarchyById(request.AutarchyId); err != nil {
+				return nil, exec.AUTARCHY_NOT_FOUND
+			}
 		}
 
 		params["autarchyId"] = request.AutarchyId
