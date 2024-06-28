@@ -1,11 +1,11 @@
 package jwt
 
 import (
-	"errors"
 	"fmt"
 	"time"
 
 	"github.com/Team-Work-Forever/FireWatchRest/config"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
@@ -95,7 +95,7 @@ func GetClaims(token string, claims jwt.Claims) (interface{}, error) {
 	}
 
 	if !jwtToken.Valid {
-		return nil, errors.New("token is no longer valid")
+		return nil, exec.TOKEN_ISNT_VALD
 	}
 
 	return claims, nil

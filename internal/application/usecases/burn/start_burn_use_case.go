@@ -1,11 +1,10 @@
 package usecases
 
 import (
-	"errors"
-
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type StartBurnUseCase struct {
@@ -24,11 +23,11 @@ func (uc *StartBurnUseCase) Handle(request contracts.StartBurnRequest) (*contrac
 	foundBurn, err := uc.burnRepository.GetBurnDetailById(request.UserId, request.BurnId, false)
 
 	if err != nil {
-		return nil, errors.New("burn not found")
+		return nil, exec.BURN_NOT_FOUND
 	}
 
 	if foundBurn.State != uint16(vo.Scheduled) {
-		return nil, errors.New("burn is not schedualed, it cannot perform this action")
+		return nil, exec.BURN_FAILED_SCHEDULED_ACTION
 	}
 
 	state, err := uc.burnRepository.SetBurnStatus(
@@ -39,7 +38,7 @@ func (uc *StartBurnUseCase) Handle(request contracts.StartBurnRequest) (*contrac
 	)
 
 	if err != nil {
-		return nil, errors.New("cannot start burn")
+		return nil, exec.BURN_NOT_ABLE_START
 	}
 
 	return &contracts.BurnActionResponse{

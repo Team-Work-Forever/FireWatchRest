@@ -1,8 +1,6 @@
 package usecases
 
 import (
-	"errors"
-
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/date"
@@ -50,7 +48,7 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 
 	if request.Sort != "" {
 		if request.Sort != "asc" && request.Sort != "desc" {
-			return nil, errors.New("that is not an valid sort query parameter")
+			return nil, exec.QUERY_PARAMETER_SORT_NOT_VALID
 		}
 	}
 
@@ -65,7 +63,7 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 			request.AutarchyId = foundAutarchy.ID
 		} else {
 			if _, err := uc.autarchyRepo.GetAutarchyById(request.AutarchyId); err != nil {
-				return nil, errors.New("autarchy not found")
+				return nil, exec.AUTARCHY_NOT_FOUND
 			}
 		}
 
@@ -76,7 +74,7 @@ func (uc *GetAllBurnsUseCase) Handle(request contracts.GetAllBurnsRequest) (*geo
 		state, ok := vo.GetBurnRequestStateKey(request.State)
 
 		if !ok {
-			return nil, errors.New("state is not valid")
+			return nil, exec.STATE_NOT_VALID
 		}
 
 		params["state"] = state

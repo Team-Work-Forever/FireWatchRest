@@ -1,0 +1,134 @@
+user-nf-header: Utilisateur Non Trouvé
+user-nf: L'utilisateur n'a pas été trouvé
+account-user-type-undefined-header: Type d'Utilisateur Non Défini
+account-user-type-undefined: Échec de la création du compte, type d'utilisateur non défini
+user-ae-header: L'Utilisateur Existe Déjà
+user-ae: Il y a déjà un utilisateur avec cet e-mail
+user-an-header: L'Utilisateur Existe Déjà
+user-an: Il y a déjà un utilisateur avec ce NIF
+password-wrg-header: Authentification
+password-wrg: L'e-mail ou le mot de passe est incorrect
+password-d-mtch-header: Autorisation
+password-d-mtch: Les mots de passe ne correspondent pas
+password-ch-header: Réinitialisation du Mot de Passe
+password-ch: Il n'est pas possible de réinitialiser au même mot de passe
+token-nf-header: Jeton Non Trouvé
+token-nf: Aucun jeton trouvé
+token-isn-v-header: Jeton Invalide
+token-isn-v: Le jeton n'est pas valide
+token-f-header: Échec de la Récupération
+token-f: Le jeton n'est pas valide
+address-pv-street: Fournir le champ de la rue
+address-pv-street-header: Validation de l'Adresse
+address-pv-number: Fournir le champ du numéro de rue
+address-pv-number-header: Validation de l'Adresse
+address-pv-number-v: Fournir un numéro de rue valide
+address-pv-number-v-header: Validation de l'Adresse
+address-pv-city: Fournir le champ de la ville
+address-pv-city-header: Validation de l'Adresse
+email-pv: Fournir le champ de l'email
+email-pv-header: Validation de l'Email
+email-pv-v: Fournir un email valide
+email-pv-header: Validation de l'Email
+nif-pv: Fournir le champ du NIF
+nif-pv-header: Validation du NIF
+nif-pv-v: Fournir un NIF valide
+nif-pv-v-header: Validation du NIF
+password-pv: Fournir le champ du mot de passe
+password-pv-header: Validation du Mot de Passe
+password-btw-6-16: Le mot de passe doit contenir entre 6 et 16 caractères
+password-btw-6-16-header: Validation du Mot de Passe
+password-mst-number: Le mot de passe doit contenir au moins un chiffre
+password-mst-number-header: Validation du Mot de Passe
+password-mst-number: Le mot de passe doit contenir au moins une lettre majuscule
+password-mst-number-header: Validation du Mot de Passe
+password-mst-n-capital: Le mot de passe doit contenir au moins une lettre minuscule
+password-mst-n-capital-header: Validation du Mot de Passe
+phone-pv: Fournir le numéro de téléphone et le code du pays
+phone-pv-header: Validation du Téléphone
+phone-i-country: Le Code du Pays est Invalide
+phone-i-country-header: Validation du Téléphone
+phone-mst-9: Le numéro de téléphone doit comporter neuf chiffres
+phone-mst-9-header: Validation du Téléphone
+zip-code-pv: Fournir le champ du code postal
+zip-code-pv-header: Validation du Code Postal
+zip-code-i: Code Postal Invalide: format 4444-444
+zip-code-i-header: Validation du Code Postal
+usern-pv: Fournir le champ du nom d'utilisateur
+usern-pv-header: Validation de l'Utilisateur
+firstn-pv: Fournir le champ du prénom
+firstn-pv-header: Validation de l'Utilisateur
+lastn-pv: Fournir le champ du nom de famille
+lastn-pv-header: Validation de l'Utilisateur
+boolean-pv-header: Validation Booléenne
+boolean-pv: Fournir une valeur booléenne valide
+date-pv-header: Validation de la Date
+date-pv: Fournir une date valide au format aaaa-mm-jj
+start-date-pv-header: Validation de la Date de Début
+start-date-pv: Fournir une date de début valide
+title-pv-header: Validation du Titre
+title-pv: Fournir le champ du titre
+coordinates-n-notfound-header: Localisation Introuvable avec ces Coordonnées
+coordinates-n-notfound: Aucun endroit trouvé avec ces coordonnées
+coordinates-i-header: Validation de la Localisation
+coordinates-i: Les Coordonnées sont Invalides
+address-i-header: Validation de l'Adresse
+address-i: L'Adresse est Invalide
+zip-code-n-notfound-header: Code Postal Introuvable
+zip-code-n-notfound: Aucun endroit trouvé avec ce code postal
+doa-header: Accès Refusé
+doa: Vous n'avez pas accès à cette action
+ta-header: Réessayez
+ta: Veuillez réessayer
+snv-header: État Non Valide
+snv: L'état est invalide
+n-ableconvert-header: Conversion Impossible
+n-ableconvert: Impossible de convertir
+query-sort-n-valid-header: Paramètre de Tri Invalide
+query-sort-n-valid: Ce n'est pas un paramètre de tri valide
+autarchy-pv-name-header: Validation de l'Autarchie
+autarchy-pv-name: Fournir le champ du nom de l'autarchie
+autarchy-pv-lat-header: Validation de l'Autarchie
+autarchy-pv-lat: Fournir une latitude valide pour l'autarchie
+autarchy-pv-lon-header: Validation de l'Autarchie
+autarchy-pv-lon: Fournir une longitude valide pour l'autarchie
+autarchy-fail-registered-header: L'Autarchie est Déjà Enregistrée
+autarchy-fail-registered: Cette autarchie est déjà enregistrée
+autarchy-fail-removal-header: Échec de la Suppression de l'Autarchie
+autarchy-fail-removal: Échec de la suppression de l'autarchie
+autarchy-fail-fetchdetais-header: Échec de la Récupération des Détails de l'Autarchie
+autarchy-fail-fetchdetais: Impossible de récupérer les détails de l'autarchie
+autarchy-n-notfound-header: Autarchie Introuvable
+autarchy-n-notfound: L'autarchie n'a pas été trouvée
+autarchy-n-ableupdate-header: Impossible de Mettre à Jour l'Autarchie
+autarchy-n-ableupdate: L'autarchie ne peut pas être mise à jour
+burn-pv-ne-reason-header: Validation de l'Incendie
+burn-pv-ne-reason: Fournir un type de raison valide
+burn-pv-ne-type-header: Validation de l'Incendie
+burn-pv-ne-type: Fournir un type d'incendie valide
+burn-doa-header: Accès Refusé
+burn-doa: Vous n'avez pas accès à cet incendie
+burn-fail-schedualaction-header: Échec de la Programmation de l'Action d'Incendie
+burn-fail-schedualaction: L'incendie n'est pas programmé, il ne peut pas effectuer cette action
+burn-fail-removal-header: Échec de la Suppression de l'Incendie
+burn-fail-removal: Échec de la suppression de l'incendie
+burn-fail_fetch-header: Échec de la Récupération de l'État
+burn-fail_fetch: Impossible de récupérer l'état
+burn-n-notfound-header: Incendie Introuvable
+burn-n-notfound: L'incendie n'a pas été trouvé
+burn-n-ableremoval-header: Impossible de Supprimer l'Incendie
+burn-n-ableremoval: Impossible de supprimer l'incendie pendant l'action
+burn-n-ableupdate-header: Impossible de Mettre à Jour l'Incendie
+burn-n-ableupdate: L'incendie ne peut pas être mis à jour
+burn-n-ablestart-header: Impossible de Démarrer l'Incendie
+burn-n-ablestart: Impossible de démarrer l'incendie
+burn-n-complete-header: Impossible de Compléter l'Incendie
+burn-n-complete: Impossible de compléter l'incendie
+burn-n-active-header: Incendie Non Actif
+burn-n-active: L'incendie n'est pas actif, il ne peut pas effectuer cette action
+file-pv-header: Validation du Fichier
+file-pv: Aucun fichier fourni
+file-pv-ne-type-header: Validation du Fichier
+file-pv-ne-type: Fournir un type de fichier valide
+file-n-ableupload-header: Impossible de Télécharger le Fichier
+file-n-ableupload: Erreur lors du téléchargement du fichier

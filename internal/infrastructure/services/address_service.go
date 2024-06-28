@@ -1,15 +1,11 @@
 package services
 
 import (
-	"errors"
 	"log"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/api"
-)
-
-var (
-	ErrNotValidAddress error = errors.New("address is not valid")
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 func GetAddress(lat, lon float64) (*vo.Address, error) {
@@ -44,11 +40,11 @@ func GetAutarchy(address vo.Address) (string, error) {
 	}
 
 	if address.ZipCode != housing.CP {
-		return "", ErrNotValidAddress
+		return "", exec.ADDRESS_INVALID
 	}
 
 	if address.City != housing.Concelho {
-		return "", ErrNotValidAddress
+		return "", exec.ADDRESS_INVALID
 	}
 
 	for _, value := range housing.Partes {
@@ -59,7 +55,7 @@ func GetAutarchy(address vo.Address) (string, error) {
 	}
 
 	if !okStreet && len(housing.Partes) != 0 {
-		return "", ErrNotValidAddress
+		return "", exec.ADDRESS_INVALID
 	}
 
 	return housing.Municipio, nil

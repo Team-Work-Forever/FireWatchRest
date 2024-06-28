@@ -1,18 +1,15 @@
 package services
 
 import (
-	"errors"
 	"mime/multipart"
 	"path/filepath"
 	"strings"
 
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 	"github.com/gofiber/fiber/v2"
 )
 
 var (
-	ErrNoFileProvided  error = errors.New("no file provided")
-	ErrInvalidFileType error = errors.New("file type not allowed")
-
 	allowedFileTypes = map[string]bool{
 		".png":  true,
 		".jpg":  true,
@@ -51,14 +48,14 @@ func GetFiles(ctx *fiber.Ctx, field string, isOptional bool) ([]*multipart.FileH
 
 	for _, file := range form.File[field] {
 		if !isValidType(file.Filename) {
-			return nil, ErrInvalidFileType
+			return nil, exec.FILE_PROVIDE_NOT_EXISTING_TYPE
 		}
 
 		files = append(files, file)
 	}
 
 	if len(files) == 0 && !isOptional {
-		return nil, ErrNoFileProvided
+		return nil, exec.FILE_PROVIDE
 	}
 
 	return files, nil

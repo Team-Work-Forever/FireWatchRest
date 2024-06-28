@@ -1,7 +1,6 @@
 package usecases
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"math/rand"
@@ -54,7 +53,7 @@ func (f *ForgotPasswordUseCase) Handle(request contracts.ForgotPasswordRequest) 
 
 	for i := 0; i < MAX_TRIES; i++ {
 		if i == MAX_TRIES-1 {
-			return errors.New("try again later")
+			return exec.TRY_AGAIN
 		}
 
 		code = strconv.Itoa(generateCode(1000, 9000))

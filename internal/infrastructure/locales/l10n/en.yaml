@@ -1,10 +1,14 @@
+user-nf-header: User Not Found
+user-nf: User not found
+account-user-type-undefined-header: User Type Undefined
+account-user-type-undefined: Failed to create account user type undefined
 user-ae-header: User Already Exists
 user-ae: There is already an user with that email
 user-an-header: User Already Exists
 user-an: There is already an user with that NIF
 user-nf-header: User Not Found
 user-nf: User not found
-password-wrg-header: Authetication
+password-wrg-header: Authentication
 password-wrg: The email or password is wrong
 password-d-mtch-header: Authorization
 password-d-mtch: The password don't match
@@ -17,13 +21,13 @@ token-isn-v: Token is not valid
 token-f-header: Fetch Failed
 token-f: Token is not valid
 address-pv-street: Provide street field
-address-pv-street-header: Adress Validation
+address-pv-street-header: Address Validation
 address-pv-number: Provide street number field
-address-pv-number-header: Adress Validation
+address-pv-number-header: Address Validation
 address-pv-number-v: Provide an valid street number field
-address-pv-number-v-header: Adress Validation
+address-pv-number-v-header: Address Validation
 address-pv-city: Provide city field
-address-pv-city-header: Adress Validation
+address-pv-city-header: Address Validation
 email-pv: Provide email field"
 email-pv-header: Email Validation
 email-pv-v: Provide an valid email field
@@ -62,3 +66,75 @@ email-pv: Provide email field
 email-pv-header: Email Validation
 email-pv-v: Provide an valid email field
 email-pv-v-header: Email Validation
+boolean-pv-header: Boolean Validation
+boolean-pv: Provide an valid boolean
+date-pv-header: Date Validation
+date-pv: Provide an valid date yyyy-mm-dd
+start-date-pv-header: Start Date Validation
+start-date-pv: Provide an valid start date
+title-pv-header: Title Validation
+title-pv: Provide title field
+coordinates-n-notfound-header: Local Not Found with Coordinates
+coordinates-n-notfound: There ins't any local with those coordinates
+coordinates-i-header: Local Validation
+coordinates-i: Coordinate is Invalid
+address-i-header: Address Validation
+address-i: Address is Invalid
+zip-code-n-notfound-header: Zip Code Not Found
+zip-code-n-notfound: There ins't any local with that zip code
+doa-header: Access Denied
+doa: Don't have access to this action
+ta-header: Try Again
+ta: Please try again
+snv-header: State not valid
+snv: State is invalid
+n-ableconvert-header: Not Able Conversion
+n-ableconvert: Cannot Convert
+query-sort-n-valid-header: Sort query parameter invalid
+query-sort-n-valid: That is not an valid sort query parameter
+autarchy-pv-name-header: Autarchy Validation
+autarchy-pv-name: Provide autarchy name field
+autarchy-pv-lat-header: Autarchy Validation
+autarchy-pv-lat: Provide autarchy a valid lat field
+autarchy-pv-lon-header: Autarchy Validation
+autarchy-pv-lon: Provide autarchy a valid lon field
+autarchy-fail-registered-header: Autarchy Already Registered
+autarchy-fail-registered: That autarchy is already registered
+autarchy-fail-removal-header: Autarchy Failed Removal
+autarchy-fail-removal: The autarchy failed to be removed
+autarchy-fail-fetchdetais-header: Autarchy Failed Details Fetch
+autarchy-fail-fetchdetais: Could not fetch autarchy details
+autarchy-n-notfound-header: Autarchy Not Found
+autarchy-n-notfound: Autarchy not found
+autarchy-n-ableupdate-header: Autarchy Not Able to Update
+autarchy-n-ableupdate: Autarchy could not be updated
+burn-pv-ne-reason-header: Burn Validation
+burn-pv-ne-reason: Provide a valid reason type field
+burn-pv-ne-type-header: Burn Validation
+burn-pv-ne-type: Provide a valid burn type field
+burn-doa-header: Access Denied
+burn-doa: Don't have access to this burn
+burn-fail-schedualaction-header: Burn Failed Schedule Action
+burn-fail-schedualaction: Burn is not scheduled, it cannot perform this action
+burn-fail-removal-header: Burn Failed Removal
+burn-fail-removal: The burn failed to be removed
+burn-fail_fetch-header: Burn Failed Fetch
+burn-fail_fetch: Could not fetch the status
+burn-n-notfound-header: Burn Not Found
+burn-n-notfound: Burn not found
+burn-n-ableremoval-header: Burn Not Able to Remove
+burn-n-ableremoval: Burn could not be removed while in action
+burn-n-ableupdate-header: Burn Not Able to Update
+burn-n-ableupdate: Burn could not be updated
+burn-n-ablestart-header: Burn Not Able to Start
+burn-n-ablestart: Cannot start burn
+burn-n-complete-header: Burn Not Able to Complete
+burn-n-complete: Cannot complete burn
+burn-n-active-header: Burn Not Active
+burn-n-active: Burn is not active, it cannot perform this action
+file-pv-header: File Validation
+file-pv: No file provided
+file-pv-ne-type-header: File Validation
+file-pv-ne-type: Provide a valid file type field
+file-n-ableupload-header: File Not Able to Upload
+file-n-ableupload: Error uploading file

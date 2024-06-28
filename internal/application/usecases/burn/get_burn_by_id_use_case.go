@@ -1,8 +1,6 @@
 package usecases
 
 import (
-	"errors"
-
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/geojson"
@@ -40,7 +38,7 @@ func (uc *GetBurnByIdUseCase) Handle(request contracts.GetBurnRequest) (*geojson
 	result, err := uc.burnRepository.GetBurnDetailById(request.AuthId, request.BurnId, isAdmin)
 
 	if err != nil {
-		return nil, errors.New("burn not found")
+		return nil, exec.BURN_NOT_FOUND
 	}
 
 	return geojson.NewFeature(

@@ -1,8 +1,6 @@
 package middlewares
 
 import (
-	"errors"
-
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
 	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/shared"
@@ -10,7 +8,7 @@ import (
 )
 
 var (
-	ErrUnAuthorized error = errors.New("don't have access to this action")
+	ErrUnAuthorized error = exec.DENIAL_OF_ACCESS
 )
 
 func AdminMiddleware(ctx *fiber.Ctx) error {

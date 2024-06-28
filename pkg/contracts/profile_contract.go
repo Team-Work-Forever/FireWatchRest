@@ -1,16 +1,12 @@
 package contracts
 
 import (
-	"errors"
 	"mime/multipart"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/entities"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/vo"
-)
-
-var (
-	ErrCannotConvert = errors.New("cannot Convert")
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type (
@@ -82,7 +78,7 @@ func GetProfileResponse(auth *entities.Auth, user interface{}, autarchyRepositor
 		userProfile, ok := user.(*entities.User)
 
 		if !ok {
-			return nil, ErrCannotConvert
+			return nil, exec.NOT_ABLE_CONVERT
 		}
 
 		return &UserProfileResponse{
@@ -96,7 +92,7 @@ func GetProfileResponse(auth *entities.Auth, user interface{}, autarchyRepositor
 		autarchyProfile, ok := user.(*entities.Autarchy)
 
 		if !ok {
-			return nil, ErrCannotConvert
+			return nil, exec.NOT_ABLE_CONVERT
 		}
 
 		sum, err := autarchyRepository.GetAutarchyBurnCount(autarchyProfile.ID)
@@ -120,7 +116,7 @@ func GetProfileResponse(auth *entities.Auth, user interface{}, autarchyRepositor
 		}, nil
 	}
 
-	return nil, ErrCannotConvert
+	return nil, exec.NOT_ABLE_CONVERT
 }
 
 func createProfileResponse(auth *entities.Auth, identity *entities.IdentityUser) ProfileResponse {

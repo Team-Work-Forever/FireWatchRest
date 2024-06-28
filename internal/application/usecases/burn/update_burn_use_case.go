@@ -1,7 +1,6 @@
 package usecases
 
 import (
-	"errors"
 	"strconv"
 
 	"github.com/Team-Work-Forever/FireWatchRest/internal/domain/repositories"
@@ -9,6 +8,7 @@ import (
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/date"
 	"github.com/Team-Work-Forever/FireWatchRest/internal/infrastructure/geojson"
 	"github.com/Team-Work-Forever/FireWatchRest/pkg/contracts"
+	exec "github.com/Team-Work-Forever/FireWatchRest/pkg/exceptions"
 )
 
 type UpdateBurnUseCase struct {
@@ -25,11 +25,11 @@ func (uc *UpdateBurnUseCase) Handle(request contracts.UpdateBurnRequest) (*geojs
 	foundBurn, err := uc.burnRepository.GetBurnById(request.BurnId)
 
 	if err != nil {
-		return nil, errors.New("burn not found")
+		return nil, exec.BURN_NOT_FOUND
 	}
 
 	if ok := uc.burnRepository.UserOwnsBurn(request.UserId, request.BurnId); !ok {
-		return nil, errors.New("you don't have access to this burn")
+		return nil, exec.BURN_DENIAL_OF_ACCESS
 	}
 
 	if request.Title != "" {
@@ -40,7 +40,7 @@ func (uc *UpdateBurnUseCase) Handle(request contracts.UpdateBurnRequest) (*geojs
 		burnType, ok := vo.GetBurnTypeKey(request.Type)
 
 		if !ok {
-			return nil, errors.New("burn type does not exists")
+			return nil, exec.BURN_PROVIDE_NOT_EXISTING_TYPE
 		}
 
 		foundBurn.Type = burnType
@@ -50,7 +50,7 @@ func (uc *UpdateBurnUseCase) Handle(request contracts.UpdateBurnRequest) (*geojs
 		hasBackUpTeam, err := strconv.ParseBool(request.HasBackUpTeam)
 
 		if err != nil {
-			return nil, errors.New("provide an valid boolean")
+			return nil, exec.BOOLEAN_PROVIDE_AN_VALID
 		}
 
 		foundBurn.HasAidTeam = hasBackUpTeam
@@ -60,7 +60,7 @@ func (uc *UpdateBurnUseCase) Handle(request contracts.UpdateBurnRequest) (*geojs
 		reason, ok := vo.GetBurnReasonKey(request.Reason)
 
 		if !ok {
-			return nil, errors.New("provide an valid reason")
+			return nil, exec.BURN_PROVIDE_NOT_EXISTING_REASON
 		}
 
 		foundBurn.Reason = reason
@@ -70,7 +70,7 @@ func (uc *UpdateBurnUseCase) Handle(request contracts.UpdateBurnRequest) (*geojs
 		initDate, err := date.ParseString(request.InitDate)
 
 		if err != nil {
-			return nil, errors.New("provide an valid date yyyy-mm-dd")
+			return nil, exec.DATE_PROVIDE_AN_VALID
 		}
 
 		foundBurn.BeginAt = *initDate
@@ -80,13 +80,13 @@ func (uc *UpdateBurnUseCase) Handle(request contracts.UpdateBurnRequest) (*geojs
 		lat, err := strconv.ParseFloat(request.Lat, 64)
 
 		if err != nil {
-			return nil, errors.New("provide an valid lat")
+			return nil, exec.AUTARCHY_PROVIDE_LAT
 		}
 
 		lon, err := strconv.ParseFloat(request.Lon, 64)
 
 		if err != nil {
-			return nil, errors.New("provide an valid lon")
+			return nil, exec.AUTARCHY_PROVIDE_LON
 		}
 
 		foundBurn.Coordinates = *vo.NewCoordinate(lat, lon)
@@ -99,7 +99,7 @@ func (uc *UpdateBurnUseCase) Handle(request contracts.UpdateBurnRequest) (*geojs
 	result, err := uc.burnRepository.GetBurnDetailById(request.UserId, request.BurnId, false)
 
 	if err != nil {
-		return nil, errors.New("burn could not be updated")
+		return nil, exec.BURN_NOT_ABLE_UPDATE
 	}
 
 	return geojson.NewFeature(
