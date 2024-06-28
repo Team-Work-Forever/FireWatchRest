@@ -29,7 +29,7 @@ address-pv-city-header: Validation de l'Adresse
 email-pv: Fournir le champ de l'email
 email-pv-header: Validation de l'Email
 email-pv-v: Fournir un email valide
-email-pv-header: Validation de l'Email
+email-pv-v-header: Validation de l'Email
 nif-pv: Fournir le champ du NIF
 nif-pv-header: Validation du NIF
 nif-pv-v: Fournir un NIF valide

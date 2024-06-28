@@ -29,7 +29,7 @@ func GetConnectionString() string {
 	env := config.GetCofig()
 
 	return fmt.Sprintf(
-		"postgres://%s:%s@%s:%s/%s?sslmode=require",
+		"postgres://%s:%s@%s:%s/%s",
 		env.POSTGRES_USER,
 		env.POSTGRES_PASSWORD,
 		env.POSTGRES_HOST,
