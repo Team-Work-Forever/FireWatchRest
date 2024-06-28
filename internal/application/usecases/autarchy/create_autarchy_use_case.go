@@ -149,6 +149,7 @@ func (uc *CreateAutarchyUseCase) Handle(request contracts.CreateAutarchyRequest)
 	}
 
 	go sendMail()
+	log.Printf("Autarchy Secret Generated %s", password)
 
 	return &contracts.AutarchyActionResponse{
 		AutarchyId: autarchy.ID,
